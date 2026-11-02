@@ -418,6 +418,64 @@ details.again .passage{margin-top:8px;font-size:.95rem}
 @keyframes bob2{50%{transform:translateY(-4px) rotate(-1deg)}}
 .gift.opened{animation:none;background:var(--surface);color:var(--text)}
 
+/* ---------- title as home button ---------- */
+button.brand{background:none;border:0;padding:4px 8px 4px 0;margin:0;color:inherit;font:inherit;cursor:pointer;border-radius:10px;text-align:left}
+button.brand:hover .brand-name{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+
+/* ---------- notices ---------- */
+.notice{padding:14px 16px;display:flex;gap:12px;align-items:flex-start;border-style:dashed;box-shadow:none}
+.notice>.ic{color:var(--ruby);margin-top:2px}
+.notice b{display:block}
+.notice p{font-size:.92rem}
+.notice .row{margin-top:10px}
+
+/* ---------- help: tour, sound check, microphone ---------- */
+#help{z-index:80}
+.help-card{width:100%;max-width:480px;padding:18px 22px 20px;display:flex;flex-direction:column;gap:14px}
+.h-top{display:flex;align-items:center;gap:10px;min-height:38px}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:2px solid var(--lead);background:var(--surface-2)}
+.dots i.on{background:var(--cobalt)}
+.dots i.done{background:var(--gold)}
+.h-close{margin-left:auto;width:38px;height:38px;border-radius:10px;border:2px solid var(--lead);background:var(--surface);display:grid;place-items:center;flex:none}
+.h-art{display:flex;justify-content:center;align-items:flex-end;gap:12px}
+.h-art .roundel{width:76px;height:76px}
+.h-art .roundel.sm{width:56px;height:56px;box-shadow:0 4px 0 var(--lead)}
+.h-art .boss{width:40px;height:40px}
+.h-art .roundel.sm .boss{width:30px;height:30px;border-width:2px}
+.help-card h2{font-family:var(--f-display);font-weight:400;font-size:clamp(1.45rem,5.4vw,1.8rem);line-height:1.1}
+.h-id{color:var(--muted);margin-top:-8px;font-weight:500}
+.h-points{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none}
+.h-points li{display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;align-items:start}
+.h-points .pi{width:38px;height:38px;border-radius:11px;border:2px solid var(--lead);display:grid;place-items:center;background:var(--surface-2)}
+.h-points b{display:block}
+.h-points small{display:block;color:var(--muted);font-size:.86rem;line-height:1.4}
+.steps{margin:0;padding-left:24px;display:flex;flex-direction:column;gap:9px}
+.steps li{padding-left:4px}
+.steps small{display:block;color:var(--muted);font-size:.85rem}
+.tips{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px;font-size:.95rem}
+.h-actions{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.h-actions .link{align-self:center}
+.h-state{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;font-weight:600}
+.h-state.ok{background:var(--good-bg);color:var(--good)}
+.h-state.bad{background:var(--bad-bg);color:var(--bad)}
+.h-live{min-height:1.6em;text-align:center;font-style:italic;color:var(--muted)}
+.h-mic{display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 0}
+.h-mic .say{font-family:var(--f-display);font-size:1.6rem}
+.perm-mock{align-self:center;width:min(100%,290px);border:2px solid var(--lead);border-radius:14px;background:var(--surface);box-shadow:3px 3px 0 var(--lead);padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:.9rem}
+.pm-site{display:flex;align-items:center;gap:6px;color:var(--muted);font-weight:600;font-size:.8rem;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.pm-q{font-weight:600}
+.pm-btns{display:flex;justify-content:flex-end;gap:10px}
+.pm-btns span{padding:5px 14px;border-radius:99px;border:1.5px solid var(--stone);font-weight:600;color:var(--muted)}
+.pm-btns .allow{border-color:var(--lead);background:var(--cobalt);color:#fff;position:relative}
+.pm-btns .allow::after{content:"";position:absolute;inset:-7px;border:3px solid var(--gold);border-radius:99px;animation:ring 1.4s ease-out infinite}
+@keyframes ring{from{opacity:1;transform:scale(.9)}to{opacity:0;transform:scale(1.25)}}
+.mic.small{width:78px;height:78px}
+.h-play{display:flex;justify-content:center}
+.coach{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:2px solid var(--lead);border-radius:14px;background:var(--gold);color:var(--on-gold);font-weight:500;font-size:.95rem;line-height:1.45;box-shadow:3px 3px 0 var(--lead)}
+.coach .ic{margin-top:1px}
+.tut-tips{text-align:left;width:100%;max-width:440px;padding:16px 18px}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
@@ -428,7 +486,7 @@ details.again .passage{margin-top:8px;font-size:.95rem}
 <!-- PREVIEW:BODY-START -->
 <div id="app">
   <header class="top">
-    <div class="brand">
+    <button type="button" class="brand" data-act="home" aria-label="Speak the Word: back to the Learn page">
       <svg class="logo" viewBox="0 0 32 34" width="30" height="32" aria-hidden="true">
         <path d="M4 18V16A12 12 0 0 1 16 4V18Z" style="fill:var(--ruby)"/>
         <path d="M16 4A12 12 0 0 1 28 16V18H16Z" style="fill:var(--gold)"/>
@@ -438,7 +496,7 @@ details.again .passage{margin-top:8px;font-size:.95rem}
         <path d="M4 32V16A12 12 0 0 1 28 16V32Z" style="fill:none;stroke:var(--lead);stroke-width:2.6;stroke-linejoin:round"/>
       </svg>
       <span class="brand-name">Speak the Word</span>
-    </div>
+    </button>
     <div class="hstats" id="hstats"></div>
   </header>
   <div class="shell">
@@ -495,6 +553,7 @@ details.again .passage{margin-top:8px;font-size:.95rem}
 </div>
 
 <div id="modal" class="overlay" hidden><div class="card modal-card" id="modal-card"></div></div>
+<div id="help" class="overlay" hidden><div class="card help-card" id="help-card" role="dialog" aria-modal="true" aria-labelledby="h-title"></div></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <canvas id="confetti" hidden></canvas>
 
@@ -508,15 +567,28 @@ details.again .passage{margin-top:8px;font-size:.95rem}
 var CONFIG = {
   // Leave empty inside Apps Script. Fill in ONLY when you host this same file elsewhere
   // (for example GitHub Pages) so microphone scoring works: paste your Apps Script /exec URL.
-  API_URL: 'https://script.google.com/macros/s/AKfycbwPIKb-FlPOmziAUBa_U9THaUm678oP57X5-Azda3CFjj25Kc7nDPyOhnS3oWfVvHD0/exec',
+  API_URL: 'https://kage-claude.github.io/speak-the-word/',
   // Optional: the address of that GitHub Pages copy. People whose browser blocks the
   // microphone inside Apps Script will see a "Open voice version" link to it.
+  // (Setting LEARNER_URL in Code.gs does the same without editing this file.)
   VOICE_URL: '',
   // Fallbacks only (the real values come from Code.gs when online).
   ENGLISH_DAY: 5,     // 0 = Sunday … 5 = Friday
   DAILY_GOAL: 60,
   FLOORS: [1, 2, 3]
 };
+var PREVIEW_LINKS = { teacher: '' }; // only used by the online preview
+
+/* Which device and browser is this? Used for sound and microphone help. */
+var UA = navigator.userAgent || '';
+var PLAT = (/iPhone|iPad|iPod/.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1)) ? 'ios' : /Android/i.test(UA) ? 'android' : 'desktop';
+function envIssue() {
+  if (/FBAN|FBAV|FB_IAB|Instagram|Line\/|MicroMessenger|Snapchat|TikTok|musical_ly|BytedanceWebview|; wv\)/.test(UA)) return 'inapp';
+  if (PLAT === 'ios' && (window.navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches))) return 'standalone';
+  if (PLAT === 'ios' && /CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(UA)) return 'iosother';
+  return null;
+}
+function browserName() { return PLAT === 'ios' ? 'Safari' : 'Chrome'; }
 
 /* =====================================================================
    2. CURRICULUM — 8 weeks of Christian English
@@ -966,6 +1038,9 @@ var IC = {
   bulb:'<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/>',
   out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
   slow:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/>',
+  copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  alert:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+  route:'<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
   pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>',
   clip:'<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/>'
 };
@@ -993,12 +1068,12 @@ function glass(c1, c2) { return '--c1:' + colorVar(c1) + ';--c2:' + colorVar(c2)
 var S = {
   profile: null,
   prog: null,
-  settings: { rate: 0.9, voiceURI: '', sfx: true, openAll: false },
+  settings: { rate: 0.9, voiceURI: '', sfx: true, micOk: false },
   config: { englishDay: CONFIG.ENGLISH_DAY, dailyGoal: CONFIG.DAILY_GOAL, floors: CONFIG.FLOORS },
   view: 'learn', week: 1, rankTab: 'week', cardLevel: 'basic', card: null,
-  tests: [], mic: 'unknown', board: null, boardLoading: false, lastSync: 0, syncErr: '', pendingLevel: 0
+  tests: [], unlock: 0, micPerm: 'unknown', env: null, mic: 'unknown', board: null, boardLoading: false, lastSync: 0, syncErr: '', pendingLevel: 0
 };
-function defaultProg() { return { daily: {}, stars: {}, best: {}, words: {}, verses: {}, cards: {}, challenges: {}, badges: [], talks: 0, skill: {}, sp: {} }; }
+function defaultProg() { return { daily: {}, stars: {}, best: {}, words: {}, verses: {}, cards: {}, challenges: {}, badges: [], talks: 0, skill: {}, sp: {}, flags: {} }; }
 function maxMap(a, b) { var o = {}, k; a = a || {}; b = b || {}; for (k in a) o[k] = Number(a[k]) || 0; for (k in b) o[k] = Math.max(o[k] || 0, Number(b[k]) || 0); return o; }
 function merge(a, b) {
   a = a || {}; b = b || {};
@@ -1008,17 +1083,18 @@ function merge(a, b) {
   return { daily: maxMap(a.daily, b.daily), stars: maxMap(a.stars, b.stars), best: maxMap(a.best, b.best),
     words: maxMap(a.words, b.words), verses: maxMap(a.verses, b.verses), cards: maxMap(a.cards, b.cards),
     challenges: ch, badges: Object.keys(badges), talks: Math.max(Number(a.talks) || 0, Number(b.talks) || 0),
-    skill: maxMap(a.skill, b.skill), sp: maxMap(a.sp, b.sp) };
+    skill: maxMap(a.skill, b.skill), sp: maxMap(a.sp, b.sp), flags: maxMap(a.flags, b.flags) };
 }
 var LS_KEY = 'speaktheword.v1';
 function load() {
   S.prog = defaultProg();
   try {
     var d = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
-    if (d) { S.profile = d.profile || null; S.prog = merge(defaultProg(), d.prog); S.tests = d.tests || []; for (var k in (d.settings || {})) S.settings[k] = d.settings[k]; }
+    if (d) { S.profile = d.profile || null; S.prog = merge(defaultProg(), d.prog); S.tests = d.tests || []; S.unlock = Number(d.unlock) || 0; for (var k in (d.settings || {})) S.settings[k] = d.settings[k]; }
+    delete S.settings.openAll; // weeks are now opened by the teacher
   } catch (e) { /* storage unavailable: start fresh */ }
 }
-function persist() { try { localStorage.setItem(LS_KEY, JSON.stringify({ profile: S.profile, prog: S.prog, settings: S.settings, tests: S.tests || [] })); } catch (e) { } }
+function persist() { try { localStorage.setItem(LS_KEY, JSON.stringify({ profile: S.profile, prog: S.prog, settings: S.settings, tests: S.tests || [], unlock: S.unlock || 0 })); } catch (e) { } }
 
 /* ---------- derived numbers ---------- */
 function totalXP() { var t = 0; for (var k in S.prog.daily) t += S.prog.daily[k] || 0; return t; }
@@ -1034,7 +1110,7 @@ function levelOf(xp) {
 function starsOf(w, k) { return S.prog.stars[w + '-' + k] || 0; }
 function doneCount(w) { return STATIONS.filter(function (s) { return starsOf(w, s.k) > 0; }).length; }
 function starSum(w) { return STATIONS.reduce(function (t, s) { return t + starsOf(w, s.k); }, 0); }
-function weekUnlocked(w) { return !!S.settings.openAll || w === 1 || doneCount(w - 1) >= 5; }
+function weekUnlocked(w) { return w === 1 || w <= (S.unlock || 0) || doneCount(w - 1) >= 5; }
 function weeksComplete(n) { for (var w = 1; w <= n; w++) if (doneCount(w) < STATIONS.length) return false; return true; }
 function learnedWords() { var c = 0; for (var k in S.prog.words) if (S.prog.words[k] >= 3) c++; return c; }
 function versesKnown() { var c = 0; for (var k in S.prog.verses) if (S.prog.verses[k] >= 80) c++; return c; }
@@ -1099,11 +1175,20 @@ function pushSave() {
     API.call('saveProgress', S.profile.id, S.profile.pin, { progress: S.prog, level: levelOf(totalXP()).n, streak: streak() })
       .then(function (r) {
         if (r && r.progress) { S.prog = merge(S.prog, r.progress); persist(); }
+        if (r && r.unlock !== undefined) applyUnlock(r.unlock);
         S.lastSync = Date.now(); S.syncErr = '';
         refreshBoard();
       })
       .catch(function (e) { S.syncErr = e.message; });
   }, 700);
+}
+function applyUnlock(n) {
+  n = Number(n) || 0;
+  if (n === (S.unlock || 0)) return;
+  var up = n > (S.unlock || 0);
+  S.unlock = n; persist();
+  if (up) toast(n >= 8 ? 'Your teacher opened all 8 weeks for you!' : 'Your teacher opened Weeks 1–' + n + ' for you!');
+  if ($('#game').hidden) renderAll();
 }
 function refreshBoard() {
   if (API.mode === 'local') { S.board = demoBoard(); if (S.view === 'ranks' || S.view === 'learn') renderView(); return; }
@@ -1137,7 +1222,13 @@ var TTS = {
     loadV();
     try { window.speechSynthesis.addEventListener('voiceschanged', loadV); } catch (e) { window.speechSynthesis.onvoiceschanged = loadV; }
   },
-  list: function (lang) { var p = lang.slice(0, 2).toLowerCase(); return this.voices.filter(function (v) { return (v.lang || '').toLowerCase().indexOf(p) === 0; }); },
+  list: function (lang) {
+    var p = lang.slice(0, 2).toLowerCase(), ps = p === 'id' ? ['id', 'in'] : [p]; // Android names Indonesian "in"
+    return this.voices.filter(function (v) {
+      var l = (v.lang || '').toLowerCase();
+      return ps.some(function (x) { return l.indexOf(x) === 0 && (l.length === 2 || /[-_]/.test(l.charAt(2))); });
+    });
+  },
   pick: function (lang, alt) {
     var L = this.list(lang); if (!L.length) return null;
     if (!alt && lang.indexOf('en') === 0 && S.settings.voiceURI) { var mine = L.filter(function (v) { return v.voiceURI === S.settings.voiceURI; })[0]; if (mine) return mine; }
@@ -1152,16 +1243,28 @@ var TTS = {
     var self = this;
     return new Promise(function (res) {
       if (!self.ok || !text) return res();
-      self.cancel();
+      var ss = window.speechSynthesis, busy = false;
+      try { busy = ss.speaking || ss.pending; } catch (e) { }
+      if (busy) self.cancel();
       var u = new SpeechSynthesisUtterance(text);
-      u.lang = o.lang || 'en-US'; u.rate = o.rate || S.settings.rate; u.pitch = o.pitch || 1;
-      var v = self.pick(u.lang, o.alt); if (v) u.voice = v;
+      u.lang = o.lang || 'en-US'; u.rate = o.rate || S.settings.rate; u.pitch = o.pitch || 1; u.volume = 1;
+      var v = self.pick(u.lang, o.alt);
+      if (v) { u.voice = v; if (v.lang) u.lang = v.lang.replace('_', '-'); }
+      self.cur = u; // keep a reference: some browsers drop the sound if the object is garbage-collected
       var done = false, t;
-      var fin = function () { if (done) return; done = true; clearTimeout(t); res(); };
+      var fin = function () { if (done) return; done = true; clearTimeout(t); if (self.cur === u) self.cur = null; res(); };
       u.onend = fin; u.onerror = fin;
-      t = setTimeout(fin, 2200 + text.length * 115 / u.rate);
-      setTimeout(function () { try { window.speechSynthesis.speak(u); } catch (e) { fin(); } }, 60);
+      t = setTimeout(fin, 2500 + text.length * 120 / u.rate);
+      var go = function () { try { if (ss.paused) ss.resume(); ss.speak(u); } catch (e) { fin(); } };
+      // iPhone only plays speech that starts inside the tap itself, so speak right away when nothing is playing.
+      // Chrome can drop speech that starts right after cancel(), so wait a moment only in that case.
+      if (busy) setTimeout(go, 80); else go();
     });
+  },
+  unlock: function () {
+    if (!this.ok || this.unlocked) return;
+    this.unlocked = true;
+    try { var u = new SpeechSynthesisUtterance(' '); u.volume = 0; window.speechSynthesis.speak(u); } catch (e) { }
   },
   cancel: function () { try { if (this.ok) window.speechSynthesis.cancel(); } catch (e) { } }
 };
@@ -1173,25 +1276,37 @@ var STT = {
     var self = this;
     return new Promise(function (resolve) {
       if (!self.Ctor) { S.mic = 'unsupported'; return resolve({ alts: [], error: 'unsupported' }); }
+      if (self.cur) { try { self.cur.abort(); } catch (e) { } self.cur = null; }
       var rec;
       try { rec = new self.Ctor(); } catch (e) { S.mic = 'unsupported'; return resolve({ alts: [], error: 'unsupported' }); }
       rec.lang = lang; rec.interimResults = true; rec.maxAlternatives = 3; rec.continuous = false;
-      var alts = [], last = '', err = null, finished = false, t;
+      var alts = [], last = '', err = null, finished = false, t, quiet;
       rec.onresult = function (e) {
-        var fin = [], inter = '';
-        for (var i = 0; i < e.results.length; i++) { var r = e.results[i]; if (r.isFinal) fin.push(r); else inter += r[0].transcript; }
-        var main = fin.map(function (r) { return r[0].transcript; }).join(' ').trim();
-        if (fin.length === 1) { alts = []; for (var j = 0; j < fin[0].length; j++) alts.push(fin[0][j].transcript); }
+        var finals = [], objs = [], inter = '';
+        for (var i = 0; i < e.results.length; i++) {
+          var r = e.results[i], tx = ((r[0] && r[0].transcript) || '').trim();
+          if (!r.isFinal) { inter += ' ' + tx; continue; }
+          var prev = finals[finals.length - 1], lo = tx.toLowerCase(), pl = prev ? prev.toLowerCase() : '';
+          if (prev && lo.indexOf(pl) === 0) { finals[finals.length - 1] = tx; objs[objs.length - 1] = r; } // Android repeats a growing phrase
+          else if (!(prev && pl.indexOf(lo) === 0)) { finals.push(tx); objs.push(r); }
+        }
+        var main = finals.join(' ').trim();
+        if (objs.length === 1) { alts = []; for (var j = 0; j < objs[0].length; j++) alts.push(objs[0][j].transcript); }
         else if (main) alts = [main];
-        last = (main + ' ' + inter).trim();
+        last = (main + ' ' + inter).replace(/\s+/g, ' ').trim();
         if (onText) onText(last);
+        // iPhone keeps listening long after you stop talking: finish after a short silence.
+        if (PLAT === 'ios') { clearTimeout(quiet); quiet = setTimeout(function () { try { rec.stop(); } catch (x) { } }, 1700); }
       };
       rec.onerror = function (e) { err = e.error || 'error'; };
       var done = function () {
-        if (finished) return; finished = true; clearTimeout(t); self.cur = null;
+        if (finished) return; finished = true; clearTimeout(t); clearTimeout(quiet); if (self.cur === rec) self.cur = null;
         if (!alts.length && last) alts = [last];
-        if (err === 'not-allowed' || err === 'service-not-allowed' || err === 'audio-capture') S.mic = 'blocked';
+        if (err === 'not-allowed') S.mic = API.mode === 'gas' ? 'frame' : 'denied';
+        else if (err === 'service-not-allowed') S.mic = 'service';
+        else if (err === 'audio-capture') S.mic = 'nomic';
         else if (!err || err === 'no-speech' || err === 'aborted') S.mic = 'ok';
+        if (alts.length && !S.settings.micOk) { S.settings.micOk = true; persist(); }
         resolve({ alts: alts, error: err === 'no-speech' || err === 'aborted' ? null : err });
       };
       rec.onend = done;
@@ -1203,7 +1318,23 @@ var STT = {
   stop: function () { if (this.cur) try { this.cur.stop(); } catch (e) { } },
   abort: function () { if (this.cur) try { this.cur.abort(); } catch (e) { } this.cur = null; }
 };
-function voiceMode() { return (S.mic === 'blocked' || S.mic === 'unsupported' || !STT.Ctor) ? 'self' : 'voice'; }
+function voiceMode() { return (!STT.Ctor || ['off', 'denied', 'service', 'unsupported', 'frame', 'env'].indexOf(S.mic) >= 0) ? 'self' : 'voice'; }
+function micErrState(e) {
+  return e === 'not-allowed' ? (API.mode === 'gas' ? 'frame' : 'denied') : e === 'service-not-allowed' ? 'service' : e === 'audio-capture' ? 'nomic'
+    : e === 'network' ? 'network' : e === 'unsupported' ? 'unsupported' : 'noheard';
+}
+function voiceUrl() { var u = CONFIG.VOICE_URL || S.config.learnerUrl || ''; return u && u !== S.config.url ? u : ''; }
+function shareUrl() { return API.mode === 'gas' ? (voiceUrl() || S.config.url || '') : String(location.href).split('#')[0]; }
+function copyText(t) {
+  var done = function () { toast('Link copied. Paste it in ' + browserName() + '.'); };
+  var fallback = function () {
+    var ta = document.createElement('textarea'); ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove(); if (ok) done(); else toast(t);
+  };
+  try { navigator.clipboard.writeText(t).then(done, fallback); } catch (e) { fallback(); }
+}
 
 var SFX = {
   ctx: null,
@@ -1234,8 +1365,13 @@ var SFX = {
   bad: function () { this.blip(220, 0.14, 0.045); this.blip(165, 0.2, 0.045, 0.1); },
   level: function () { var s = this; [523, 659, 784, 1047].forEach(function (f, i) { s.bell(f, i * 0.13, 0.13, 1.5); }); },
   gift: function () { var s = this; [784, 988, 1175, 1568].forEach(function (f, i) { s.bell(f, i * 0.07, 0.09, 0.9); }); },
-  tick: function () { this.blip(1500, 0.035, 0.025); }
+  tick: function () { this.blip(1500, 0.035, 0.025); },
+  unlock: function () {
+    var c = this.ac(); if (!c) return;
+    try { var b = c.createBuffer(1, 1, 22050), src = c.createBufferSource(); src.buffer = b; src.connect(c.destination); src.start(0); } catch (e) { }
+  }
 };
+function unlockAudio() { if (unlockAudio.done) return; unlockAudio.done = true; TTS.unlock(); SFX.unlock(); }
 
 /* =====================================================================
    7. SCORING — what did they say?
@@ -1396,13 +1532,59 @@ function renderStep() {
   setProgress();
   var st = R.steps[R.i];
   R.tries = 0; R.best = null; R.peek = false; R.answered = false; R.listening = false; R.selfOnly = false;
-  if (st.type === 'tip') return rTip();
-  if (st.type === 'passage') return rPassage();
-  if (st.type === 'write') return rWrite(st);
-  if (st.type === 'say') return rSay(st, false);
-  if (st.type === 'choice') return rChoice(st);
-  if (st.type === 'order') return rOrder(st);
-  if (st.type === 'partner') return rPartner(st);
+  if (st.type === 'tip') rTip();
+  else if (st.type === 'passage') rPassage();
+  else if (st.type === 'write') rWrite(st);
+  else if (st.type === 'say') rSay(st, false);
+  else if (st.type === 'choice') rChoice(st);
+  else if (st.type === 'order') rOrder(st);
+  else if (st.type === 'partner') rPartner(st);
+  if (st.coach) {
+    var tip = typeof st.coach === 'string' ? st.coach : st.coach[voiceMode() === 'voice' ? 0 : 1];
+    $('#g-body').insertAdjacentHTML('afterbegin', '<div class="coach">' + icon('bulb', 20) + '<p>' + esc(tip) + '</p></div>');
+  }
+}
+
+/* ---------- practice lesson for new learners ---------- */
+function startTutorial() {
+  var steps = [
+    { type: 'say', mode: 'word', en: 'Amen', id: 'amin', ex: 'We say amen after we pray.',
+      coach: ['Listen to the word. Then tap the red microphone and say it. Tap Listen or Slowly to hear it again.',
+              'Listen to the word and say it out loud. Then tap “I said it out loud” and compare.'] },
+    { type: 'choice', q: 'God ___ love.', opts: ['am', 'is', 'are'], a: 1, full: 'God is love.',
+      coach: 'Tap the right answer. Green means correct. Red shows you the right one.' },
+    { type: 'write', mode: 'write', en: 'God bless you.', id: 'Tuhan memberkatimu.', dict: true,
+      coach: 'Listen, type what you hear, then tap Check. In writing, spelling counts.' },
+    { type: 'say', mode: 'sentence', en: 'Good morning, brother!', id: 'Selamat pagi, saudara!',
+      coach: ['Now a whole sentence. Words in red were not clear: tap Try again, or Continue.',
+              'Now a whole sentence. Say it out loud, then rate yourself honestly.'] }
+  ];
+  R = { week: 1, sk: 'tutorial', tutorial: true, steps: steps, i: 0, scores: [], combo: 0, maxCombo: 0, xp: 0 };
+  openGame();
+  renderStep();
+}
+function firstLesson() {
+  var w = defaultWeek();
+  for (var j = 0; j < STATIONS.length; j++) if (!(starsOf(w, STATIONS[j].k) > 0)) return { w: w, k: STATIONS[j].k, label: 'Week ' + w + ': ' + STATIONS[j].name };
+  return { w: w, k: 'words', label: 'Week ' + w + ': ' + STATIONS[0].name };
+}
+function pt(ic, title, text) { return '<li><span class="pi">' + icon(ic, 20) + '</span><span><b>' + title + '</b><small>' + text + '</small></span></li>'; }
+function finishTutorial() {
+  STT.abort(); TTS.cancel();
+  $('#g-bar').style.width = '100%';
+  S.prog.flags.tut = 1;
+  R.xp += addXP(20, true);
+  checkBadges(); pushSave();
+  var f = firstLesson();
+  $('#g-body').innerHTML = '<div class="result center"><span class="eyebrow">Practice lesson</span><h2>You’re ready!</h2>' +
+    '<p class="muted">+' + R.xp + ' XP. Today’s goal has already started.</p>' +
+    '<div class="card tut-tips"><ul class="h-points">' +
+    pt('star', 'Daily goal', 'Fill the ring at the top with ' + S.config.dailyGoal + ' XP a day.') +
+    pt('flame', 'Streak', 'Practise every day and your streak grows.') +
+    pt('cal', 'English Day', DAYS[Number(S.config.englishDay)] + ': all XP counts double, for you and your floor.') +
+    '</ul></div></div>';
+  $('#g-actions').innerHTML = '<button class="btn primary wide" data-g="tut-start">Start ' + esc(f.label) + ' ' + icon('chev') + '</button><button class="link" data-g="close">Look around first</button>';
+  confetti(); SFX.level();
 }
 
 function rTip() {
@@ -1467,10 +1649,14 @@ function sayActions() {
     return '<div class="live" id="live">' + (R && R.tries ? 'Tap the mic and try again' : 'Tap the mic, then speak') + '</div>' +
       '<button class="mic" id="mic" data-g="mic" aria-label="Start speaking">' + icon('mic', 36) + '</button><button class="link" data-g="skip">Skip</button>';
   }
-  var note = (R && R.selfOnly) ? 'Say it out loud in Indonesian, then compare with the model.' : S.mic === 'blocked'
-    ? 'Voice scoring is blocked in this browser window. Say it out loud anyway, then rate yourself.' + (CONFIG.VOICE_URL ? ' <a href="' + esc(CONFIG.VOICE_URL) + '" target="_blank" rel="noopener">Open the voice version</a>' : '')
-    : 'Your browser can’t score your voice. Say it out loud, then rate yourself. (Chrome, Edge or Safari can score you.)';
-  return '<p class="selfnote">' + note + '</p><button class="btn primary wide" data-g="self">' + icon('check') + 'I said it out loud</button><button class="link" data-g="skip">Skip</button>';
+  var vu = voiceUrl(), note, fix = '';
+  if (R && R.selfOnly) note = 'Say it out loud in Indonesian, then compare with the model.';
+  else if (S.mic === 'frame') note = 'This link can’t use the microphone. Say it out loud, then rate yourself.' + (vu ? ' <a href="' + esc(vu) + '" target="_top" rel="noopener">Open the voice version</a>' : '');
+  else {
+    note = S.mic === 'off' ? 'The microphone is off. Say it out loud, then rate yourself.' : 'The microphone isn’t working here yet. Say it out loud, then rate yourself.';
+    fix = '<button class="tool" data-g="fixmic">' + icon('mic', 16) + 'Turn on the microphone</button>';
+  }
+  return '<p class="selfnote">' + note + '</p>' + fix + '<button class="btn primary wide" data-g="self">' + icon('check') + 'I said it out loud</button><button class="link" data-g="skip">Skip</button>';
 }
 function speakTarget(st, slow) {
   var rate = slow ? Math.max(0.5, S.settings.rate - 0.3) : S.settings.rate;
@@ -1481,6 +1667,8 @@ function speakTarget(st, slow) {
 function onMic() {
   if (!R) return;
   if (R.listening) { STT.stop(); return; }
+  // First time on this device: explain the browser's permission question before it appears.
+  if (API.mode !== 'gas' && !S.settings.micOk && S.micPerm !== 'granted') { openHelp(['mic'], { from: 'lesson' }); return; }
   var st = R.steps[R.i];
   TTS.cancel();
   R.listening = true;
@@ -1493,15 +1681,16 @@ function onMic() {
     var m = $('#mic'); if (m) { m.classList.remove('on'); m.setAttribute('aria-label', 'Start speaking'); }
     if (R.steps[R.i] !== st) return;
     if (res.error === 'language-not-supported') { R.selfOnly = true; $('#g-actions').innerHTML = sayActions(); toast('This browser can’t listen to Indonesian. Rate yourself for this one.'); return; }
-    if (res.error && res.error !== 'network') {
-      if (voiceMode() === 'self') { toast('Microphone not available here. Switched to self-check.'); $('#g-actions').innerHTML = sayActions(); }
-      else { var l2 = $('#live'); if (l2) { l2.classList.remove('hearing'); l2.textContent = 'Something went wrong with the mic. Tap to try again.'; } }
-      return;
-    }
     if (res.error === 'network') {
       S.netFails = (S.netFails || 0) + 1;
-      if (S.netFails >= 2) { S.mic = 'blocked'; $('#g-actions').innerHTML = sayActions(); }
+      if (S.netFails >= 2) { S.mic = 'off'; $('#g-actions').innerHTML = sayActions(); }
       toast('The speech service can’t be reached. Check the internet connection.');
+      return;
+    }
+    if (res.error) {
+      $('#g-actions').innerHTML = sayActions();
+      if (voiceMode() === 'self') { if (S.mic !== 'frame') openHelp(['mic'], { from: 'lesson' }); }
+      else { var l2 = $('#live'); if (l2) { l2.classList.remove('hearing'); l2.innerHTML = 'The microphone didn’t start. <button class="link" data-g="fixmic">Fix it</button>'; } }
       return;
     }
     if (!res.alts.length) { var l3 = $('#live'); if (l3) { l3.classList.remove('hearing'); l3.textContent = 'I didn’t hear anything. Tap the mic and speak a little louder.'; } return; }
@@ -1788,6 +1977,7 @@ function finishBlitz() {
 
 /* ---------- end of a round ---------- */
 function finishRound(forcedStars, note) {
+  if (R.tutorial) return finishTutorial();
   STT.abort(); TTS.cancel();
   $('#g-bar').style.width = '100%';
   var sc = R.scores, acc = sc.length ? sc.reduce(function (a, b) { return a + b; }, 0) / sc.length : 1;
@@ -1927,10 +2117,10 @@ function renderLearn() {
       '<span class="roundel" style="' + glass(s.c1, s.c2) + '"><span class="boss">' + icon(unlocked ? s.icon : 'lock', 22) + '</span></span>' +
       '<span class="nstars">' + starIcon(st >= 1) + starIcon(st >= 2) + starIcon(st >= 3) + '</span><span class="nlabel">' + esc(s.name) + '</span><span class="nsub">' + esc(s.sub) + '</span></button>';
   }).join('');
-  var lockNote = '<div class="card locknote">' + icon('lock', 22) + '<span>Finish 5 stations in Week ' + (w - 1) + ' to open this week. You have ' + doneCount(w - 1) + ' of 5.</span></div>';
+  var lockNote = '<div class="card locknote">' + icon('lock', 22) + '<span>Finish 5 stations in Week ' + (w - 1) + ' to open this week (you have ' + doneCount(w - 1) + ' of 5), or ask your teacher to open it for you.</span></div>';
   var mix = '<button class="card mix" data-act="mix"><span class="mix-ic">' + icon('shuffle', 24) + '</span><span><b>Daily Mix</b><small>Two minutes. Your weakest words come back.</small></span><span class="chev">' + icon('chev', 22) + '</span></button>';
 
-  $('#main').innerHTML = '<div class="learn"><div class="learn-main">' +
+  $('#main').innerHTML = '<div class="learn"><div class="learn-main">' + envBanner() +
     '<div class="weekbar" role="tablist" aria-label="Weeks">' + chips + '</div>' +
     '<section class="card hero"><span class="eyebrow">Week ' + w + ' of 8 · ' + esc(W.stage) + '</span><h1>' + esc(W.t) + '</h1><p class="id-title">' + esc(W.idt) + '</p>' +
     '<p class="goal"><b>By the end of this week:</b> ' + esc(W.goal) + '</p>' +
@@ -1940,6 +2130,18 @@ function renderLearn() {
     '<aside class="learn-side">' + goalCard() + verseCard(W) + floorCard(true) + '</aside></div>';
   var bar = $('.weekbar'), sel = $('.wchip[aria-selected="true"]');
   if (bar && sel) bar.scrollLeft = Math.max(0, sel.offsetLeft - bar.clientWidth / 2 + sel.clientWidth / 2);
+}
+function notice(ic, title, text, actions) {
+  return '<section class="card notice">' + icon(ic, 22) + '<div><b>' + title + '</b><p class="muted">' + text + '</p>' + (actions ? '<div class="row">' + actions + '</div>' : '') + '</div></section>';
+}
+function envBanner() {
+  var vu = voiceUrl(), copy = '<button class="tool" data-act="copy-link">' + icon('copy', 16) + 'Copy link</button>';
+  if (API.mode === 'gas' && vu) return notice('mic', 'Get your speaking checked', 'This link can’t use the microphone. Open the voice version to have your pronunciation checked.', '<a class="btn primary" href="' + esc(vu) + '" target="_top" rel="noopener">Open the voice version</a>');
+  if (S.env === 'inapp') return notice('alert', 'Open this page in ' + browserName(), 'It is open inside another app, where sound and the microphone often don’t work. Use the app’s menu to open it in ' + browserName() + ', or copy the link.', copy);
+  if (S.env === 'standalone') return notice('alert', 'Open this page in Safari', 'On iPhone, voice checking doesn’t work from a Home Screen icon. Copy the link and open it in Safari.', copy);
+  if (S.env === 'iosother') return notice('alert', 'Use Safari on iPhone', 'Voice checking works best in Safari. Copy the link and open it there.', copy);
+  if (S.mic === 'unsupported') return notice('alert', 'This browser can’t check your voice', 'Use Chrome on Android or a laptop, Edge on a laptop, or Safari on iPhone.', copy);
+  return '';
 }
 function goalCard() {
   var td = todayXP(), g = S.config.dailyGoal, st = streak();
@@ -2040,7 +2242,9 @@ function renderMe() {
   var sync = API.mode === 'local'
     ? 'This copy is running on its own, so progress stays in this browser. Run it from Google Apps Script to join the office leaderboard.'
     : (S.syncErr ? 'Could not sync: ' + esc(S.syncErr) : S.lastSync ? 'Synced with the office leaderboard at ' + new Date(S.lastSync).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '.' : 'Connected to the office leaderboard.');
-  var micTxt = { unknown: 'Not tested yet', ok: 'Working', blocked: 'Blocked in this window (self-check mode)', unsupported: 'Not supported in this browser (self-check mode)' }[S.mic];
+  var micTxt = { unknown: S.settings.micOk ? 'Worked before on this device' : 'Not checked yet on this device', ok: 'Working', off: 'Off: you rate yourself',
+    denied: 'Blocked by the browser', service: 'Voice checking is turned off on this device', nomic: 'No microphone found',
+    unsupported: 'This browser can’t check your voice', frame: 'Not available on this link', env: 'Not available inside this app' }[S.mic] || '';
   $('#main').innerHTML = '<div class="page">' +
     '<section class="card profile"><span class="avatar"><span>' + esc(initials) + '</span></span><div style="flex:1;min-width:0"><h1>' + esc(S.profile ? S.profile.name : 'Guest') + '</h1>' +
     '<p class="muted">Floor ' + esc(S.profile ? S.profile.floor : '–') + ' · Level ' + L.n + ' · ' + esc(L.title) + '</p><div class="lvlbar"><i style="width:' + pct + '%"></i></div><p class="hint">' + fmt(L.next - xp) + ' XP to level ' + (L.n + 1) + '</p></div></section>' +
@@ -2052,8 +2256,9 @@ function renderMe() {
     '<div class="set"><label for="s-rate">Voice speed<small>How fast the app speaks English</small></label><input type="range" id="s-rate" min="0.6" max="1.15" step="0.05" value="' + S.settings.rate + '"></div>' +
     '<div class="set"><label for="s-voice">English voice<small>Depends on your device</small></label><select id="s-voice">' + vopts + '</select></div>' +
     '<div class="set"><label for="s-sfx">Sound effects<small>Bells for right answers</small></label><input type="checkbox" class="switch" id="s-sfx"' + (S.settings.sfx ? ' checked' : '') + '></div>' +
-    '<div class="set"><span class="lbl">Microphone<small id="mic-status">' + micTxt + '</small></span><button class="tool" data-act="mic-test">' + icon('mic', 16) + 'Test: say “Hallelujah”</button></div>' +
-    '<div class="set"><label for="s-open">Open all weeks<small>For leaders and interpreters who want to jump ahead</small></label><input type="checkbox" class="switch" id="s-open"' + (S.settings.openAll ? ' checked' : '') + '></div>' +
+    '<div class="set"><span class="lbl">Sound &amp; microphone<small id="mic-status">' + micTxt + '</small></span><button class="tool" data-act="check">' + icon('mic', 16) + 'Check</button></div>' +
+    '<div class="set"><span class="lbl">App tour<small>The welcome tour and the 1-minute practice</small></span><button class="tool" data-act="tour">' + icon('play', 16) + 'Start tour</button></div>' +
+    (S.unlock ? '<div class="set"><span class="lbl">Weeks open<small>Your teacher opened ' + (S.unlock >= 8 ? 'all 8 weeks' : 'Weeks 1–' + S.unlock) + ' for you.</small></span></div>' : '') +
     '<div class="set"><span class="lbl">Teachers<small>Progress of every learner, plus the speaking test</small></span>' + teacherLink() + '</div>' +
     '<div class="set"><span class="lbl">Account<small class="sync">' + sync + '</small></span><button class="tool" data-act="signout">' + icon('out', 16) + (S.signoutArm ? 'Tap again to sign out' : 'Sign out') + '</button></div>' +
     '</section></div>';
@@ -2073,7 +2278,8 @@ function speakingCard() {
 }
 function teacherLink() {
   var base = S.config.url || CONFIG.API_URL || '';
-  if (API.mode === 'local' || !base) return '<span class="hint">Available after you deploy</span>';
+  if (API.mode === 'local') return PREVIEW_LINKS.teacher ? '<a class="tool" href="' + esc(PREVIEW_LINKS.teacher) + '" target="_blank" rel="noopener">' + icon('clip', 16) + 'Teacher dashboard (demo)</a>' : '<span class="hint">Available after you deploy</span>';
+  if (!base) return '<span class="hint">Available after you deploy</span>';
   return '<a class="tool" href="' + esc(base + '?page=teacher') + '" target="_top" rel="noopener">' + icon('clip', 16) + 'Teacher dashboard</a>';
 }
 
@@ -2095,7 +2301,7 @@ function onLogin(e) {
   var floor = Number(fl.value);
   if (API.mode === 'local') {
     S.profile = { id: (S.profile && S.profile.id) || 'local-' + Date.now().toString(36), name: name, floor: floor, pin: pin };
-    persist(); $('#login').hidden = true; S.board = demoBoard(); renderAll(); return;
+    persist(); $('#login').hidden = true; S.board = demoBoard(); renderAll(); maybeTour(); return;
   }
   var btn = $('#login-btn'); btn.disabled = true; btn.textContent = 'Signing in…';
   API.call('login', name, floor, pin).then(function (r) {
@@ -2103,8 +2309,10 @@ function onLogin(e) {
     S.profile = { id: r.id, name: r.name, floor: r.floor, pin: pin };
     S.prog = merge(same ? S.prog : defaultProg(), r.progress || {});
     S.tests = r.tests || [];
+    S.unlock = Number(r.unlock) || 0;
     persist(); $('#login').hidden = true; S.week = defaultWeek(); renderAll(); refreshBoard(); pushSave();
-    toast('Welcome, ' + r.name + '!');
+    if (S.prog.flags.tut || stationsCleared() > 0) toast('Welcome, ' + r.name + '!');
+    maybeTour();
   }).catch(function (x) { err.textContent = x.message; }).then(function () { btn.disabled = false; btn.textContent = 'Start learning'; });
 }
 function syncDown() {
@@ -2112,7 +2320,199 @@ function syncDown() {
   API.call('login', S.profile.name, S.profile.floor, S.profile.pin).then(function (r) {
     if (r.id !== S.profile.id) return;
     S.prog = merge(S.prog, r.progress || {}); S.tests = r.tests || S.tests; persist(); renderAll();
+    applyUnlock(r.unlock);
+    maybeTour();
   }).catch(function () { /* stay offline; local progress keeps working */ });
+}
+function maybeTour() {
+  if (!S.profile || S.prog.flags.tut || HELP || !$('#login').hidden || !$('#game').hidden) return;
+  if (stationsCleared() > 0) { S.prog.flags.tut = 1; persist(); return; } // already knows the app
+  openHelp(['welcome', 'sound', 'mic', 'practice'], { tour: true });
+}
+
+/* =====================================================================
+   9b. HELP: welcome tour, sound check, microphone setup
+   ===================================================================== */
+var HELP = null;
+function initialMicState() {
+  if (['env', 'unsupported', 'frame', 'denied', 'service', 'nomic'].indexOf(S.mic) >= 0) return S.mic;
+  if (S.micPerm === 'denied' && API.mode !== 'gas') return 'denied';
+  return 'intro';
+}
+function openHelp(flow, o) {
+  o = o || {};
+  TTS.cancel();
+  HELP = { flow: flow, i: 0, from: o.from || '', tour: !!o.tour, ss: 'intro', ms: initialMicState(), heard: '' };
+  $('#help').hidden = false;
+  renderHelp();
+  try { $('#help').scrollTop = 0; } catch (e) { }
+}
+function closeHelp() {
+  var h = HELP; HELP = null;
+  $('#help').hidden = true;
+  STT.abort();
+  if (h && h.tour && !S.prog.flags.tut) { S.prog.flags.tut = 1; pushSave(); }
+  if (R && !R.blitz && R.steps[R.i] && R.steps[R.i].type === 'say' && $('#sheet').className.indexOf('open') < 0) $('#g-actions').innerHTML = sayActions();
+  if (S.view === 'me' && $('#game').hidden) renderMe();
+}
+function hArt(list) {
+  return '<div class="h-art" aria-hidden="true">' + list.map(function (a, i) {
+    return '<span class="roundel' + (list.length > 1 && i !== 1 ? ' sm' : '') + '" style="' + glass(a[0], a[1]) + '"><span class="boss">' + icon(a[2], list.length > 1 && i !== 1 ? 16 : 22) + '</span></span>';
+  }).join('') + '</div>';
+}
+function hSteps(items) { return '<ol class="steps">' + items.map(function (x) { return '<li>' + x[0] + (x[1] ? '<small>' + x[1] + '</small>' : '') + '</li>'; }).join('') + '</ol>'; }
+function hTips(items) { return '<ul class="tips">' + items.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>'; }
+function hNextBtn(primary) {
+  var last = HELP.i >= HELP.flow.length - 1;
+  var label = !last ? 'Next' : HELP.from === 'lesson' ? 'Back to the lesson' : 'Done';
+  return '<button class="btn' + (primary ? ' primary' : '') + '" data-h="' + (last ? 'done' : 'next') + '">' + label + (last ? '' : ' ' + icon('chev')) + '</button>';
+}
+function renderHelp() {
+  if (!HELP) return;
+  var step = HELP.flow[HELP.i];
+  var dots = HELP.flow.length > 1 ? '<div class="dots" role="img" aria-label="Step ' + (HELP.i + 1) + ' of ' + HELP.flow.length + '">' +
+    HELP.flow.map(function (x, i) { return '<i class="' + (i < HELP.i ? 'done' : i === HELP.i ? 'on' : '') + '"></i>'; }).join('') + '</div>' : '';
+  var body = step === 'welcome' ? hWelcome() : step === 'sound' ? hSound() : step === 'mic' ? hMic() : hPractice();
+  $('#help-card').innerHTML = '<div class="h-top">' + dots + '<button class="h-close" data-h="close" aria-label="Close">' + icon('x', 20) + '</button></div>' + body;
+}
+function hWelcome() {
+  var name = S.profile ? S.profile.name.split(' ')[0] : 'friend';
+  return hArt([['cobalt', 'cobalt-2', 'book'], ['ruby', 'ruby-2', 'mic'], ['gold', 'gold-2', 'zap']]) +
+    '<h2 id="h-title">Welcome, ' + esc(name) + '!</h2><p class="h-id">Selamat datang! A 2-minute tour before you start.</p>' +
+    '<ul class="h-points">' +
+    pt('route', 'Follow the path', 'Each week has 8 short stations. Finish 5 to open the next week.') +
+    pt('mic', 'Listen, then speak', 'The app hears you and colours each word: green is right, red needs another try. No microphone? Say it out loud and rate yourself.') +
+    pt('flame', 'A little every day', 'Reach your daily goal to keep your streak. Your XP also helps your floor win the Floor Battle.') +
+    '</ul><div class="h-actions"><button class="btn primary" data-h="next">Next ' + icon('chev') + '</button><button class="link" data-h="close">Skip the tour</button></div>';
+}
+function hSound() {
+  var ss = HELP.ss, h = hArt([['sky', 'sky-2', 'vol']]) + '<h2 id="h-title">Check your sound</h2><p class="h-id">Cek suara. The app reads every word and sentence to you.</p>';
+  if (!TTS.ok) {
+    return h + '<div class="h-state bad">' + icon('alert', 20) + 'This browser can’t read text out loud.</div>' +
+      '<p>Open the app in ' + browserName() + ' instead.</p><div class="h-actions"><button class="btn" data-h="copy">' + icon('copy', 16) + 'Copy link</button>' + hNextBtn(true) + '</div>';
+  }
+  h += '<p>Tap the speaker. You should hear a bell, then a voice saying “Welcome to English Day!”</p>' +
+    '<div class="h-play listen-big"><button class="play" data-h="play" aria-label="Play the test sound">' + icon('vol', 28) + '</button></div>';
+  if (ss === 'played') h += '<p style="text-align:center;font-weight:600">Did you hear the voice?</p><div class="row" style="justify-content:center"><button class="btn" data-h="sound-no">No sound</button><button class="btn good" data-h="sound-yes">Yes, I heard it</button></div>';
+  if (ss === 'yes') h += '<div class="h-state ok">' + icon('check', 20) + 'Sound works.</div>';
+  if (ss === 'tips') {
+    var tips = ['Turn the volume up while the sound plays. Use the media volume, not the ringer.'];
+    if (PLAT === 'ios') tips.push('Turn off Silent mode: the switch or Action button on the side of the iPhone.');
+    tips.push('Bluetooth earbuds connected? Check they are on, or disconnect them.');
+    if (PLAT === 'android') tips.push('No voice installed? Phone Settings → search “Text-to-speech” → choose Speech Services by Google → install English (United States).');
+    if (S.env === 'inapp' || S.env === 'iosother') tips.push('Open the page in ' + browserName() + '. Sound often doesn’t work inside other apps.');
+    tips.push(PLAT === 'desktop' ? 'Check the laptop’s sound output and volume.' : 'Still nothing? Close the page, open it again in ' + browserName() + ', and tap the speaker once more.');
+    h += '<div class="h-state bad">' + icon('alert', 20) + 'Let’s fix it. Try these, then tap the speaker again:</div>' + hTips(tips);
+    if (!TTS.list('en-US').length && TTS.voices.length) h += '<p class="hint">This browser reports no English voice.</p>';
+  }
+  return h + '<div class="h-actions">' + (ss === 'intro' || ss === 'played' ? '<button class="link" data-h="next-skip">Skip this step</button>' : hNextBtn(true)) + '</div>';
+}
+function hMic() {
+  var ms = HELP.ms, vu = voiceUrl(), copy = '<button class="btn" data-h="copy">' + icon('copy', 16) + 'Copy link</button>';
+  var head = function (sub) { return hArt([['ruby', 'ruby-2', 'mic']]) + '<h2 id="h-title">Turn on your microphone</h2><p class="h-id">' + (sub || 'Nyalakan mikrofon') + '</p>'; };
+  var bad = function (msg) { return '<div class="h-state bad">' + icon('alert', 20) + '<span>' + msg + '</span></div>'; };
+  var tryBtn = '<button class="btn primary" data-h="mic-go">' + icon('mic', 18) + 'Try again</button>';
+  var later = '<button class="link" data-h="mic-skip">' + (HELP.flow.length > 1 && HELP.i < HELP.flow.length - 1 ? 'Skip for now' : 'Not now, I’ll rate myself') + '</button>';
+  var host = '';
+  try { host = location.hostname && !/googleusercontent/.test(location.hostname) ? location.hostname : 'This site'; } catch (e) { host = 'This site'; }
+  if (ms === 'intro') {
+    return head() + '<p>The app needs to hear you to check your pronunciation. Your browser’s speech service checks your voice; this app doesn’t record or keep it.</p>' +
+      (S.settings.micOk ? '<div class="h-state ok">' + icon('check', 20) + 'It worked before on this device.</div>' : '') +
+      hSteps([['Tap <b>Turn on microphone</b> below.', ''], ['Your browser asks to use the microphone. Tap <b>Allow</b>.', 'Ketuk Izinkan / Allow'], ['Say: <b>Hallelujah!</b>', '']]) +
+      '<div class="perm-mock" aria-hidden="true"><div class="pm-site">' + icon('lock', 13) + esc(host) + '</div><div class="pm-q">Use your microphone?</div><div class="pm-btns"><span>Block</span><span class="allow">Allow</span></div></div>' +
+      '<div class="h-actions"><button class="btn primary" data-h="mic-go">' + icon('mic', 18) + 'Turn on microphone</button>' + later + '</div>';
+  }
+  if (ms === 'listen') {
+    return head('Tap Allow if your browser asks. Then say:') + '<div class="h-mic"><span class="say">“Hallelujah!”</span><button class="mic small on" data-h="mic-stop" aria-label="Stop listening">' + icon('mic', 30) + '</button>' +
+      '<div class="h-live" id="h-live">' + esc(HELP.heard || 'Listening…') + '</div></div>';
+  }
+  if (ms === 'ok') {
+    return head('Mikrofon siap') + '<div class="h-state ok">' + icon('check', 20) + '<span>Your microphone works! I heard: “' + esc(HELP.heard) + '”</span></div>' +
+      '<div class="h-actions">' + hNextBtn(true) + '</div>';
+  }
+  if (ms === 'noheard') {
+    return head() + bad('I couldn’t hear anything.') + hTips(['Hold the phone closer and speak a little louder.', 'Find a quieter spot.', 'Close other apps that use the microphone: a call, a WhatsApp voice note, Zoom or Meet.']) +
+      '<div class="h-actions">' + tryBtn + later + '</div>';
+  }
+  if (ms === 'denied') {
+    var d = PLAT === 'android'
+      ? [['Tap the icon on the left of the web address', 'a lock or two small sliders'], ['Tap <b>Permissions</b> → <b>Microphone</b> → <b>Allow</b>', 'Izin → Mikrofon → Izinkan'], ['Come back and tap <b>Try again</b>', 'still blocked? tap Reload page first']]
+      : PLAT === 'ios'
+      ? [['Tap the <b>aA</b> button in the address bar', 'on newer iPhones it can look like a small page icon'], ['Tap <b>Website Settings</b> → <b>Microphone</b> → <b>Allow</b>', ''], ['Tap <b>Reload page</b>, then <b>Try again</b>', '']]
+      : [['Click the icon on the left of the web address', 'a lock or two small sliders'], ['Set <b>Microphone</b> to <b>Allow</b>', ''], ['Click <b>Reload page</b>, then <b>Try again</b>', '']];
+    var extra = PLAT === 'android' ? 'Still blocked? Phone Settings → Apps → Chrome → Permissions → Microphone → Allow.'
+      : PLAT === 'ios' ? 'Also check iPhone Settings → Safari (or Apps → Safari) → Microphone is set to Ask or Allow.'
+      : 'Windows: Settings → Privacy &amp; security → Microphone. Mac: System Settings → Privacy &amp; Security → Microphone. Let your browser use it.';
+    return head() + bad('The microphone is blocked for this page.') + hSteps(d) + '<p class="hint">' + extra + '</p>' +
+      '<div class="h-actions">' + tryBtn + '<button class="btn" data-h="reload">' + icon('refresh', 16) + 'Reload page</button>' + later + '</div>';
+  }
+  if (ms === 'service') {
+    var sv = PLAT === 'ios'
+      ? [['Open this page in <b>Safari</b>', 'not Chrome, not inside another app, not from a Home Screen icon'], ['Turn on <b>Siri</b>', 'Settings → Siri (or Apple Intelligence &amp; Siri)'], ['Turn on <b>Dictation</b>', 'Settings → General → Keyboard → Enable Dictation'], ['Come back, reload the page and try again', '']]
+      : PLAT === 'android'
+      ? [['Use <b>Google Chrome</b>', ''], ['Update the <b>Google</b> app in the Play Store', 'it does the voice checking'], ['Let the Google app use the microphone', 'Settings → Apps → Google → Permissions → Microphone → Allow'], ['Come back and try again', '']]
+      : [['Use <b>Chrome</b> or <b>Edge</b>', ''], ['Check your internet connection', 'voice checking runs online'], ['Try again', '']];
+    return head() + bad('Voice checking is turned off on this device.') + hSteps(sv) + '<div class="h-actions">' + tryBtn + '<button class="btn" data-h="reload">' + icon('refresh', 16) + 'Reload page</button>' + later + '</div>';
+  }
+  if (ms === 'nomic') {
+    return head() + bad('No microphone found, or another app is using it.') + hTips(['Close other apps that use the microphone: a call, a WhatsApp voice note, Zoom or Meet.', 'Using Bluetooth earbuds? Try without them.', 'Laptop: pick the right microphone in your sound settings.']) +
+      '<div class="h-actions">' + tryBtn + later + '</div>';
+  }
+  if (ms === 'network') {
+    return head() + bad('The voice checking service can’t be reached.') + hTips(['Check your Wi-Fi or mobile data.', 'Voice checking needs the internet.']) + '<div class="h-actions">' + tryBtn + later + '</div>';
+  }
+  if (ms === 'env') {
+    var st = S.env === 'standalone'
+      ? [['Copy the link below', ''], ['Open <b>Safari</b> and paste it in the address bar', 'On iPhone, voice checking doesn’t work from a Home Screen icon']]
+      : [['Tap the menu of this app’s browser', 'often ⋮ or ··· in a corner'], ['Choose <b>Open in ' + browserName() + '</b>', 'or copy the link below and paste it in ' + browserName()]];
+    return head() + bad(S.env === 'standalone' ? 'The microphone doesn’t work from the Home Screen icon.' : 'This page is open inside another app, where the microphone doesn’t work.') + hSteps(st) +
+      '<div class="h-actions">' + copy + '<button class="link" data-h="mic-go">Try anyway</button>' + later + '</div>';
+  }
+  if (ms === 'unsupported') {
+    return head() + bad('This browser can’t check your voice.') + hTips(['Android: Google Chrome', 'iPhone: Safari', 'Laptop: Chrome or Edge']) + '<div class="h-actions">' + copy + later + '</div>';
+  }
+  // frame: the Apps Script link blocks the microphone
+  return head() + bad('This link can’t use the microphone.') + '<p>Google blocks the microphone on Apps Script pages. ' + (vu ? 'Open the voice version instead; your progress stays the same.' : 'Ask your coordinator for the voice version link.') + '</p>' +
+    '<div class="h-actions">' + (vu ? '<a class="btn primary" href="' + esc(vu) + '" target="_top" rel="noopener">Open the voice version</a>' : '') + later + '</div>';
+}
+function hPractice() {
+  return hArt([['ruby', 'ruby-2', 'mic'], ['emerald', 'emerald-2', 'grid'], ['cobalt', 'gold', 'pen']]) +
+    '<h2 id="h-title">Try a 1-minute practice</h2><p class="h-id">Latihan singkat</p>' +
+    '<p>A tiny lesson to learn the buttons: say a word, pick an answer, type what you hear, and say a sentence. You can’t get it wrong.</p>' +
+    '<div class="h-actions"><button class="btn primary" data-h="practice">' + icon('play', 18) + 'Start practice</button><button class="link" data-h="done">Skip, go to the path</button></div>';
+}
+function helpMicTest() {
+  TTS.cancel();
+  HELP.ms = 'listen'; HELP.heard = '';
+  var p = STT.listen('en-US', function (t) { if (!HELP) return; HELP.heard = t; var l = $('#h-live'); if (l) l.textContent = t; }); // starts inside the tap
+  renderHelp();
+  p.then(function (r) {
+    if (!HELP) return;
+    if (r.error) HELP.ms = micErrState(r.error);
+    else if (!r.alts.length) HELP.ms = 'noheard';
+    else { HELP.ms = 'ok'; HELP.heard = r.alts[0]; S.mic = 'ok'; }
+    if (HELP.flow[HELP.i] === 'mic') renderHelp();
+    if (HELP.ms === 'ok') SFX.ok(0);
+  });
+}
+function onHelp(k) {
+  if (!HELP) return;
+  if (k === 'close' || k === 'done') { closeHelp(); return; }
+  if (k === 'next' || k === 'next-skip') { STT.abort(); HELP.i = Math.min(HELP.i + 1, HELP.flow.length - 1); HELP.ss = 'intro'; HELP.ms = initialMicState(); renderHelp(); try { $('#help').scrollTop = 0; } catch (e) { } return; }
+  if (k === 'play') { SFX.unlock(); SFX.gift(); TTS.speak('Welcome to English Day! God bless you.'); if (HELP.ss === 'intro') { HELP.ss = 'played'; renderHelp(); } return; }
+  if (k === 'sound-yes') { HELP.ss = 'yes'; renderHelp(); return; }
+  if (k === 'sound-no') { HELP.ss = 'tips'; renderHelp(); return; }
+  if (k === 'mic-go') { helpMicTest(); return; }
+  if (k === 'mic-stop') { STT.stop(); return; }
+  if (k === 'mic-skip') {
+    STT.abort();
+    if (S.mic !== 'ok' && S.mic !== 'frame') S.mic = ['env', 'unsupported'].indexOf(S.mic) >= 0 ? S.mic : 'off';
+    if (HELP.i < HELP.flow.length - 1) { HELP.i++; renderHelp(); } else closeHelp();
+    return;
+  }
+  if (k === 'reload') { try { location.reload(); } catch (e) { } return; }
+  if (k === 'copy') { copyText(shareUrl()); return; }
+  if (k === 'practice') { closeHelp(); startTutorial(); return; }
 }
 
 /* =====================================================================
@@ -2125,6 +2525,8 @@ document.addEventListener('click', function (e) {
   if (t && t.classList.contains('tab')) { go(t.dataset.tab); return; }
   var m = e.target.closest('[data-m]');
   if (m) { $('#modal').hidden = true; return; }
+  var h = e.target.closest('[data-h]');
+  if (h) { onHelp(h.dataset.h); return; }
   var a = e.target.closest('[data-act]');
   if (a) return onAct(a);
   var g = e.target.closest('[data-g]');
@@ -2132,6 +2534,10 @@ document.addEventListener('click', function (e) {
 });
 function onAct(a) {
   var act = a.dataset.act;
+  if (act === 'home') { $('#modal').hidden = true; S.week = defaultWeek(); go('learn'); return; }
+  if (act === 'copy-link') { copyText(shareUrl()); return; }
+  if (act === 'tour') { openHelp(['welcome', 'sound', 'mic', 'practice'], { tour: true }); return; }
+  if (act === 'check') { openHelp(['sound', 'mic'], {}); return; }
   if (act === 'week') { var w = +a.dataset.w; if (!weekUnlocked(w)) { toast('Finish 5 stations in Week ' + (w - 1) + ' to unlock Week ' + w + '.'); } S.week = w; renderLearn(); }
   else if (act === 'station') { if (!weekUnlocked(S.week)) { toast('This week is still locked.'); return; } startRound(S.week, a.dataset.k); }
   else if (act === 'mix') startMix();
@@ -2146,20 +2552,10 @@ function onAct(a) {
   else if (act === 'say-starter') TTS.speak(a.dataset.t.replace(/…/g, ''));
   else if (act === 'card-timer') toggleTimer();
   else if (act === 'card-done') { var k = dkey(); if ((S.prog.cards[k] || 0) < 6 && !S.card.done) { S.prog.cards[k] = (S.prog.cards[k] || 0) + 1; S.card.done = true; addXP(15); SFX.ok(0); renderEday(); } }
-  else if (act === 'mic-test') micTest();
   else if (act === 'signout') {
     if (!S.signoutArm) { S.signoutArm = true; renderMe(); return; }
-    S.profile = null; S.prog = defaultProg(); S.tests = []; S.signoutArm = false; persist(); S.board = null; S.week = 1; go('learn'); renderHeader(); showLogin();
+    S.profile = null; S.prog = defaultProg(); S.tests = []; S.unlock = 0; S.signoutArm = false; persist(); S.board = null; S.week = 1; go('learn'); renderHeader(); showLogin();
   }
-}
-function micTest() {
-  var st = $('#mic-status'); if (st) st.textContent = 'Listening… say “Hallelujah”';
-  STT.listen('en-US', function (t) { var s = $('#mic-status'); if (s) s.textContent = 'Hearing: ' + t; }).then(function (r) {
-    var s = $('#mic-status'); if (!s) return;
-    if (r.error) s.textContent = S.mic === 'blocked' ? 'Blocked in this window. Self-check mode is on.' + (CONFIG.VOICE_URL ? ' Use the voice version link in lessons.' : '') : 'Not available: ' + r.error;
-    else if (!r.alts.length) s.textContent = 'Heard nothing. Check that the right microphone is selected.';
-    else { var ok = scoreEn('Hallelujah', r.alts).score >= 0.75; s.textContent = (ok ? 'Working! ' : 'Working, but I heard ') + '“' + r.alts[0] + '”'; }
-  });
 }
 function onGame(g) {
   if (!R && g.dataset.g !== 'close') return;
@@ -2195,9 +2591,12 @@ function onGame(g) {
       break;
     case 'again': var wk = R.week, sk = R.sk, mx = R.mix; R = null; closeSheet(); if (mx) startMix(); else startRound(wk, sk); break;
     case 'go-next': var nx = nextStation(); R = null; if (nx) { S.week = nx.w; startRound(nx.w, nx.k); } break;
+    case 'tut-start': var fl = firstLesson(); R = null; closeSheet(); S.week = fl.w; startRound(fl.w, fl.k); break;
+    case 'fixmic': STT.abort(); if (R) R.listening = false; openHelp(['mic'], { from: 'lesson' }); break;
   }
 }
 document.addEventListener('keydown', function (e) {
+  if (!$('#help').hidden) { if (e.key === 'Escape') closeHelp(); return; }
   if ($('#game').hidden) return;
   var tag = (e.target.tagName || '').toLowerCase();
   if (tag === 'input' || tag === 'select' || tag === 'textarea') return;
@@ -2216,7 +2615,6 @@ document.addEventListener('change', function (e) {
   if (id === 's-rate') TTS.speak('God is good all the time.');
   else if (id === 's-voice') { S.settings.voiceURI = e.target.value; persist(); TTS.speak('Welcome to English Day.'); }
   else if (id === 's-sfx') { S.settings.sfx = e.target.checked; persist(); if (S.settings.sfx) SFX.ok(0); }
-  else if (id === 's-open') { S.settings.openAll = e.target.checked; persist(); toast(S.settings.openAll ? 'All weeks are open.' : 'Weeks unlock step by step again.'); }
 });
 $('#login-form').addEventListener('submit', onLogin);
 document.addEventListener('submit', function (e) { if (e.target && e.target.id === 'w-form') { e.preventDefault(); onWrite(); } });
@@ -2229,15 +2627,27 @@ function init() {
   load();
   API.init();
   TTS.init();
-  if (!STT.Ctor) S.mic = 'unsupported';
+  S.env = envIssue();
+  if (S.env === 'inapp' || S.env === 'standalone') S.mic = 'env';
+  else if (!STT.Ctor) S.mic = 'unsupported';
+  ['touchend', 'click', 'keydown'].forEach(function (ev) { document.addEventListener(ev, unlockAudio, true); });
+  try {
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions.query({ name: 'microphone' }).then(function (p) {
+        S.micPerm = p.state;
+        p.onchange = function () { S.micPerm = p.state; if (p.state === 'granted' && S.mic === 'denied') S.mic = 'unknown'; };
+      }).catch(function () { });
+    }
+  } catch (e) { }
   document.querySelectorAll('.tab').forEach(function (t) { t.insertAdjacentHTML('afterbegin', icon(t.dataset.icon, 22)); });
   S.week = defaultWeek();
   S.board = API.mode === 'local' ? demoBoard() : null;
   renderAll();
   if (!S.profile) showLogin();
+  else if (API.mode === 'local') maybeTour();
   if (API.mode !== 'local') {
     API.call('getConfig').then(function (c) {
-      S.config.englishDay = c.englishDay; S.config.dailyGoal = c.dailyGoal; S.config.floors = c.floors || S.config.floors; S.config.url = c.url || '';
+      S.config.englishDay = c.englishDay; S.config.dailyGoal = c.dailyGoal; S.config.floors = c.floors || S.config.floors; S.config.url = c.url || ''; S.config.learnerUrl = c.learnerUrl || '';
       if (!S.profile && !document.querySelector('input[name="floor"]:checked')) showLogin();
       renderAll();
     }).catch(function () { });
