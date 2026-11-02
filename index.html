@@ -1085,7 +1085,14 @@ function merge(a, b) {
     challenges: ch, badges: Object.keys(badges), talks: Math.max(Number(a.talks) || 0, Number(b.talks) || 0),
     skill: maxMap(a.skill, b.skill), sp: maxMap(a.sp, b.sp), flags: maxMap(a.flags, b.flags) };
 }
-var LS_KEY = 'speaktheword.v1';
+var LS_KEY = 'speaktheword.v1', CFG_KEY = 'speaktheword.cfg';
+function applyCfg(c) {
+  if (!c) return;
+  if (c.englishDay !== undefined) S.config.englishDay = c.englishDay;
+  if (c.dailyGoal) S.config.dailyGoal = c.dailyGoal;
+  if (c.floors && c.floors.length) S.config.floors = c.floors;
+  S.config.url = c.url || S.config.url || ''; S.config.learnerUrl = c.learnerUrl || S.config.learnerUrl || '';
+}
 function load() {
   S.prog = defaultProg();
   try {
@@ -1159,13 +1166,35 @@ var API = {
       });
     }
     if (this.mode === 'http') {
-      return fetch(CONFIG.API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: fn, args: args }) })
-        .then(function (r) { return r.json(); })
-        .then(function (j) { if (!j.ok) throw new Error(j.error || 'Server error'); return j.data; });
+      if (!/^https:\/\/script\.google\.com\/(a\/[^/]+\/)?macros\/s\/[\w-]+\/exec\/?$/.test(String(CONFIG.API_URL).trim())) {
+        return Promise.reject(new Error('API_URL in index.html isn’t an Apps Script /exec link. Copy the Web app URL from Deploy → Manage deployments (it ends in /exec).'));
+      }
+      return fetch(String(CONFIG.API_URL).trim(), { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: fn, args: args }) })
+        .catch(function () { throw new Error('Can’t reach the office server. Check the internet connection and try again.'); })
+        .then(function (r) {
+          return r.text().then(function (t) {
+            var j;
+            try { j = JSON.parse(t); } catch (e) { throw new Error(serverHint(t, r.status)); }
+            if (!j.ok) throw new Error(j.error || 'Server error');
+            return j.data;
+          });
+        });
     }
     return Promise.reject(new Error('offline'));
   }
 };
+/* The server answered with a web page instead of data: say why, in words a coordinator can act on. */
+function serverHint(text, status) {
+  var t = String(text || '');
+  var pre = 'The office server sent a web page instead of data. ';
+  if (/accounts\.google\.com|ServiceLogin/i.test(t)) return pre + 'It asks for a Google sign-in: in Apps Script, Deploy → Manage deployments → set “Who has access” to Anyone.';
+  if (/Authorization is required/i.test(t)) return pre + 'It needs permission again: open the Apps Script editor, run setup once and click Allow.';
+  if (/Script function not found/i.test(t)) return pre + 'It is running old code: paste the latest Code.gs and deploy a new version.';
+  if (/unable to open the file|not found/i.test(t) || status === 404) return pre + 'The API_URL link is old or archived: paste the current Web app URL from Deploy → Manage deployments.';
+  var m = t.replace(/<[^>]+>/g, ' ').match(/\b(\w*Error: [^\n]{3,140})/);
+  if (m) return 'Apps Script reported an error: ' + m[1].trim() + ' Check the latest Code.gs was pasted completely.';
+  return pre + '(status ' + status + ') Check that API_URL is the /exec link and “Who has access” is Anyone.';
+}
 var saveTimer = null;
 function pushSave() {
   persist();
@@ -1280,8 +1309,9 @@ var STT = {
       var rec;
       try { rec = new self.Ctor(); } catch (e) { S.mic = 'unsupported'; return resolve({ alts: [], error: 'unsupported' }); }
       rec.lang = lang; rec.interimResults = true; rec.maxAlternatives = 3; rec.continuous = false;
-      var alts = [], last = '', err = null, finished = false, t, quiet;
+      var alts = [], last = '', err = null, finished = false, started = false, t, quiet;
       rec.onresult = function (e) {
+        started = true;
         var finals = [], objs = [], inter = '';
         for (var i = 0; i < e.results.length; i++) {
           var r = e.results[i], tx = ((r[0] && r[0].transcript) || '').trim();
@@ -1303,14 +1333,25 @@ var STT = {
         if (finished) return; finished = true; clearTimeout(t); clearTimeout(quiet); if (self.cur === rec) self.cur = null;
         if (!alts.length && last) alts = [last];
         if (err === 'not-allowed') S.mic = API.mode === 'gas' ? 'frame' : 'denied';
-        else if (err === 'service-not-allowed') S.mic = 'service';
+        else if (err === 'service-not-allowed') S.mic = S.env === 'iosother' ? 'env' : 'service';
+        else if (err === 'no-response' && S.env === 'iosother') S.mic = 'env';
         else if (err === 'audio-capture') S.mic = 'nomic';
         else if (!err || err === 'no-speech' || err === 'aborted') S.mic = 'ok';
         if (alts.length && !S.settings.micOk) { S.settings.micOk = true; persist(); }
         resolve({ alts: alts, error: err === 'no-speech' || err === 'aborted' ? null : err });
       };
+      rec.onstart = rec.onaudiostart = function () { started = true; };
       rec.onend = done;
-      t = setTimeout(function () { try { rec.stop(); } catch (e) { done(); } }, 12000);
+      // Some browsers never answer (no prompt, no error). Stop after 12 s, give up 2 s later.
+      t = setTimeout(function () {
+        try { rec.stop(); } catch (e) { done(); return; }
+        setTimeout(function () {
+          if (finished) return;
+          try { rec.abort(); } catch (e) { }
+          if (!err && !started) err = 'no-response';
+          done();
+        }, 2000);
+      }, 12000);
       self.cur = rec;
       try { rec.start(); } catch (e) { err = 'start-failed'; done(); }
     });
@@ -1320,7 +1361,8 @@ var STT = {
 };
 function voiceMode() { return (!STT.Ctor || ['off', 'denied', 'service', 'unsupported', 'frame', 'env'].indexOf(S.mic) >= 0) ? 'self' : 'voice'; }
 function micErrState(e) {
-  return e === 'not-allowed' ? (API.mode === 'gas' ? 'frame' : 'denied') : e === 'service-not-allowed' ? 'service' : e === 'audio-capture' ? 'nomic'
+  if (S.env === 'iosother' && (e === 'service-not-allowed' || e === 'no-response')) return 'env';
+  return e === 'not-allowed' ? (API.mode === 'gas' ? 'frame' : 'denied') : e === 'service-not-allowed' ? 'service' : e === 'no-response' ? 'stuck' : e === 'audio-capture' ? 'nomic'
     : e === 'network' ? 'network' : e === 'unsupported' ? 'unsupported' : 'noheard';
 }
 function voiceUrl() { var u = CONFIG.VOICE_URL || S.config.learnerUrl || ''; return u && u !== S.config.url ? u : ''; }
@@ -1653,8 +1695,10 @@ function sayActions() {
   if (R && R.selfOnly) note = 'Say it out loud in Indonesian, then compare with the model.';
   else if (S.mic === 'frame') note = 'This link can’t use the microphone. Say it out loud, then rate yourself.' + (vu ? ' <a href="' + esc(vu) + '" target="_top" rel="noopener">Open the voice version</a>' : '');
   else {
-    note = S.mic === 'off' ? 'The microphone is off. Say it out loud, then rate yourself.' : 'The microphone isn’t working here yet. Say it out loud, then rate yourself.';
-    fix = '<button class="tool" data-g="fixmic">' + icon('mic', 16) + 'Turn on the microphone</button>';
+    var iosOther = S.mic === 'env' && S.env === 'iosother';
+    note = iosOther ? 'On iPhone, voice checking only works in Safari. For now, say it out loud and rate yourself.'
+      : S.mic === 'off' ? 'The microphone is off. Say it out loud, then rate yourself.' : 'The microphone isn’t working here yet. Say it out loud, then rate yourself.';
+    fix = '<button class="tool" data-g="fixmic">' + icon(iosOther ? 'copy' : 'mic', 16) + (iosOther ? 'How to open in Safari' : 'Turn on the microphone') + '</button>';
   }
   return '<p class="selfnote">' + note + '</p>' + fix + '<button class="btn primary wide" data-g="self">' + icon('check') + 'I said it out loud</button><button class="link" data-g="skip">Skip</button>';
 }
@@ -2139,7 +2183,7 @@ function envBanner() {
   if (API.mode === 'gas' && vu) return notice('mic', 'Get your speaking checked', 'This link can’t use the microphone. Open the voice version to have your pronunciation checked.', '<a class="btn primary" href="' + esc(vu) + '" target="_top" rel="noopener">Open the voice version</a>');
   if (S.env === 'inapp') return notice('alert', 'Open this page in ' + browserName(), 'It is open inside another app, where sound and the microphone often don’t work. Use the app’s menu to open it in ' + browserName() + ', or copy the link.', copy);
   if (S.env === 'standalone') return notice('alert', 'Open this page in Safari', 'On iPhone, voice checking doesn’t work from a Home Screen icon. Copy the link and open it in Safari.', copy);
-  if (S.env === 'iosother') return notice('alert', 'Use Safari on iPhone', 'Voice checking works best in Safari. Copy the link and open it there.', copy);
+  if (S.env === 'iosother') return notice('alert', 'On iPhone, open this page in Safari', 'Chrome and other iPhone browsers can’t check your voice. Copy the link, open Safari and paste it, then sign in with the same name and PIN.', copy);
   if (S.mic === 'unsupported') return notice('alert', 'This browser can’t check your voice', 'Use Chrome on Android or a laptop, Edge on a laptop, or Safari on iPhone.', copy);
   return '';
 }
@@ -2244,7 +2288,8 @@ function renderMe() {
     : (S.syncErr ? 'Could not sync: ' + esc(S.syncErr) : S.lastSync ? 'Synced with the office leaderboard at ' + new Date(S.lastSync).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '.' : 'Connected to the office leaderboard.');
   var micTxt = { unknown: S.settings.micOk ? 'Worked before on this device' : 'Not checked yet on this device', ok: 'Working', off: 'Off: you rate yourself',
     denied: 'Blocked by the browser', service: 'Voice checking is turned off on this device', nomic: 'No microphone found',
-    unsupported: 'This browser can’t check your voice', frame: 'Not available on this link', env: 'Not available inside this app' }[S.mic] || '';
+    unsupported: 'This browser can’t check your voice', frame: 'Not available on this link',
+    env: S.env === 'iosother' ? 'On iPhone, works only in Safari' : S.env === 'standalone' ? 'Not available from the Home Screen icon' : 'Not available inside this app' }[S.mic] || '';
   $('#main').innerHTML = '<div class="page">' +
     '<section class="card profile"><span class="avatar"><span>' + esc(initials) + '</span></span><div style="flex:1;min-width:0"><h1>' + esc(S.profile ? S.profile.name : 'Guest') + '</h1>' +
     '<p class="muted">Floor ' + esc(S.profile ? S.profile.floor : '–') + ' · Level ' + L.n + ' · ' + esc(L.title) + '</p><div class="lvlbar"><i style="width:' + pct + '%"></i></div><p class="hint">' + fmt(L.next - xp) + ' XP to level ' + (L.n + 1) + '</p></div></section>' +
@@ -2286,8 +2331,14 @@ function teacherLink() {
 /* ---------- login ---------- */
 function showLogin() {
   var floors = S.config.floors || [1, 2, 3];
-  $('#floors').innerHTML = floors.map(function (f) { return '<input type="radio" name="floor" id="fl-' + f + '" value="' + f + '"><label for="fl-' + f + '">Floor ' + f + '</label>'; }).join('');
-  $('#login-mode').textContent = API.mode === 'local' ? 'Preview mode: progress stays on this device.' : '';
+  var cur = document.querySelector('input[name="floor"]:checked');
+  var sel = cur ? Number(cur.value) : (S.profile ? Number(S.profile.floor) : null);
+  $('#floors').innerHTML = floors.map(function (f) { return '<input type="radio" name="floor" id="fl-' + f + '" value="' + f + '"' + (Number(f) === sel ? ' checked' : '') + '><label for="fl-' + f + '">Floor ' + f + '</label>'; }).join('');
+  $('#floors').style.gridTemplateColumns = 'repeat(' + Math.min(floors.length, 3) + ',1fr)';
+  var m = $('#login-mode');
+  if (API.mode === 'local') { m.className = 'hint'; m.textContent = 'Preview mode: progress stays on this device.'; }
+  else if (S.configErr) { m.className = 'err'; m.textContent = S.configErr; }
+  else { m.className = 'hint'; m.textContent = ''; }
   $('#login').hidden = false;
 }
 function onLogin(e) {
@@ -2313,7 +2364,7 @@ function onLogin(e) {
     persist(); $('#login').hidden = true; S.week = defaultWeek(); renderAll(); refreshBoard(); pushSave();
     if (S.prog.flags.tut || stationsCleared() > 0) toast('Welcome, ' + r.name + '!');
     maybeTour();
-  }).catch(function (x) { err.textContent = x.message; }).then(function () { btn.disabled = false; btn.textContent = 'Start learning'; });
+  }).catch(function (x) { err.textContent = x.message; if (x.message === S.configErr) $('#login-mode').textContent = ''; }).then(function () { btn.disabled = false; btn.textContent = 'Start learning'; });
 }
 function syncDown() {
   if (API.mode === 'local' || !S.profile) return;
@@ -2462,11 +2513,29 @@ function hMic() {
     return head() + bad('The voice checking service can’t be reached.') + hTips(['Check your Wi-Fi or mobile data.', 'Voice checking needs the internet.']) + '<div class="h-actions">' + tryBtn + later + '</div>';
   }
   if (ms === 'env') {
-    var st = S.env === 'standalone'
-      ? [['Copy the link below', ''], ['Open <b>Safari</b> and paste it in the address bar', 'On iPhone, voice checking doesn’t work from a Home Screen icon']]
-      : [['Tap the menu of this app’s browser', 'often ⋮ or ··· in a corner'], ['Choose <b>Open in ' + browserName() + '</b>', 'or copy the link below and paste it in ' + browserName()]];
-    return head() + bad(S.env === 'standalone' ? 'The microphone doesn’t work from the Home Screen icon.' : 'This page is open inside another app, where the microphone doesn’t work.') + hSteps(st) +
-      '<div class="h-actions">' + copy + '<button class="link" data-h="mic-go">Try anyway</button>' + later + '</div>';
+    var st, msg, why = '';
+    if (S.env === 'iosother') {
+      msg = 'On iPhone, voice checking only works in Safari.';
+      why = '<p class="hint">Chrome, Edge and Firefox on iPhone can’t use Apple’s speech service, even when the microphone is allowed. That’s why no question appeared.</p>';
+      st = [['Tap <b>Copy link</b> below', ''], ['Open <b>Safari</b>', 'the blue compass app'], ['Paste the link in the address bar and tap <b>Go</b>', 'sign in with the same name and PIN; your progress is saved']];
+    } else if (S.env === 'standalone') {
+      msg = 'The microphone doesn’t work from the Home Screen icon.';
+      st = [['Tap <b>Copy link</b> below', ''], ['Open <b>Safari</b> and paste it in the address bar', 'On iPhone, voice checking doesn’t work from a Home Screen icon']];
+    } else {
+      msg = 'This page is open inside another app, where the microphone doesn’t work.';
+      st = [['Tap the menu of this app’s browser', 'often ⋮ or ··· in a corner'], ['Choose <b>Open in ' + browserName() + '</b>', 'or copy the link below and paste it in ' + browserName()]];
+    }
+    return head() + bad(msg) + why + hSteps(st) +
+      '<div class="h-actions"><button class="btn primary" data-h="copy">' + icon('copy', 16) + 'Copy link</button>' + (S.env === 'iosother' ? '' : '<button class="link" data-h="mic-go">Try anyway</button>') + later + '</div>';
+  }
+  if (ms === 'stuck') {
+    var tips = PLAT === 'ios'
+      ? ['Use <b>Safari</b>: other iPhone browsers can’t check your voice.', 'Turn on Siri and Dictation: Settings → General → Keyboard → Enable Dictation.', 'Reload the page and try again.']
+      : PLAT === 'android'
+      ? ['Use <b>Google Chrome</b>, updated in the Play Store.', 'Check the microphone is allowed: tap the icon left of the web address → Permissions.', 'Reload the page and try again.']
+      : ['Use <b>Chrome</b> or <b>Edge</b>.', 'Check the microphone is allowed: click the icon left of the web address.', 'Reload the page and try again.'];
+    return head() + bad('Your browser didn’t respond.') + hTips(tips) +
+      '<div class="h-actions">' + tryBtn + '<button class="btn" data-h="reload">' + icon('refresh', 16) + 'Reload page</button>' + later + '</div>';
   }
   if (ms === 'unsupported') {
     return head() + bad('This browser can’t check your voice.') + hTips(['Android: Google Chrome', 'iPhone: Safari', 'Laptop: Chrome or Edge']) + '<div class="h-actions">' + copy + later + '</div>';
@@ -2484,10 +2553,15 @@ function hPractice() {
 function helpMicTest() {
   TTS.cancel();
   HELP.ms = 'listen'; HELP.heard = '';
-  var p = STT.listen('en-US', function (t) { if (!HELP) return; HELP.heard = t; var l = $('#h-live'); if (l) l.textContent = t; }); // starts inside the tap
+  var tok = HELP.tok = (HELP.tok || 0) + 1;
+  var p = STT.listen('en-US', function (t) { if (!HELP || HELP.tok !== tok) return; HELP.heard = t; var l = $('#h-live'); if (l) l.textContent = t; }); // starts inside the tap
   renderHelp();
+  setTimeout(function () {
+    if (!HELP || HELP.tok !== tok || HELP.ms !== 'listen' || HELP.heard) return;
+    var l = $('#h-live'); if (l) l.innerHTML = 'Nothing happening? <button class="link" data-h="mic-stuck">Get help</button>';
+  }, 6000);
   p.then(function (r) {
-    if (!HELP) return;
+    if (!HELP || HELP.tok !== tok) return;
     if (r.error) HELP.ms = micErrState(r.error);
     else if (!r.alts.length) HELP.ms = 'noheard';
     else { HELP.ms = 'ok'; HELP.heard = r.alts[0]; S.mic = 'ok'; }
@@ -2498,12 +2572,13 @@ function helpMicTest() {
 function onHelp(k) {
   if (!HELP) return;
   if (k === 'close' || k === 'done') { closeHelp(); return; }
-  if (k === 'next' || k === 'next-skip') { STT.abort(); HELP.i = Math.min(HELP.i + 1, HELP.flow.length - 1); HELP.ss = 'intro'; HELP.ms = initialMicState(); renderHelp(); try { $('#help').scrollTop = 0; } catch (e) { } return; }
+  if (k === 'next' || k === 'next-skip') { HELP.tok = (HELP.tok || 0) + 1; STT.abort(); HELP.i = Math.min(HELP.i + 1, HELP.flow.length - 1); HELP.ss = 'intro'; HELP.ms = initialMicState(); renderHelp(); try { $('#help').scrollTop = 0; } catch (e) { } return; }
   if (k === 'play') { SFX.unlock(); SFX.gift(); TTS.speak('Welcome to English Day! God bless you.'); if (HELP.ss === 'intro') { HELP.ss = 'played'; renderHelp(); } return; }
   if (k === 'sound-yes') { HELP.ss = 'yes'; renderHelp(); return; }
   if (k === 'sound-no') { HELP.ss = 'tips'; renderHelp(); return; }
   if (k === 'mic-go') { helpMicTest(); return; }
   if (k === 'mic-stop') { STT.stop(); return; }
+  if (k === 'mic-stuck') { HELP.tok = (HELP.tok || 0) + 1; STT.abort(); HELP.ms = S.env === 'iosother' ? 'env' : 'stuck'; renderHelp(); return; }
   if (k === 'mic-skip') {
     STT.abort();
     if (S.mic !== 'ok' && S.mic !== 'frame') S.mic = ['env', 'unsupported'].indexOf(S.mic) >= 0 ? S.mic : 'off';
@@ -2625,10 +2700,11 @@ document.addEventListener('visibilitychange', function () { if (!document.hidden
    ===================================================================== */
 function init() {
   load();
+  try { applyCfg(JSON.parse(localStorage.getItem(CFG_KEY) || 'null')); } catch (e) { }
   API.init();
   TTS.init();
   S.env = envIssue();
-  if (S.env === 'inapp' || S.env === 'standalone') S.mic = 'env';
+  if (S.env === 'inapp' || S.env === 'standalone' || S.env === 'iosother') S.mic = 'env'; // iPhone: only Safari can check voices
   else if (!STT.Ctor) S.mic = 'unsupported';
   ['touchend', 'click', 'keydown'].forEach(function (ev) { document.addEventListener(ev, unlockAudio, true); });
   try {
@@ -2647,10 +2723,14 @@ function init() {
   else if (API.mode === 'local') maybeTour();
   if (API.mode !== 'local') {
     API.call('getConfig').then(function (c) {
-      S.config.englishDay = c.englishDay; S.config.dailyGoal = c.dailyGoal; S.config.floors = c.floors || S.config.floors; S.config.url = c.url || ''; S.config.learnerUrl = c.learnerUrl || '';
-      if (!S.profile && !document.querySelector('input[name="floor"]:checked')) showLogin();
+      applyCfg(c); S.configErr = '';
+      try { localStorage.setItem(CFG_KEY, JSON.stringify(c)); } catch (e) { }
+      if (!S.profile) showLogin();
       renderAll();
-    }).catch(function () { });
+    }).catch(function (e) {
+      S.configErr = e.message;
+      if (!S.profile) showLogin();
+    });
     refreshBoard();
     syncDown();
   }
