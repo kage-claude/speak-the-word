@@ -567,15 +567,15 @@ button.brand:hover .brand-name{text-decoration:underline;text-decoration-thickne
 var CONFIG = {
   // Leave empty inside Apps Script. Fill in ONLY when you host this same file elsewhere
   // (for example GitHub Pages) so microphone scoring works: paste your Apps Script /exec URL.
-  API_URL: 'https://kage-claude.github.io/speak-the-word/',
+  API_URL: 'https://script.google.com/macros/s/AKfycbwPIKb-FlPOmziAUBa_U9THaUm678oP57X5-Azda3CFjj25Kc7nDPyOhnS3oWfVvHD0/exec',
   // Optional: the address of that GitHub Pages copy. People whose browser blocks the
   // microphone inside Apps Script will see a "Open voice version" link to it.
   // (Setting LEARNER_URL in Code.gs does the same without editing this file.)
-  VOICE_URL: '',
+  VOICE_URL: 'https://kage-claude.github.io/speak-the-word/',
   // Fallbacks only (the real values come from Code.gs when online).
   ENGLISH_DAY: 5,     // 0 = Sunday … 5 = Friday
   DAILY_GOAL: 60,
-  FLOORS: [1, 2, 3]
+  FLOORS: [2, 3]
 };
 var PREVIEW_LINKS = { teacher: '' }; // only used by the online preview
 
