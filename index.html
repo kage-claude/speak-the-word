@@ -571,11 +571,11 @@ var CONFIG = {
   // Optional: the address of that GitHub Pages copy. People whose browser blocks the
   // microphone inside Apps Script will see a "Open voice version" link to it.
   // (Setting LEARNER_URL in Code.gs does the same without editing this file.)
-  VOICE_URL: 'https://kage-claude.github.io/speak-the-word/',
+  VOICE_URL: 'kage-claude.github.io/speak-the-word/',
   // Fallbacks only (the real values come from Code.gs when online).
   ENGLISH_DAY: 5,     // 0 = Sunday … 5 = Friday
   DAILY_GOAL: 60,
-  FLOORS: [2, 3]
+  FLOORS: [1, 2, 3]
 };
 var PREVIEW_LINKS = { teacher: '' }; // only used by the online preview
 
@@ -1261,6 +1261,7 @@ var TTS = {
   pick: function (lang, alt) {
     var L = this.list(lang); if (!L.length) return null;
     if (!alt && lang.indexOf('en') === 0 && S.settings.voiceURI) { var mine = L.filter(function (v) { return v.voiceURI === S.settings.voiceURI; })[0]; if (mine) return mine; }
+    if (PLAT === 'ios') return null; // iPhone: let the system use its installed voice for the language
     var want = lang.toLowerCase();
     var rank = function (v) { var s = 0; if ((v.lang || '').toLowerCase().replace('_', '-') === want) s += 4; if (/google|natural|neural|samantha|aria|jenny|guy|daniel|karen/i.test(v.name)) s += 2; return s; };
     var sorted = L.slice().sort(function (a, b) { return rank(b) - rank(a); });
@@ -1272,31 +1273,48 @@ var TTS = {
     var self = this;
     return new Promise(function (res) {
       if (!self.ok || !text) return res();
-      var ss = window.speechSynthesis, busy = false;
-      try { busy = ss.speaking || ss.pending; } catch (e) { }
-      if (busy) self.cancel();
+      var ss = window.speechSynthesis, busy = !!self.cur;
+      try { if (busy || ss.speaking || ss.pending) ss.cancel(); } catch (e) { }
+      self.cur = null;
+      audioSession('playback'); // iPhone: after the microphone, put speech back on the loudspeaker
       var u = new SpeechSynthesisUtterance(text);
       u.lang = o.lang || 'en-US'; u.rate = o.rate || S.settings.rate; u.pitch = o.pitch || 1; u.volume = 1;
       var v = self.pick(u.lang, o.alt);
       if (v) { u.voice = v; if (v.lang) u.lang = v.lang.replace('_', '-'); }
       self.cur = u; // keep a reference: some browsers drop the sound if the object is garbage-collected
-      var done = false, t;
+      var done = false, started = false, t;
       var fin = function () { if (done) return; done = true; clearTimeout(t); if (self.cur === u) self.cur = null; res(); };
+      u.onstart = function () { started = true; self.silent = 0; };
       u.onend = fin; u.onerror = fin;
       t = setTimeout(fin, 2500 + text.length * 120 / u.rate);
-      var go = function () { try { if (ss.paused) ss.resume(); ss.speak(u); } catch (e) { fin(); } };
-      // iPhone only plays speech that starts inside the tap itself, so speak right away when nothing is playing.
+      var go = function () {
+        try { if (ss.paused) ss.resume(); ss.speak(u); } catch (e) { fin(); return; }
+        // If nothing started, tell the learner once how to fix it instead of failing silently.
+        setTimeout(function () {
+          var on = false; try { on = ss.speaking; } catch (e) { }
+          if (started || on || done) return;
+          self.silent = (self.silent || 0) + 1;
+          if (self.silent === 2 && !self.warned) { self.warned = true; toast(PLAT === 'ios' ? 'No voice? Turn off Silent mode, turn the volume up, then tap Listen.' : 'No voice? Turn the volume up, then tap Listen. Me → Sound & microphone can help.'); }
+        }, 1500);
+      };
+      // iPhone only plays speech that starts inside the tap itself: never delay it there.
       // Chrome can drop speech that starts right after cancel(), so wait a moment only in that case.
-      if (busy) setTimeout(go, 80); else go();
+      if (busy && PLAT !== 'ios') setTimeout(go, 80); else go();
     });
   },
   unlock: function () {
-    if (!this.ok || this.unlocked) return;
+    // iPhone: a silent "warm-up" utterance can leave speech stuck, so skip it there.
+    if (!this.ok || this.unlocked || PLAT === 'ios') return;
     this.unlocked = true;
     try { var u = new SpeechSynthesisUtterance(' '); u.volume = 0; window.speechSynthesis.speak(u); } catch (e) { }
   },
-  cancel: function () { try { if (this.ok) window.speechSynthesis.cancel(); } catch (e) { } }
+  cancel: function () { this.cur = null; try { if (this.ok) window.speechSynthesis.cancel(); } catch (e) { } }
 };
+/* iPhone (iOS 17+): choose how the page uses audio. Playback = loudspeaker, ignores the silent switch;
+   play-and-record = while the microphone listens. Older iPhones simply ignore this. */
+function audioSession(type) {
+  try { if (PLAT === 'ios' && navigator.audioSession && navigator.audioSession.type !== type) navigator.audioSession.type = type; } catch (e) { }
+}
 
 var STT = {
   Ctor: window.SpeechRecognition || window.webkitSpeechRecognition || null,
@@ -1338,6 +1356,7 @@ var STT = {
         else if (err === 'audio-capture') S.mic = 'nomic';
         else if (!err || err === 'no-speech' || err === 'aborted') S.mic = 'ok';
         if (alts.length && !S.settings.micOk) { S.settings.micOk = true; persist(); }
+        audioSession('playback');
         resolve({ alts: alts, error: err === 'no-speech' || err === 'aborted' ? null : err });
       };
       rec.onstart = rec.onaudiostart = function () { started = true; };
@@ -1353,6 +1372,7 @@ var STT = {
         }, 2000);
       }, 12000);
       self.cur = rec;
+      audioSession('play-and-record');
       try { rec.start(); } catch (e) { err = 'start-failed'; done(); }
     });
   },
@@ -2299,7 +2319,7 @@ function renderMe() {
     '<h2 style="font-size:1.15rem">Badges</h2><section class="card badges">' + badges + '</section>' +
     '<h2 style="font-size:1.15rem">Settings</h2><section class="card settings">' +
     '<div class="set"><label for="s-rate">Voice speed<small>How fast the app speaks English</small></label><input type="range" id="s-rate" min="0.6" max="1.15" step="0.05" value="' + S.settings.rate + '"></div>' +
-    '<div class="set"><label for="s-voice">English voice<small>Depends on your device</small></label><select id="s-voice">' + vopts + '</select></div>' +
+    '<div class="set"><label for="s-voice">English voice<small>' + (PLAT === 'ios' ? 'Keep Automatic on iPhone: other voices may be silent unless downloaded in Settings → Accessibility → Spoken Content' : 'Depends on your device') + '</small></label><select id="s-voice">' + vopts + '</select></div>' +
     '<div class="set"><label for="s-sfx">Sound effects<small>Bells for right answers</small></label><input type="checkbox" class="switch" id="s-sfx"' + (S.settings.sfx ? ' checked' : '') + '></div>' +
     '<div class="set"><span class="lbl">Sound &amp; microphone<small id="mic-status">' + micTxt + '</small></span><button class="tool" data-act="check">' + icon('mic', 16) + 'Check</button></div>' +
     '<div class="set"><span class="lbl">App tour<small>The welcome tour and the 1-minute practice</small></span><button class="tool" data-act="tour">' + icon('play', 16) + 'Start tour</button></div>' +
