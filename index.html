@@ -1,0 +1,2253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- PREVIEW:HEAD-START -->
+<title>Speak the Word</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Lexend:wght@400;500;600;700&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+:root{
+  /* Layout: phone-first app shell. Sticky header, bottom tab bar under 900px, left rail above.
+     Each lesson station is a leaded-glass roundel on a zigzag path; surfaces carry a lead outline + hard shadow. */
+  --bg:#ECEFF8;
+  --lattice:rgba(20,26,58,.055);
+  --surface:#FFFFFF;
+  --surface-2:#F3F5FC;
+  --text:#141A3A;
+  --muted:#565E7E;
+  --lead:#141A3A;
+  --on-gold:#141A3A;
+  --cobalt:#2747C9; --cobalt-2:#8EA3FF;
+  --ruby:#C4244A;   --ruby-2:#F590A6;
+  --gold:#F2B400;   --gold-2:#FFE07A;
+  --emerald:#0A845B; --emerald-2:#74DBB3;
+  --sky:#1A86CC;    --sky-2:#9AD8FF;
+  --violet:#6935BE; --violet-2:#C3A7F7;
+  --stone:#A3A8BD;  --stone-2:#D3D6E3;
+  --good:#0A845B; --good-bg:#DCF4E9; --on-good:#FFFFFF;
+  --bad:#C4244A;  --bad-bg:#FCE3E9; --on-bad:#FFFFFF;
+  --f-display:"Alfa Slab One","Rockwell","Roboto Slab",Georgia,serif;
+  --f-body:"Lexend","Segoe UI",Roboto,system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B0F2B; --lattice:rgba(150,170,255,.055); --surface:#161C47; --surface-2:#1E2559;
+    --text:#EDF0FF; --muted:#A8AFD6; --lead:#02041A;
+    --cobalt:#5D7BFF; --cobalt-2:#2A3DA3; --ruby:#FF4F76; --ruby-2:#8E1C3A; --gold:#FFC738; --gold-2:#9A7000;
+    --emerald:#2CC98F; --emerald-2:#0C6447; --sky:#4CB4FF; --sky-2:#145A8C; --violet:#A47DFF; --violet-2:#4A2893;
+    --stone:#4A5075; --stone-2:#2C3156; --good:#3BD9A0; --good-bg:#0E392C; --on-good:#04231A; --bad:#FF6B8C; --bad-bg:#45152A; --on-bad:#2A0712;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B0F2B; --lattice:rgba(150,170,255,.055); --surface:#161C47; --surface-2:#1E2559;
+  --text:#EDF0FF; --muted:#A8AFD6; --lead:#02041A;
+  --cobalt:#5D7BFF; --cobalt-2:#2A3DA3; --ruby:#FF4F76; --ruby-2:#8E1C3A; --gold:#FFC738; --gold-2:#9A7000;
+  --emerald:#2CC98F; --emerald-2:#0C6447; --sky:#4CB4FF; --sky-2:#145A8C; --violet:#A47DFF; --violet-2:#4A2893;
+  --stone:#4A5075; --stone-2:#2C3156; --good:#3BD9A0; --good-bg:#0E392C; --on-good:#04231A; --bad:#FF6B8C; --bad-bg:#45152A; --on-bad:#2A0712;
+  color-scheme:dark;
+}
+
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100%;color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.5;
+  background-color:var(--bg);
+  background-image:repeating-linear-gradient(60deg,var(--lattice) 0 1.5px,transparent 1.5px 38px),repeating-linear-gradient(-60deg,var(--lattice) 0 1.5px,transparent 1.5px 38px);
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:10px}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+.ic{flex:none;display:inline-block;vertical-align:-0.18em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 18px;border:2px solid var(--lead);border-radius:14px;background:var(--surface);color:var(--text);font-weight:600;font-size:1rem;box-shadow:3px 3px 0 var(--lead);transition:transform .08s,box-shadow .08s;text-decoration:none}
+.btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--lead)}
+.btn.primary{background:var(--cobalt);color:#fff}
+.btn.gold{background:var(--gold);color:var(--on-gold)}
+.btn.good{background:var(--good);color:var(--on-good)}
+.btn.danger{background:var(--ruby);color:#fff}
+.btn.wide{width:100%;max-width:420px}
+.btn:disabled{opacity:.55;cursor:default}
+.link{background:none;border:0;padding:8px 10px;color:var(--muted);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.iconbtn{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;border:2px solid var(--lead);background:var(--surface);box-shadow:2px 2px 0 var(--lead);flex:none}
+.iconbtn:active{transform:translate(2px,2px);box-shadow:none}
+.tool{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:6px 12px;border:2px solid var(--lead);border-radius:999px;background:var(--surface-2);font-weight:600;font-size:.88rem}
+.tool:active{transform:translateY(1px)}
+a.tool{text-decoration:none;color:var(--text)}
+.card{background:var(--surface);border:2px solid var(--lead);border-radius:18px;box-shadow:4px 4px 0 var(--lead)}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.tab-num{font-variant-numeric:tabular-nums}
+
+/* ---------- header ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:12px;background:var(--surface);border-bottom:2px solid var(--lead);padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-name{font-family:var(--f-display);font-size:1.15rem;line-height:1;white-space:nowrap}
+.hstats{margin-left:auto;display:flex;align-items:center;gap:8px}
+.hchip{display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 10px;border:2px solid var(--lead);border-radius:999px;background:var(--surface-2);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hchip small{font-size:.7rem;font-weight:700;color:var(--muted)}
+.hchip.fire{color:var(--ruby)}
+.hchip.cold{color:var(--muted)}
+.hchip.eday{background:var(--gold);color:var(--on-gold);font-size:.8rem}
+.ring{display:grid;place-items:center;width:38px;height:38px}
+.ring-bg{fill:none;stroke:var(--stone-2);stroke-width:4}
+.ring-fg{fill:none;stroke:var(--emerald);stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset .6s}
+.xp-pop{position:fixed;z-index:95;top:calc(56px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));font-family:var(--f-display);font-size:1.3rem;color:var(--gold);-webkit-text-stroke:1px var(--lead);pointer-events:none;animation:pop 1.1s ease-out forwards}
+@keyframes pop{0%{opacity:0;transform:translateY(10px) scale(.8)}20%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-26px)}}
+@media (max-width:420px){.brand-name{display:none}.hchip{padding:0 8px}}
+
+/* ---------- shell ---------- */
+main{display:block;max-width:1120px;margin:0 auto;padding-block:18px calc(100px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));outline:none}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border-top:2px solid var(--lead);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 2px 10px;background:none;border:0;color:var(--muted);font-weight:600;font-size:.72rem;line-height:1.1}
+.tab[aria-current="page"]{color:var(--cobalt)}
+@media (min-width:900px){
+  .shell{display:grid;grid-template-columns:210px minmax(0,1fr);max-width:1340px;margin:0 auto}
+  .tabs{position:sticky;top:calc(70px + env(safe-area-inset-top,0px));align-self:start;display:flex;flex-direction:column;gap:6px;background:none;border:0;padding:22px 0 22px max(16px,env(safe-area-inset-left,0px))}
+  .tab{flex-direction:row;gap:12px;padding:11px 14px;border:2px solid transparent;border-radius:14px;font-size:.98rem;color:var(--text)}
+  .tab:hover{background:var(--surface-2)}
+  .tab[aria-current="page"]{background:var(--surface);border-color:var(--lead);box-shadow:3px 3px 0 var(--lead);color:var(--text)}
+  .tab[aria-current="page"] .ic{color:var(--cobalt)}
+  main{padding-bottom:48px}
+}
+
+/* ---------- learn ---------- */
+.learn{display:grid;gap:22px}
+.learn-main{display:flex;flex-direction:column;gap:18px;min-width:0}
+.learn-side{display:flex;flex-direction:column;gap:18px;min-width:0}
+@media (min-width:1100px){.learn{grid-template-columns:minmax(0,1fr) 330px;align-items:start}.learn-side{position:sticky;top:86px}}
+.weekbar{display:flex;gap:8px;overflow-x:auto;padding:2px 4px 8px 2px;scrollbar-width:thin}
+.wchip{flex:none;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border:2px solid var(--lead);border-radius:999px;background:var(--surface);font-weight:600;font-size:.9rem;box-shadow:2px 2px 0 var(--lead)}
+.wchip[aria-selected="true"]{background:var(--cobalt);color:#fff}
+.wchip.locked{color:var(--muted);box-shadow:none;border-style:dashed}
+.wchip.done .ic{color:var(--emerald)}
+.wchip[aria-selected="true"].done .ic{color:#fff}
+.hero{padding:20px 20px 18px;display:flex;flex-direction:column;gap:12px}
+.hero h1{font-family:var(--f-display);font-weight:400;font-size:clamp(1.7rem,4.6vw,2.4rem);line-height:1.05;letter-spacing:.005em}
+.hero .id-title{color:var(--muted);font-weight:500;margin-top:-4px}
+.hero .goal{font-size:.98rem;max-width:60ch}
+.hero .goal b{font-weight:700}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 16px;font-weight:600;font-size:.9rem}
+.hero-meta span{display:inline-flex;align-items:center;gap:6px}
+.hero-meta .ic{color:var(--gold)}
+.journey{display:flex;flex-direction:column;gap:6px}
+.panes{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.pane{height:26px;border:2px solid var(--lead);border-radius:12px 12px 3px 3px;background:var(--surface-2);position:relative;overflow:hidden}
+.pane::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--lead);opacity:.55}
+.pane.done{background:linear-gradient(135deg,var(--gold) 0 50%,var(--gold-2) 50% 100%)}
+.pane.now{background:linear-gradient(135deg,var(--cobalt) 0 50%,var(--cobalt-2) 50% 100%)}
+.pane-labels{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pane-labels span{text-align:center;white-space:nowrap}
+.mix{display:flex;align-items:center;gap:14px;padding:14px 16px;text-align:left;width:100%;font-weight:400;color:var(--text)}
+.mix .mix-ic{width:48px;height:48px;border-radius:14px;border:2px solid var(--lead);display:grid;place-items:center;background:var(--gold);color:var(--on-gold);flex:none}
+.mix b{display:block;font-size:1.05rem}
+.mix small{color:var(--muted);font-size:.85rem}
+.mix .chev{margin-left:auto;color:var(--muted)}
+.mix:active{transform:translate(3px,3px);box-shadow:none}
+.locknote{padding:16px;display:flex;gap:12px;align-items:center;color:var(--muted);font-weight:500}
+
+.path{display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 0 8px}
+.node{position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:0;padding:0;color:var(--text);transform:translateX(var(--x,0));width:150px}
+.roundel{position:relative;width:86px;height:86px;border-radius:50%;border:3px solid var(--lead);overflow:hidden;display:grid;place-items:center;
+  background:conic-gradient(from 45deg,var(--c1) 0 25%,var(--c2) 0 50%,var(--c1) 0 75%,var(--c2) 0 100%);box-shadow:0 6px 0 var(--lead);transition:transform .12s}
+.node-wrap{position:relative;border-radius:50%;box-shadow:0 6px 0 var(--lead)}
+.roundel::before,.roundel::after{content:"";position:absolute;left:50%;top:-10%;width:3px;height:120%;margin-left:-1.5px;background:var(--lead);transform:rotate(45deg)}
+.roundel::after{transform:rotate(-45deg)}
+.boss{position:relative;z-index:1;width:46px;height:46px;border-radius:50%;background:var(--surface);border:3px solid var(--lead);display:grid;place-items:center;color:var(--text)}
+.node:active .roundel{transform:translateY(4px);box-shadow:0 2px 0 var(--lead)}
+.node.locked .roundel{--c1:var(--stone)!important;--c2:var(--stone-2)!important}
+.node.locked{color:var(--muted)}
+.nlabel{font-weight:700;font-size:.92rem;line-height:1.15;text-align:center}
+.nsub{font-size:.75rem;color:var(--muted);margin-top:-5px;text-align:center}
+.nstars{display:flex;gap:2px;margin-top:-2px}
+.nstars .ic{color:var(--stone)}
+.nstars .on,.badge .on{color:var(--gold)}
+.start-tag{position:absolute;top:-34px;left:50%;transform:translateX(-50%);z-index:2;padding:4px 10px;font-family:var(--f-display);font-size:.8rem;letter-spacing:.06em;background:var(--gold);color:var(--on-gold);border:2px solid var(--lead);border-radius:10px;white-space:nowrap;animation:bob 1.4s ease-in-out infinite}
+.start-tag::after{content:"";position:absolute;left:50%;bottom:-8px;margin-left:-6px;border:6px solid transparent;border-top-color:var(--lead);border-bottom:0}
+@keyframes bob{50%{transform:translate(-50%,-5px)}}
+.node.next .roundel{animation:glow 2s ease-in-out infinite}
+@keyframes glow{50%{filter:brightness(1.15) saturate(1.2)}}
+
+.side-card{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.side-card h2{font-size:1rem;font-weight:700}
+.goalrow{display:flex;align-items:center;gap:14px}
+.goalrow .big{font-family:var(--f-display);font-size:1.6rem;line-height:1}
+.verse-text{font-size:1.02rem;line-height:1.55}
+.verse-ref{font-weight:700;font-size:.85rem;color:var(--violet)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:10px;align-items:center;font-weight:600;font-size:.88rem}
+.bar-track{height:18px;border:2px solid var(--lead);border-radius:999px;background:var(--surface-2);overflow:hidden}
+.bar-fill{height:100%;border-right:2px solid var(--lead);transition:width .6s}
+.bar-row .val{font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.lead-pill{font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:99px;background:var(--gold);color:var(--on-gold);border:1.5px solid var(--lead);margin-left:6px}
+
+/* ---------- page headings ---------- */
+.page{display:flex;flex-direction:column;gap:18px;max-width:780px}
+.page-title{font-family:var(--f-display);font-weight:400;font-size:clamp(1.6rem,4vw,2.1rem);line-height:1.1}
+.seg{display:inline-flex;border:2px solid var(--lead);border-radius:14px;overflow:hidden;background:var(--surface);box-shadow:2px 2px 0 var(--lead);max-width:100%}
+.seg button{border:0;background:none;padding:9px 14px;font-weight:600;font-size:.9rem;white-space:nowrap}
+.seg button+button{border-left:2px solid var(--lead)}
+.seg button[aria-pressed="true"]{background:var(--cobalt);color:#fff}
+
+/* ---------- ranks ---------- */
+.rank-list{display:flex;flex-direction:column}
+.rank-row{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 14px;border-top:2px solid var(--stone-2)}
+.rank-row:first-child{border-top:0}
+.rank-row.me{background:var(--surface-2);background:color-mix(in srgb,var(--gold) 22%,var(--surface))}
+.rank-no{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-size:.95rem;border:2px solid var(--lead);background:var(--surface-2)}
+.rank-no.m1{background:var(--gold);color:var(--on-gold)}
+.rank-no.m2{background:var(--stone-2)}
+.rank-no.m3{background:#D9A066;color:#141A3A}
+.rank-name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-sub{font-size:.8rem;color:var(--muted)}
+.rank-xp{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.rank-xp small{display:block;font-size:.72rem;color:var(--muted);font-weight:600}
+.floor-pill{display:inline-block;font-size:.7rem;font-weight:700;padding:1px 7px;border-radius:99px;border:1.5px solid var(--lead);margin-left:6px;vertical-align:2px;color:#fff}
+.demo-note{font-size:.85rem;color:var(--muted);padding:10px 14px;border:2px dashed var(--stone);border-radius:12px}
+
+/* ---------- english day ---------- */
+.eday-hero{padding:20px;display:grid;gap:10px;background:linear-gradient(120deg,var(--surface) 0 62%,transparent 62%),conic-gradient(from 45deg at 82% 50%,var(--gold) 0 25%,var(--ruby) 0 50%,var(--cobalt) 0 75%,var(--emerald) 0 100%)}
+.eday-hero.today{background:linear-gradient(120deg,var(--gold) 0 62%,transparent 62%),conic-gradient(from 45deg at 82% 50%,var(--ruby) 0 25%,var(--surface) 0 50%,var(--cobalt) 0 75%,var(--surface) 0 100%);color:var(--on-gold)}
+.eday-hero.today .muted{color:var(--on-gold);opacity:.8}
+.eday-hero h1{font-family:var(--f-display);font-weight:400;font-size:clamp(1.5rem,4.5vw,2.2rem);line-height:1.08;max-width:62%}
+.eday-hero p{max-width:60%}
+.challenge{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.challenge .ch-text{font-size:1.1rem;font-weight:600}
+.talkcard{padding:20px;display:flex;flex-direction:column;gap:14px}
+.talkcard .q{font-family:var(--f-display);font-weight:400;font-size:clamp(1.25rem,3.6vw,1.6rem);line-height:1.2}
+.starters{display:flex;flex-wrap:wrap;gap:8px}
+.starter{border:2px solid var(--lead);border-radius:12px;padding:6px 12px;background:var(--surface-2);font-weight:500;font-size:.92rem;display:inline-flex;gap:6px;align-items:center}
+.timer{font-family:var(--f-display);font-size:2rem;font-variant-numeric:tabular-nums;line-height:1}
+.timer.run{color:var(--ruby)}
+
+/* ---------- me ---------- */
+.profile{padding:18px;display:flex;gap:16px;align-items:center}
+.avatar{width:72px;height:72px;flex:none;border-radius:50%;border:3px solid var(--lead);display:grid;place-items:center;position:relative;overflow:hidden;
+  background:conic-gradient(from 45deg,var(--cobalt) 0 25%,var(--cobalt-2) 0 50%,var(--cobalt) 0 75%,var(--cobalt-2) 0 100%)}
+.avatar span{position:relative;z-index:1;width:44px;height:44px;border-radius:50%;background:var(--surface);border:3px solid var(--lead);display:grid;place-items:center;font-family:var(--f-display);font-size:1.05rem}
+.profile h1{font-size:1.3rem;font-weight:700}
+.lvlbar{height:14px;border:2px solid var(--lead);border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:8px}
+.lvlbar i{display:block;height:100%;background:var(--gold);border-right:2px solid var(--lead)}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (min-width:640px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.tile{padding:14px;display:flex;flex-direction:column;gap:2px}
+.tile b{font-family:var(--f-display);font-weight:400;font-size:1.7rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile span{font-size:.82rem;color:var(--muted);font-weight:600}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:14px;padding:16px}
+.badge{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.badge .roundel{width:58px;height:58px;box-shadow:0 4px 0 var(--lead)}
+.badge .boss{width:30px;height:30px;border-width:2px}
+.badge b{font-size:.82rem;line-height:1.15}
+.badge small{font-size:.7rem;color:var(--muted);line-height:1.2}
+.badge.off .roundel{--c1:var(--stone)!important;--c2:var(--stone-2)!important}
+.badge.off b{color:var(--muted)}
+.settings{padding:6px 18px}
+.set{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:2px solid var(--stone-2);flex-wrap:wrap}
+.set:first-child{border-top:0}
+.set label,.set .lbl{font-weight:600}
+.set small{display:block;color:var(--muted);font-weight:400;font-size:.8rem}
+.set select{max-width:100%;min-height:42px;border:2px solid var(--lead);border-radius:10px;background:var(--surface-2);padding:6px 10px}
+.set input[type=range]{width:180px;max-width:100%;accent-color:var(--cobalt)}
+.switch{appearance:none;-webkit-appearance:none;width:52px;height:30px;border:2px solid var(--lead);border-radius:99px;background:var(--stone-2);position:relative;cursor:pointer;flex:none;transition:background .15s}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--surface);border:2px solid var(--lead);transition:transform .15s}
+.switch:checked{background:var(--emerald)}
+.switch:checked::after{transform:translateX(22px)}
+.sync{font-size:.85rem;color:var(--muted)}
+
+/* ---------- overlays ---------- */
+.overlay{position:fixed;inset:0;z-index:70;display:grid;place-items:center;background:var(--bg);background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);padding-block:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow-y:auto}
+.login-card,.modal-card{width:100%;max-width:440px;padding:24px;display:flex;flex-direction:column;gap:14px}
+.login-card .logo-big{width:64px;height:68px}
+.login-card h1{font-family:var(--f-display);font-weight:400;font-size:2rem;line-height:1}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.field legend{font-weight:600;font-size:.92rem;padding:0}
+.field input[type=text],.field input[type=password],.field input:not([type]){min-height:48px;border:2px solid var(--lead);border-radius:12px;padding:10px 12px;background:var(--surface-2);font-size:1.05rem}
+fieldset.field{border:0;margin:0;padding:0}
+.floors{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.floors input{position:absolute;opacity:0;pointer-events:none}
+.floors label{display:grid;place-items:center;min-height:48px;border:2px solid var(--lead);border-radius:12px;background:var(--surface-2);font-weight:700;cursor:pointer}
+.floors input:checked+label{background:var(--cobalt);color:#fff;box-shadow:2px 2px 0 var(--lead)}
+.floors input:focus-visible+label{outline:3px solid var(--gold);outline-offset:2px}
+.err{color:var(--bad);font-weight:600;font-size:.9rem;min-height:1.2em}
+.hint{font-size:.85rem;color:var(--muted)}
+.modal-card{align-items:center;text-align:center}
+.modal-card .lvl-num{font-family:var(--f-display);font-size:3.4rem;line-height:1;color:var(--gold);-webkit-text-stroke:2px var(--lead)}
+.modal-card h2{font-family:var(--f-display);font-weight:400;font-size:1.6rem}
+.toast{position:fixed;left:50%;top:calc(66px + env(safe-area-inset-top,0px));z-index:96;transform:translate(-50%,-20px);opacity:0;pointer-events:none;max-width:min(92vw,460px);padding:10px 16px;border:2px solid var(--lead);border-radius:14px;background:var(--surface);box-shadow:3px 3px 0 var(--lead);font-weight:600;font-size:.92rem;transition:opacity .2s,transform .2s;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99}
+
+/* ---------- game ---------- */
+.game{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;background-color:var(--bg);
+  background-image:repeating-linear-gradient(60deg,var(--lattice) 0 1.5px,transparent 1.5px 38px),repeating-linear-gradient(-60deg,var(--lattice) 0 1.5px,transparent 1.5px 38px);
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.g-top,.g-body,.g-actions{width:100%;max-width:700px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.g-top{display:flex;align-items:center;gap:12px;padding-block:12px}
+.g-progress{flex:1;height:16px;border:2px solid var(--lead);border-radius:99px;background:var(--surface);overflow:hidden}
+.g-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--emerald),var(--emerald-2));border-right:2px solid var(--lead);transition:width .35s}
+.g-progress.timer i{background:linear-gradient(90deg,var(--gold),var(--gold-2));transition:none}
+.g-combo{min-width:58px;display:flex;align-items:center;gap:3px;justify-content:flex-end;font-family:var(--f-display);font-size:1.05rem;color:var(--ruby);font-variant-numeric:tabular-nums}
+.g-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding-block:6px 12px}
+.g-body>.center{margin-block:auto}
+.g-actions{display:flex;flex-direction:column;align-items:center;gap:10px;padding-block:10px 18px}
+.prompt{padding:22px 20px;display:flex;flex-direction:column;gap:12px}
+.big-word{font-family:var(--f-display);font-weight:400;font-size:clamp(2.4rem,10vw,3.6rem);line-height:1.02;word-break:break-word}
+.big-sent{font-size:clamp(1.3rem,4.6vw,1.75rem);font-weight:600;line-height:1.35}
+.big-sent.id{color:var(--violet)}
+.trans{font-size:1.02rem;color:var(--muted)}
+.ex{display:inline-flex;align-items:flex-start;gap:8px;text-align:left;background:var(--surface-2);border:2px dashed var(--stone);border-radius:12px;padding:8px 12px;font-size:.95rem;font-style:italic;color:var(--text)}
+.ex .ic{margin-top:3px;color:var(--cobalt)}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.blank{display:inline-block;min-width:3.2em;border-bottom:3px solid var(--cobalt);color:var(--cobalt);text-align:center}
+.recite{font-size:1.15rem;line-height:1.5;color:var(--muted)}
+.recite b{color:var(--text)}
+.listen-big{display:flex;align-items:center;gap:14px}
+.listen-big .play{width:64px;height:64px;border-radius:50%;border:3px solid var(--lead);background:var(--sky);color:#fff;display:grid;place-items:center;box-shadow:0 4px 0 var(--lead)}
+.listen-big .play:active{transform:translateY(3px);box-shadow:0 1px 0 var(--lead)}
+.scene{font-size:.9rem;color:var(--muted);padding:2px 2px 0}
+.scene b{color:var(--text)}
+.chat{display:flex;flex-direction:column;gap:10px}
+.bubble{max-width:86%;padding:10px 14px;border:2px solid var(--lead);border-radius:16px;font-size:1rem;line-height:1.4;box-shadow:2px 2px 0 var(--lead)}
+.bubble small{display:block;color:inherit;opacity:.75;font-size:.82rem;margin-top:2px}
+.bubble.a{align-self:flex-start;background:var(--surface);border-bottom-left-radius:4px}
+.bubble.y{align-self:flex-end;background:var(--cobalt);color:#fff;border-bottom-right-radius:4px}
+.bubble.now{animation:rise .3s ease-out}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}}
+.yourline{padding:16px 18px;display:flex;flex-direction:column;gap:8px;border-color:var(--cobalt)}
+.live{min-height:1.5em;text-align:center;color:var(--muted);font-weight:500;max-width:520px}
+.live.hearing{color:var(--text);font-style:italic}
+.mic{position:relative;width:92px;height:92px;border-radius:50%;border:3px solid var(--lead);background:var(--ruby);color:#fff;display:grid;place-items:center;box-shadow:0 6px 0 var(--lead);transition:transform .08s,box-shadow .08s}
+.mic:active{transform:translateY(4px);box-shadow:0 2px 0 var(--lead)}
+.mic.on{background:var(--emerald)}
+.mic.on::before,.mic.on::after{content:"";position:absolute;inset:-12px;border:3px solid var(--emerald);border-radius:50%;animation:ripple 1.3s ease-out infinite}
+.mic.on::after{animation-delay:.65s}
+@keyframes ripple{from{opacity:.9;transform:scale(.85)}to{opacity:0;transform:scale(1.35)}}
+.selfnote{font-size:.85rem;color:var(--muted);text-align:center;max-width:460px}
+.selfnote a{color:var(--cobalt);font-weight:700}
+.opts{display:grid;gap:10px;width:100%;max-width:520px}
+.opts.grid2{grid-template-columns:1fr 1fr}
+.opt{display:flex;align-items:center;gap:10px;min-height:56px;padding:10px 14px;border:2px solid var(--lead);border-radius:14px;background:var(--surface);box-shadow:3px 3px 0 var(--lead);font-weight:600;font-size:1.05rem;text-align:left;transition:transform .08s,box-shadow .08s,background .15s}
+.opt:active{transform:translate(3px,3px);box-shadow:none}
+.opt kbd{font:600 .72rem var(--f-body);border:1.5px solid var(--stone);border-radius:6px;padding:1px 6px;color:var(--muted)}
+.opt.right{background:var(--good);color:var(--on-good)}
+.opt.wrong{background:var(--bad);color:var(--on-bad);animation:shake .3s}
+.opt.right kbd,.opt.wrong kbd{color:inherit;border-color:currentColor}
+@media (hover:none){.opt kbd{display:none}}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.built{min-height:90px;padding:14px;border:2px dashed var(--stone);border-radius:14px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;font-size:1.05rem}
+.built span{padding:4px 8px;border-radius:8px;background:var(--good-bg);border:1.5px solid var(--good);animation:rise .2s}
+.bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:620px}
+.chunk{padding:9px 13px;border:2px solid var(--lead);border-radius:12px;background:var(--surface);box-shadow:2px 2px 0 var(--lead);font-weight:600}
+.chunk.used{visibility:hidden}
+.chunk.no{animation:shake .3s;background:var(--bad-bg)}
+.passage{font-size:1.05rem;line-height:1.7;display:flex;flex-direction:column;gap:10px;max-width:65ch}
+.ptitle{font-family:var(--f-display);font-weight:400;font-size:1.5rem;line-height:1.15}
+details.again{border:2px dashed var(--stone);border-radius:12px;padding:8px 12px;background:var(--surface-2)}
+details.again summary{cursor:pointer;font-weight:600;color:var(--cobalt)}
+details.again .passage{margin-top:8px;font-size:.95rem}
+.hintline{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.05rem;letter-spacing:.06em;color:var(--muted);word-break:break-word}
+.wform{display:flex;gap:8px;width:100%;max-width:560px}
+.wform input{flex:1;min-width:0;min-height:52px;border:2px solid var(--lead);border-radius:14px;padding:10px 14px;background:var(--surface);font-size:1.1rem}
+.wform .btn{flex:none}
+.crit{display:grid;grid-template-columns:auto minmax(0,1fr) 34px;gap:6px 10px;align-items:center;font-size:.85rem;font-weight:600}
+.crit .bar-track{height:12px}
+.crit span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.lvl-badge{display:inline-flex;align-items:center;padding:4px 12px;border:2px solid var(--lead);border-radius:999px;background:var(--gold);color:var(--on-gold);font-weight:700}
+.feedback{padding:10px 12px;border-radius:12px;background:var(--surface-2);border:2px dashed var(--stone);font-size:.95rem}
+.tipcard{padding:22px 20px;display:flex;flex-direction:column;gap:12px}
+.tipcard h2{font-family:var(--f-display);font-weight:400;font-size:1.7rem;line-height:1.1}
+.tipcard .tip{font-size:1.02rem;line-height:1.6}
+.tipcard .tip b{color:var(--emerald)}
+.blitz-q{padding:26px 20px;text-align:center;display:flex;flex-direction:column;gap:6px}
+.blitz-q .dir{font-size:.8rem}
+.blitz-score{display:flex;justify-content:space-between;align-items:baseline;font-weight:700}
+.blitz-score b{font-family:var(--f-display);font-size:2rem;font-weight:400}
+
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:65;transform:translateY(105%);visibility:hidden;transition:transform .22s ease-out,visibility 0s .22s;border-top:3px solid var(--lead);background:var(--surface)}
+.sheet.open{transform:none;visibility:visible;transition:transform .22s ease-out}
+.sheet.good{background:var(--good-bg)}
+.sheet.bad{background:var(--bad-bg)}
+.sheet-in{max-width:700px;margin:0 auto;padding-block:16px calc(18px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:10px;max-height:72vh;overflow-y:auto}
+.verdict{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-size:1.45rem;line-height:1.1}
+.sheet.good .verdict{color:var(--good)}
+.sheet.bad .verdict{color:var(--bad)}
+.verdict .pct{margin-left:auto;font-size:1.1rem;font-variant-numeric:tabular-nums}
+.marks{font-size:1.08rem;line-height:1.6}
+.marks .ok{color:var(--good);font-weight:600}
+.marks .miss{color:var(--bad);font-weight:600;text-decoration:underline wavy;text-underline-offset:4px}
+.heard{font-size:.9rem;color:var(--muted);font-style:italic}
+.keys{display:flex;flex-wrap:wrap;gap:6px}
+.key{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;border:1.5px solid currentColor;font-size:.85rem;font-weight:600}
+.key.ok{color:var(--good)}
+.key.miss{color:var(--bad)}
+.model{font-size:1rem}
+.model b{font-weight:700}
+.sheet-xp{font-family:var(--f-display);color:var(--text);font-size:1rem}
+.sheet-actions{display:flex;gap:10px;flex-wrap:wrap}
+.sheet-actions .btn{flex:1 1 140px}
+.rate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rate .btn{flex-direction:column;gap:2px;font-size:.9rem;padding:8px 6px}
+.rate small{font-weight:500;font-size:.72rem;opacity:.85}
+
+.result{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;padding-block:10px}
+.result h2{font-family:var(--f-display);font-weight:400;font-size:clamp(1.9rem,7vw,2.6rem);line-height:1.05}
+.bigstars{display:flex;gap:8px;align-items:flex-end}
+.bigstars svg{width:64px;height:64px}
+.bigstars svg:nth-child(2){width:84px;height:84px}
+.bigstars .s-on polygon{fill:var(--gold)}
+.bigstars .s-off polygon{fill:var(--stone-2)}
+.bigstars polygon{stroke:var(--lead);stroke-width:1.6;stroke-linejoin:round}
+.bigstars .s-on{animation:starpop .45s cubic-bezier(.3,1.6,.5,1) backwards}
+.bigstars .s-on:nth-child(2){animation-delay:.15s}
+.bigstars .s-on:nth-child(3){animation-delay:.3s}
+@keyframes starpop{from{transform:scale(0) rotate(-40deg)}}
+.rstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:100%;max-width:480px}
+.rstat{padding:12px 6px}
+.rstat b{display:block;font-family:var(--f-display);font-weight:400;font-size:1.5rem;font-variant-numeric:tabular-nums}
+.rstat span{font-size:.75rem;color:var(--muted);font-weight:600}
+.gift{display:flex;align-items:center;gap:12px;padding:12px 18px;background:var(--gold);color:var(--on-gold);font-weight:700;animation:bob2 1.2s ease-in-out infinite}
+@keyframes bob2{50%{transform:translateY(-4px) rotate(-1deg)}}
+.gift.opened{animation:none;background:var(--surface);color:var(--text)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+<!-- PREVIEW:HEAD-END -->
+</head>
+<body>
+<!-- PREVIEW:BODY-START -->
+<div id="app">
+  <header class="top">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 32 34" width="30" height="32" aria-hidden="true">
+        <path d="M4 18V16A12 12 0 0 1 16 4V18Z" style="fill:var(--ruby)"/>
+        <path d="M16 4A12 12 0 0 1 28 16V18H16Z" style="fill:var(--gold)"/>
+        <path d="M4 18H16V32H4Z" style="fill:var(--cobalt)"/>
+        <path d="M16 18H28V32H16Z" style="fill:var(--emerald)"/>
+        <path d="M16 4V32M4 18H28" style="fill:none;stroke:var(--lead);stroke-width:2"/>
+        <path d="M4 32V16A12 12 0 0 1 28 16V32Z" style="fill:none;stroke:var(--lead);stroke-width:2.6;stroke-linejoin:round"/>
+      </svg>
+      <span class="brand-name">Speak the Word</span>
+    </div>
+    <div class="hstats" id="hstats"></div>
+  </header>
+  <div class="shell">
+    <nav class="tabs" id="tabs" aria-label="Main">
+      <button class="tab" data-tab="learn" data-icon="home"><span>Learn</span></button>
+      <button class="tab" data-tab="eday" data-icon="cal"><span>English Day</span></button>
+      <button class="tab" data-tab="ranks" data-icon="award"><span>Ranks</span></button>
+      <button class="tab" data-tab="me" data-icon="user"><span>Me</span></button>
+    </nav>
+    <main id="main" tabindex="-1"></main>
+  </div>
+</div>
+
+<div id="game" class="game" hidden role="dialog" aria-modal="true" aria-label="Lesson">
+  <div class="g-top">
+    <button class="iconbtn" data-g="close" aria-label="Close lesson" id="g-close"></button>
+    <div class="g-progress" id="g-prog"><i id="g-bar"></i></div>
+    <div class="g-combo" id="g-combo" aria-live="polite"></div>
+  </div>
+  <div class="g-body" id="g-body"></div>
+  <div class="g-actions" id="g-actions"></div>
+  <div class="sheet" id="sheet" aria-live="polite"><div class="sheet-in" id="sheet-in"></div></div>
+</div>
+
+<div id="login" class="overlay" hidden>
+  <form class="card login-card" id="login-form" autocomplete="on" novalidate>
+    <svg class="logo-big" viewBox="0 0 32 34" aria-hidden="true">
+      <path d="M4 18V16A12 12 0 0 1 16 4V18Z" style="fill:var(--ruby)"/>
+      <path d="M16 4A12 12 0 0 1 28 16V18H16Z" style="fill:var(--gold)"/>
+      <path d="M4 18H16V32H4Z" style="fill:var(--cobalt)"/>
+      <path d="M16 18H28V32H16Z" style="fill:var(--emerald)"/>
+      <path d="M16 4V32M4 18H28" style="fill:none;stroke:var(--lead);stroke-width:2"/>
+      <path d="M4 32V16A12 12 0 0 1 28 16V32Z" style="fill:none;stroke:var(--lead);stroke-width:2.6;stroke-linejoin:round"/>
+    </svg>
+    <h1>Speak the Word</h1>
+    <p class="muted">Eight weeks to everyday English, and then to the pulpit. A few minutes a day, together with your office.</p>
+    <div class="field">
+      <label for="in-name">Your name</label>
+      <input id="in-name" name="name" type="text" maxlength="40" autocomplete="name" placeholder="e.g. Ruth Wijaya">
+    </div>
+    <fieldset class="field">
+      <legend>Your floor</legend>
+      <div class="floors" id="floors"></div>
+    </fieldset>
+    <div class="field">
+      <label for="in-pin">4-digit PIN</label>
+      <input id="in-pin" name="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="••••">
+    </div>
+    <p class="hint">Use the same name and PIN on your phone and laptop to keep one score.</p>
+    <p class="err" id="login-err" role="alert"></p>
+    <button class="btn primary" type="submit" id="login-btn">Start learning</button>
+    <p class="hint" id="login-mode"></p>
+  </form>
+</div>
+
+<div id="modal" class="overlay" hidden><div class="card modal-card" id="modal-card"></div></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<canvas id="confetti" hidden></canvas>
+
+<script>
+(function () {
+'use strict';
+
+/* =====================================================================
+   1. SETTINGS YOU CAN CHANGE
+   ===================================================================== */
+var CONFIG = {
+  // Leave empty inside Apps Script. Fill in ONLY when you host this same file elsewhere
+  // (for example GitHub Pages) so microphone scoring works: paste your Apps Script /exec URL.
+  API_URL: '',
+  // Optional: the address of that GitHub Pages copy. People whose browser blocks the
+  // microphone inside Apps Script will see a "Open voice version" link to it.
+  VOICE_URL: '',
+  // Fallbacks only (the real values come from Code.gs when online).
+  ENGLISH_DAY: 5,     // 0 = Sunday … 5 = Friday
+  DAILY_GOAL: 60,
+  FLOORS: [1, 2, 3]
+};
+
+/* =====================================================================
+   2. CURRICULUM — 8 weeks of Christian English
+   Bible verses: World English Bible (public domain). Indonesian lines are plain-language meanings.
+   ===================================================================== */
+var STATIONS = [
+  { k: 'words',   name: 'Word Cards',   sub: 'Hear it, say it',       icon: 'book',   c1: 'cobalt',  c2: 'cobalt-2' },
+  { k: 'match',   name: 'Quick Match',  sub: '45-second blitz',       icon: 'zap',    c1: 'gold',    c2: 'gold-2' },
+  { k: 'grammar', name: 'Grammar Snap', sub: 'Pick it, say it',       icon: 'grid',   c1: 'emerald', c2: 'emerald-2' },
+  { k: 'read',    name: 'Read & Write', sub: 'Understand, then type', icon: 'pen',    c1: 'cobalt',  c2: 'gold' },
+  { k: 'speak',   name: 'Say It Right', sub: 'Repeat after me',       icon: 'mic',    c1: 'ruby',    c2: 'ruby-2' },
+  { k: 'verse',   name: 'Memory Verse', sub: 'Read, build, recite',   icon: 'scroll', c1: 'violet',  c2: 'violet-2' },
+  { k: 'talk',    name: 'Talk Time',    sub: 'Role-play a chat',      icon: 'chat',   c1: 'sky',     c2: 'sky-2' },
+  { k: 'interp',  name: 'Interpreter',  sub: 'English ⇄ Indonesia',   icon: 'swap',   c1: 'ruby',    c2: 'gold' }
+];
+
+var WEEKS = [
+{ t: "Hello, Brother!", idt: "Salam & perkenalan", stage: "Basic",
+  goal: "Greet people and introduce yourself at church and at work.",
+  words: [
+    ["God","Tuhan, Allah","God is good all the time."],["Jesus","Yesus","Jesus loves you."],
+    ["church","gereja","I go to church on Sunday."],["Bible","Alkitab","This is my Bible."],
+    ["pray","berdoa","Let's pray together."],["worship","ibadah, penyembahan","Worship starts at nine."],
+    ["pastor","pendeta, gembala","He is our pastor."],["brother","saudara laki-laki","Welcome, brother!"],
+    ["sister","saudari","She is my sister in Christ."],["bless","memberkati","God bless you."],
+    ["welcome","selamat datang","Welcome to our church."],["amen","amin","We say amen after we pray."]],
+  says: [
+    ["Good morning! How are you?","Selamat pagi! Apa kabar?"],["I'm fine, thank you. And you?","Saya baik, terima kasih. Kamu?"],
+    ["Nice to meet you.","Senang bertemu denganmu."],["I work on the second floor.","Saya bekerja di lantai dua."],
+    ["I am a Christian.","Saya seorang Kristen."],["God bless you!","Tuhan memberkatimu!"],
+    ["Welcome to our church.","Selamat datang di gereja kami."],["See you on Sunday.","Sampai jumpa hari Minggu."]],
+  gram: { t: "am · is · are",
+    tip: "<b>I</b> → am · <b>he / she / it</b> (satu orang atau benda) → is · <b>you / we / they</b> → are.<br>Contoh: <i>I am a Christian. Jesus is Lord. We are one family.</i>",
+    q: [["I ___ a Christian.",["am","is","are"],0],["Jesus ___ my Savior.",["am","is","are"],1],
+        ["We ___ brothers and sisters in Christ.",["is","am","are"],2],["She ___ our worship leader.",["are","is","am"],1],
+        ["You ___ welcome here.",["are","is","am"],0],["God ___ good all the time.",["am","are","is"],2]] },
+  verse: { ref: "1 John 4:8", en: "He who doesn't love doesn't know God, for God is love.",
+    id: "Orang yang tidak mengasihi tidak mengenal Allah, sebab Allah adalah kasih." },
+  talk: { t: "Meeting a new coworker", scene: "Maria is new. She says hello in the lobby.", lines: [
+    ["A","Good morning! I'm Maria. I'm new here.","Selamat pagi! Saya Maria. Saya karyawan baru."],
+    ["Y","Good morning! Welcome. Nice to meet you.","Selamat pagi! Selamat datang. Senang bertemu denganmu."],
+    ["A","Nice to meet you too. Which floor do you work on?","Senang bertemu juga. Kamu kerja di lantai berapa?"],
+    ["Y","I work on the second floor.","Saya bekerja di lantai dua."],
+    ["A","Do you go to church?","Apakah kamu pergi ke gereja?"],
+    ["Y","Yes, I do. I go to church every Sunday.","Ya. Saya ke gereja setiap hari Minggu."],
+    ["A","Me too! God bless you.","Saya juga! Tuhan memberkatimu."],
+    ["Y","God bless you too. See you later!","Tuhan memberkatimu juga. Sampai nanti!"]] },
+  interp: [
+    ["Good morning, church!","Selamat pagi, jemaat!",["selamat pagi","jemaat|gereja|saudara"]],
+    ["God loves you.","Tuhan mengasihi Anda.",["tuhan|allah","kasih|asih|sayang|cinta"]],
+    ["Let us pray.","Mari kita berdoa.",["mari|ayo","doa"]],
+    ["Please open your Bible.","Silakan buka Alkitab Anda.",["buka","alkitab"]],
+    ["Jesus is with us today.","Yesus bersama kita hari ini.",["yesus","bersama|beserta|menyertai","hari ini"]],
+    ["Praise the Lord!","Puji Tuhan!",["puji","tuhan"]]] },
+
+{ t: "My Daily Walk", idt: "Kebiasaan sehari-hari", stage: "Basic",
+  goal: "Talk about your daily routine and your habits of faith.",
+  words: [
+    ["faith","iman","Faith grows when we read God's Word."],["believe","percaya","I believe in Jesus."],
+    ["hope","pengharapan","We have hope in Christ."],["love","kasih","Love is patient and kind."],
+    ["grace","anugerah, kasih karunia","We are saved by grace."],["peace","damai sejahtera","Jesus gives us peace."],
+    ["joy","sukacita","The joy of the Lord is my strength."],["thank","bersyukur, berterima kasih","I thank God every day."],
+    ["devotion","saat teduh, renungan","I have my devotion every morning."],["read","membaca","I read the Bible before work."],
+    ["sing","bernyanyi","We sing praise songs."],["habit","kebiasaan","Prayer is a good habit."]],
+  says: [
+    ["I wake up at five o'clock.","Saya bangun jam lima."],["I pray before I go to work.","Saya berdoa sebelum berangkat kerja."],
+    ["She reads the Bible every morning.","Dia membaca Alkitab setiap pagi."],["We have lunch together at noon.","Kami makan siang bersama jam dua belas."],
+    ["He doesn't work on Sunday.","Dia tidak bekerja pada hari Minggu."],["I thank God for my family.","Saya bersyukur kepada Tuhan untuk keluarga saya."],
+    ["Our worship team sings on Sunday morning.","Tim pujian kami bernyanyi pada Minggu pagi."],["I listen to sermons on my way home.","Saya mendengarkan khotbah dalam perjalanan pulang."]],
+  gram: { t: "Simple present",
+    tip: "Untuk kebiasaan dan rutinitas. <b>he / she / it</b> + kata kerja <b>-s</b>: <i>She prays.</i><br>Negatif: <b>don't</b> (I / you / we / they) · <b>doesn't</b> (he / she / it) + kata kerja dasar: <i>He doesn't work on Sunday.</i>",
+    q: [["She ___ every morning.",["pray","prays","praying"],1],["I ___ the Bible before work.",["read","reads","reading"],0],
+        ["He ___ go to work on Sunday.",["don't","doesn't","isn't"],1],["We ___ praise songs together.",["sings","singing","sing"],2],
+        ["My pastor ___ in Surabaya.",["live","lives","living"],1],["They ___ believe in luck.",["don't","doesn't","aren't"],0]] },
+  verse: { ref: "Philippians 4:13", en: "I can do all things through Christ, who strengthens me.",
+    id: "Aku sanggup melakukan segala sesuatu melalui Kristus yang menguatkan aku." },
+  talk: { t: "Coffee break chat", scene: "A coworker chats with you at the pantry.", lines: [
+    ["A","Hi! What time do you usually wake up?","Hai! Biasanya kamu bangun jam berapa?"],
+    ["Y","I usually wake up at five.","Saya biasanya bangun jam lima."],
+    ["A","Wow, that's early! What do you do in the morning?","Wah, pagi sekali! Apa yang kamu lakukan di pagi hari?"],
+    ["Y","I pray and read the Bible.","Saya berdoa dan membaca Alkitab."],
+    ["A","That's a good habit. How do you come to work?","Kebiasaan yang baik. Kamu ke kantor naik apa?"],
+    ["Y","I ride my motorbike.","Saya naik motor."],
+    ["A","Me too. The traffic is terrible!","Saya juga. Macetnya parah!"],
+    ["Y","Yes, so I pray on the way.","Ya, jadi saya berdoa di jalan."]] },
+  interp: [
+    ["God is faithful every day.","Tuhan setia setiap hari.",["tuhan|allah","setia","setiap hari|tiap hari"]],
+    ["Read your Bible every morning.","Bacalah Alkitab Anda setiap pagi.",["baca","alkitab","pagi"]],
+    ["Prayer changes things.","Doa mengubah segala sesuatu.",["doa","ubah"]],
+    ["Give thanks in everything.","Mengucap syukurlah dalam segala hal.",["syukur|terima kasih","segala|semua"]],
+    ["His grace is enough for you.","Anugerah-Nya cukup bagimu.",["anugerah|kasih karunia","cukup"]],
+    ["We have peace in Jesus.","Kita memiliki damai di dalam Yesus.",["damai","yesus"]]] },
+
+{ t: "Can I Pray for You?", idt: "Bertanya & peduli", stage: "Intermediate",
+  goal: "Ask how someone is doing and offer to pray for them.",
+  words: [
+    ["prayer request","pokok doa","Do you have a prayer request?"],["heal","menyembuhkan","God can heal you."],
+    ["sick","sakit","My mother is sick."],["worry","khawatir","Don't worry about tomorrow."],
+    ["help","menolong","How can I help you?"],["care","peduli","God cares about you."],
+    ["comfort","menghibur","The Holy Spirit comforts us."],["strength","kekuatan","God is our strength."],
+    ["need","membutuhkan","What do you need?"],["trust","percaya, berserah","Trust God with your problem."],
+    ["family","keluarga","How is your family?"],["tired","lelah, capek","Are you tired today?"]],
+  says: [
+    ["How are you feeling today?","Bagaimana perasaanmu hari ini?"],["Is everything okay?","Apakah semuanya baik-baik saja?"],
+    ["Do you have a prayer request?","Apakah kamu punya pokok doa?"],["Can I pray for you?","Boleh saya mendoakanmu?"],
+    ["What happened?","Apa yang terjadi?"],["Where does your mother live?","Di mana ibumu tinggal?"],
+    ["When is her surgery?","Kapan operasinya?"],["Don't worry. God is with you.","Jangan khawatir. Tuhan menyertaimu."]],
+  gram: { t: "Asking questions",
+    tip: "<b>Do</b> (I / you / we / they) · <b>Does</b> (he / she / it) di depan kalimat untuk pertanyaan ya/tidak.<br>Kata tanya: <b>What</b> apa · <b>Where</b> di mana · <b>When</b> kapan · <b>Who</b> siapa · <b>Why</b> mengapa · <b>How</b> bagaimana.",
+    q: [["___ you have a prayer request?",["Do","Does","Are"],0],["___ your father go to church?",["Do","Is","Does"],2],
+        ["___ are you feeling today?",["What","How","Who"],1],["___ do you live?",["Where","When","Who"],0],
+        ["___ is the Bible study? On Friday.",["Who","Why","When"],2],["___ wrote the book of Romans? Paul.",["Who","What","Where"],0]] },
+  verse: { ref: "Matthew 11:28", en: "Come to me, all you who labor and are heavily burdened, and I will give you rest.",
+    id: "Datanglah kepada-Ku, kamu semua yang bekerja keras dan berbeban berat, dan Aku akan memberi kamu istirahat." },
+  talk: { t: "A friend needs prayer", scene: "Your teammate looks sad this morning.", lines: [
+    ["A","Hi. Sorry, I'm not feeling well today.","Hai. Maaf, hari ini aku sedang tidak baik."],
+    ["Y","Oh no. What happened?","Aduh. Apa yang terjadi?"],
+    ["A","My son is sick. He is in the hospital.","Anakku sakit. Dia di rumah sakit."],
+    ["Y","I'm sorry to hear that. How old is he?","Aku turut sedih mendengarnya. Berapa umurnya?"],
+    ["A","He is seven years old.","Dia tujuh tahun."],
+    ["Y","Can I pray for him?","Boleh aku mendoakannya?"],
+    ["A","Yes, please. Thank you so much.","Ya, tolong. Terima kasih banyak."],
+    ["Y","Don't worry. God cares about your family.","Jangan khawatir. Tuhan peduli pada keluargamu."]] },
+  interp: [
+    ["Do you feel tired today?","Apakah Anda merasa lelah hari ini?",["lelah|capek|capai|letih","hari ini"]],
+    ["Jesus cares about you.","Yesus peduli kepada Anda.",["yesus","peduli|perhati"]],
+    ["Bring your burden to God.","Bawalah bebanmu kepada Tuhan.",["bawa","beban","tuhan|allah"]],
+    ["He can heal your heart.","Dia dapat menyembuhkan hatimu.",["embuh|pulih","hati"]],
+    ["Do not be afraid.","Jangan takut.",["jangan","takut"]],
+    ["God hears your prayer.","Tuhan mendengar doamu.",["tuhan|allah","dengar","doa"]]] },
+
+{ t: "Stories of Jesus", idt: "Bercerita tentang Yesus", stage: "Intermediate",
+  goal: "Tell a Bible story using the past tense.",
+  words: [
+    ["born","lahir","Jesus was born in Bethlehem."],["disciple","murid","Jesus called twelve disciples."],
+    ["miracle","mukjizat","Jesus did many miracles."],["parable","perumpamaan","Jesus taught with parables."],
+    ["cross","salib","Jesus died on the cross."],["tomb","kubur","The tomb was empty."],
+    ["rose","bangkit (bentuk lampau)","He rose on the third day."],["resurrection","kebangkitan","Easter celebrates the resurrection."],
+    ["Savior","Juruselamat","Jesus is our Savior."],["crowd","orang banyak","A big crowd followed Jesus."],
+    ["fed","memberi makan (lampau)","Jesus fed five thousand people."],["forgave","mengampuni (lampau)","Jesus forgave his enemies."]],
+  says: [
+    ["Jesus was born in Bethlehem.","Yesus lahir di Betlehem."],["He healed a blind man.","Dia menyembuhkan seorang yang buta."],
+    ["Jesus walked on the water.","Yesus berjalan di atas air."],["He fed five thousand people.","Dia memberi makan lima ribu orang."],
+    ["Jesus died on the cross for our sins.","Yesus mati di kayu salib karena dosa-dosa kita."],["On the third day, He rose again.","Pada hari ketiga, Dia bangkit kembali."],
+    ["The women found an empty tomb.","Para perempuan menemukan kubur yang kosong."],["Last Sunday, our pastor told this story.","Minggu lalu, pendeta kami menceritakan kisah ini."]],
+  gram: { t: "Simple past",
+    tip: "Untuk cerita masa lalu. Kata kerja beraturan + <b>-ed</b>: walk → walked, heal → healed.<br>Tidak beraturan harus dihafal: go → <b>went</b>, give → <b>gave</b>, rise → <b>rose</b>, feed → <b>fed</b>, leave → <b>left</b>.",
+    q: [["Jesus ___ on the water.",["walk","walked","walking"],1],["He ___ five thousand people.",["feeded","feed","fed"],2],
+        ["Jesus ___ again on the third day.",["rose","rised","rise"],0],["The disciples ___ everything and followed Him.",["leaved","left","leave"],1],
+        ["Yesterday I ___ to a prayer meeting.",["go","goed","went"],2],["God ___ His only Son.",["gave","gived","give"],0]] },
+  verse: { ref: "John 14:6", en: "I am the way, the truth, and the life. No one comes to the Father, except through me.",
+    id: "Akulah jalan, kebenaran, dan hidup. Tidak seorang pun datang kepada Bapa kecuali melalui Aku." },
+  talk: { t: "Telling the Easter story", scene: "A friend asks you what Easter is about.", lines: [
+    ["A","What is Easter about?","Paskah itu tentang apa?"],
+    ["Y","Easter is about the resurrection of Jesus.","Paskah adalah tentang kebangkitan Yesus."],
+    ["A","What happened to Jesus?","Apa yang terjadi pada Yesus?"],
+    ["Y","He died on the cross for our sins.","Dia mati di kayu salib karena dosa kita."],
+    ["A","And then?","Lalu?"],
+    ["Y","His friends buried Him in a tomb.","Teman-teman-Nya menguburkan Dia di sebuah kubur."],
+    ["A","Is that the end of the story?","Apakah ceritanya selesai di situ?"],
+    ["Y","No! On the third day, He rose again.","Tidak! Pada hari ketiga, Dia bangkit kembali."]] },
+  interp: [
+    ["Jesus went to Galilee.","Yesus pergi ke Galilea.",["yesus","pergi|berangkat","galilea"]],
+    ["He healed many sick people.","Dia menyembuhkan banyak orang sakit.",["embuh","banyak","sakit"]],
+    ["The disciples were afraid.","Para murid ketakutan.",["murid","takut"]],
+    ["Jesus calmed the storm.","Yesus menenangkan badai.",["yesus","enang|reda","badai|angin ribut"]],
+    ["The tomb was empty.","Kubur itu kosong.",["kubur|makam","kosong"]],
+    ["He is alive today!","Dia hidup hari ini!",["hidup","hari ini"]]] },
+
+{ t: "My Testimony", idt: "Kesaksian hidupku", stage: "Advanced",
+  goal: "Share how God has changed your life.",
+  words: [
+    ["testimony","kesaksian","Let me share my testimony."],["saved","diselamatkan","I was saved when I was young."],
+    ["sin","dosa","Jesus took away my sin."],["forgive","mengampuni","God forgives us."],
+    ["repent","bertobat","I repented and believed."],["change","mengubah","Jesus has changed my life."],
+    ["born again","lahir baru","I am born again."],["purpose","tujuan hidup","Now my life has a purpose."],
+    ["struggle","pergumulan","I had many struggles."],["faithful","setia","God has been faithful to me."],
+    ["grateful","bersyukur","I am so grateful."],["since","sejak","I have followed Jesus since 2015."]],
+  says: [
+    ["I have been a Christian for ten years.","Saya sudah menjadi orang Kristen selama sepuluh tahun."],["Before I knew Jesus, I was lost.","Sebelum mengenal Yesus, saya terhilang."],
+    ["God has changed my life.","Tuhan telah mengubah hidup saya."],["I have never felt so much peace.","Saya belum pernah merasakan damai sebesar ini."],
+    ["He has forgiven all my sins.","Dia telah mengampuni semua dosa saya."],["My life has a new purpose.","Hidup saya memiliki tujuan baru."],
+    ["God has been faithful to my family.","Tuhan telah setia kepada keluarga saya."],["I want to share my testimony.","Saya ingin membagikan kesaksian saya."]],
+  gram: { t: "Present perfect",
+    tip: "<b>have / has + V3</b> untuk pengalaman yang masih terasa sampai sekarang: <i>God has changed my life.</i><br><b>for</b> + lamanya (for ten years) · <b>since</b> + titik waktu (since 2019).",
+    q: [["God ___ changed my life.",["have","has","is"],1],["I have ___ a Christian for ten years.",["be","was","been"],2],
+        ["We have ___ many miracles.",["seen","saw","see"],0],["He has ___ all my sins.",["forgave","forgiven","forgive"],1],
+        ["I have prayed for her ___ 2019.",["for","from","since"],2],["She has worked here ___ five years.",["for","since","at"],0]] },
+  verse: { ref: "2 Corinthians 5:17", en: "Therefore if anyone is in Christ, he is a new creation. The old things have passed away. Behold, all things have become new.",
+    id: "Jadi, siapa pun yang ada di dalam Kristus adalah ciptaan baru. Yang lama sudah berlalu; lihat, semuanya sudah menjadi baru." },
+  talk: { t: "Your story at lunch", scene: "A coworker asks about your faith over lunch.", lines: [
+    ["A","How long have you been a Christian?","Sudah berapa lama kamu menjadi orang Kristen?"],
+    ["Y","I have been a Christian for many years.","Saya sudah menjadi orang Kristen selama bertahun-tahun."],
+    ["A","What was your life like before?","Seperti apa hidupmu sebelumnya?"],
+    ["Y","Before I knew Jesus, I was always worried.","Sebelum mengenal Yesus, saya selalu khawatir."],
+    ["A","And what has changed?","Lalu apa yang berubah?"],
+    ["Y","God has given me peace and a new purpose.","Tuhan telah memberi saya damai dan tujuan baru."],
+    ["A","That's beautiful. Thank you for sharing.","Indah sekali. Terima kasih sudah berbagi."],
+    ["Y","You're welcome. God is faithful!","Sama-sama. Tuhan itu setia!"]] },
+  interp: [
+    ["I was lost, but now I am found.","Dulu aku terhilang, tetapi sekarang aku ditemukan.",["hilang|sesat","sekarang","temu|emukan|dapat"]],
+    ["God has forgiven your sins.","Tuhan telah mengampuni dosa-dosamu.",["tuhan|allah","ampun","dosa"]],
+    ["Your past does not define you.","Masa lalumu tidak menentukan siapa dirimu.",["masa lalu","tidak|bukan","entukan|tentu|definisi"]],
+    ["He has made you a new person.","Dia telah menjadikan kamu manusia baru.",["baru","manusia|orang|pribadi|ciptaan"]],
+    ["Share your story with others.","Bagikan kisahmu kepada orang lain.",["bagi|cerita","kisah|cerita|kesaksian","orang lain"]],
+    ["God has been good to us.","Tuhan sudah baik kepada kita.",["tuhan|allah","baik"]]] },
+
+{ t: "Church Life", idt: "Kehidupan bergereja", stage: "Advanced",
+  goal: "Invite people and make plans for church activities.",
+  words: [
+    ["fellowship","persekutuan","We have fellowship on Friday."],["Bible study","pemahaman Alkitab (PA)","Join our Bible study!"],
+    ["small group","kelompok sel (komsel)","Our small group meets on Wednesday."],["ministry","pelayanan","What ministry do you serve in?"],
+    ["volunteer","sukarelawan","We need volunteers for Christmas."],["offering","persembahan","We give an offering every Sunday."],
+    ["communion","perjamuan kudus","We take communion once a month."],["baptism","baptisan","The baptism is next Sunday."],
+    ["choir","paduan suara","She sings in the choir."],["usher","penyambut jemaat","The ushers welcome everyone."],
+    ["congregation","jemaat","The congregation stood up."],["invite","mengundang","I want to invite you."]],
+  says: [
+    ["Would you like to join our Bible study?","Maukah kamu ikut pemahaman Alkitab kami?"],["We will meet on Friday at seven.","Kami akan bertemu hari Jumat jam tujuh."],
+    ["I'm going to serve as an usher.","Saya akan melayani sebagai penyambut jemaat."],["What time does the service start?","Jam berapa ibadahnya mulai?"],
+    ["Let's have lunch after church.","Ayo makan siang setelah ibadah."],["I'll pick you up at six.","Saya akan menjemputmu jam enam."],
+    ["Our church is going to have a retreat.","Gereja kami akan mengadakan retret."],["Thank you for inviting me!","Terima kasih sudah mengundang saya!"]],
+  gram: { t: "will · going to · Would you like…?",
+    tip: "<b>will</b> untuk janji atau keputusan spontan: <i>I will pray for you.</i><br><b>be going to</b> untuk rencana: <i>We are going to have a retreat.</i><br>Mengundang dengan sopan: <b>Would you like to</b> + kata kerja?",
+    q: [["I ___ pray for you tonight.",["am","will","going"],1],["We are going ___ have a retreat.",["for","will","to"],2],
+        ["___ you like to join our choir?",["Would","Will","Do"],0],["She ___ going to sing on Sunday.",["are","is","will"],1],
+        ["Don't worry, I ___ help you.",["will","going","am"],0],["Would you like ___ come with me?",["for","at","to"],2]] },
+  verse: { ref: "Matthew 18:20", en: "For where two or three are gathered together in my name, there I am in the middle of them.",
+    id: "Sebab di mana dua atau tiga orang berkumpul dalam nama-Ku, di situ Aku ada di tengah-tengah mereka." },
+  talk: { t: "Inviting a coworker", scene: "You want to bring a coworker to Bible study.", lines: [
+    ["A","Hey, what are you doing this Friday?","Hei, Jumat ini kamu ada acara apa?"],
+    ["Y","I'm going to a Bible study. Would you like to come?","Aku mau ikut PA. Kamu mau ikut?"],
+    ["A","Maybe. What time does it start?","Mungkin. Mulai jam berapa?"],
+    ["Y","It starts at seven in the evening.","Mulainya jam tujuh malam."],
+    ["A","Where is it?","Di mana tempatnya?"],
+    ["Y","It's at my friend's house, near the office.","Di rumah temanku, dekat kantor."],
+    ["A","Okay, I'll come!","Oke, aku datang!"],
+    ["Y","Great! I will pick you up at six thirty.","Bagus! Aku jemput jam setengah tujuh."]] },
+  interp: [
+    ["Next Sunday, we will have a baptism service.","Minggu depan, kita akan mengadakan ibadah baptisan.",["minggu depan","akan","baptis"]],
+    ["Everyone is invited to the fellowship.","Semua orang diundang ke persekutuan.",["semua|setiap orang","undang","persekutuan"]],
+    ["Let's serve God together.","Mari kita melayani Tuhan bersama-sama.",["mari|ayo","layan","bersama"]],
+    ["Please bring a friend next week.","Silakan bawa seorang teman minggu depan.",["bawa|ajak","teman","minggu depan"]],
+    ["The offering will be used for missions.","Persembahan akan digunakan untuk misi.",["persembahan","guna|pakai","misi|penginjilan"]],
+    ["We are one family in Christ.","Kita adalah satu keluarga di dalam Kristus.",["satu","keluarga","kristus"]]] },
+
+{ t: "The Good News", idt: "Menjelaskan Injil", stage: "Advanced",
+  goal: "Explain the gospel simply and clearly.",
+  words: [
+    ["gospel","Injil","The gospel is good news."],["salvation","keselamatan","Salvation is a gift."],
+    ["eternal life","hidup kekal","Jesus gives eternal life."],["sacrifice","pengorbanan","Jesus made the perfect sacrifice."],
+    ["redeem","menebus","Christ redeemed us."],["kingdom","kerajaan","Seek first God's kingdom."],
+    ["Holy Spirit","Roh Kudus","The Holy Spirit helps us."],["righteous","benar di hadapan Allah","God makes us righteous."],
+    ["receive","menerima","You can receive Jesus today."],["gift","karunia, hadiah","Eternal life is a free gift."],
+    ["separate","memisahkan","Sin separates us from God."],["therefore","oleh karena itu","Therefore, we have peace with God."]],
+  says: [
+    ["Everyone has sinned.","Semua orang telah berdosa."],["Sin separates us from God.","Dosa memisahkan kita dari Allah."],
+    ["God loves us, so He sent Jesus.","Allah mengasihi kita, jadi Dia mengutus Yesus."],["Jesus died because He loves us.","Yesus mati karena Dia mengasihi kita."],
+    ["We can't save ourselves, but Jesus can.","Kita tidak bisa menyelamatkan diri sendiri, tetapi Yesus bisa."],["You must believe in your heart.","Kamu harus percaya di dalam hatimu."],
+    ["Salvation is a free gift from God.","Keselamatan adalah karunia cuma-cuma dari Allah."],["Therefore, we have peace with God.","Oleh karena itu, kita memiliki damai dengan Allah."]],
+  gram: { t: "Linking ideas",
+    tip: "<b>because</b> karena · <b>so</b> jadi · <b>but</b> tetapi · <b>therefore</b> oleh karena itu.<br>Setelah <b>can / must / should</b> selalu kata kerja dasar: <i>You can receive Him. We should love one another.</i>",
+    q: [["Jesus died ___ He loves us.",["so","because","but"],1],["God loves us, ___ He sent His Son.",["so","because","but"],0],
+        ["We are sinners, ___ God is merciful.",["because","so","but"],2],["Christ died for us; ___, we live for Him.",["therefore","because","but"],0],
+        ["You can ___ Jesus today.",["receives","received","receive"],2],["We ___ love one another.",["should to","should","shoulds"],1]] },
+  verse: { ref: "Ephesians 2:8–9", en: "For by grace you have been saved through faith, and that not of yourselves; it is the gift of God, not of works, that no one would boast.",
+    id: "Sebab karena anugerah kamu diselamatkan melalui iman; itu bukan dari dirimu sendiri, melainkan pemberian Allah, bukan hasil perbuatan, supaya tidak ada orang yang memegahkan diri." },
+  talk: { t: "Explaining the gospel", scene: "A curious coworker asks what you believe.", lines: [
+    ["A","What does the word gospel mean?","Apa arti kata Injil?"],
+    ["Y","Gospel means good news.","Injil berarti kabar baik."],
+    ["A","Good news about what?","Kabar baik tentang apa?"],
+    ["Y","God loves us, but our sin separates us from Him.","Allah mengasihi kita, tetapi dosa memisahkan kita dari-Nya."],
+    ["A","So what can we do?","Jadi apa yang bisa kita lakukan?"],
+    ["Y","We can't save ourselves, but Jesus died for us.","Kita tidak bisa menyelamatkan diri sendiri, tetapi Yesus mati untuk kita."],
+    ["A","How can I receive this gift?","Bagaimana aku bisa menerima karunia ini?"],
+    ["Y","Believe in Jesus and follow Him.","Percayalah kepada Yesus dan ikutlah Dia."]] },
+  interp: [
+    ["All have sinned and fall short of the glory of God.","Semua orang telah berbuat dosa dan kehilangan kemuliaan Allah.",["dosa","mulia","allah|tuhan"]],
+    ["The wages of sin is death.","Upah dosa adalah maut.",["upah","dosa","maut|kematian|mati"]],
+    ["But the gift of God is eternal life.","Tetapi karunia Allah adalah hidup yang kekal.",["tetapi|namun|tapi","karunia|anugerah|hadiah","kekal"]],
+    ["Jesus paid the price for us.","Yesus telah membayar harganya untuk kita.",["yesus","bayar|ebus","harga"]],
+    ["You cannot earn salvation.","Anda tidak bisa mendapatkan keselamatan dengan usaha sendiri.",["tidak|tak","selamat"]],
+    ["Receive Him today!","Terimalah Dia hari ini!",["erima","hari ini"]]] },
+
+{ t: "Preach & Interpret", idt: "Berkhotbah & menerjemahkan", stage: "Preaching",
+  goal: "Preach a short message, or interpret a sermon line by line.",
+  words: [
+    ["sermon","khotbah","Today's sermon is about hope."],["passage","bagian Alkitab, perikop","Let's read the passage together."],
+    ["verse","ayat","Look at verse sixteen."],["chapter","pasal","Turn to chapter three."],
+    ["Scripture","Kitab Suci","Scripture teaches us to love."],["apply","menerapkan","How can we apply this today?"],
+    ["interpret","menerjemahkan (lisan)","She will interpret the sermon."],["preach","berkhotbah, memberitakan","Paul preached the gospel."],
+    ["message","pesan, firman","God has a message for you."],["conclusion","kesimpulan","In conclusion, God is faithful."],
+    ["altar call","panggilan altar","There is an altar call at the end."],["benediction","berkat penutup","The pastor gave the benediction."]],
+  says: [
+    ["Please turn with me to John chapter three.","Silakan buka bersama saya Yohanes pasal tiga."],["Let us read verse sixteen together.","Mari kita membaca ayat enam belas bersama-sama."],
+    ["What does this verse teach us?","Apa yang diajarkan ayat ini kepada kita?"],["First, God loves the whole world.","Pertama, Allah mengasihi seluruh dunia."],
+    ["Second, His love is a gift.","Kedua, kasih-Nya adalah sebuah karunia."],["How can we apply this today?","Bagaimana kita dapat menerapkannya hari ini?"],
+    ["In conclusion, God is always faithful.","Sebagai kesimpulan, Allah selalu setia."],["Let us bow our heads and pray.","Mari kita menundukkan kepala dan berdoa."]],
+  gram: { t: "Sermon language",
+    tip: "Perintah sopan: <b>Please turn to…</b>, <b>Open your Bibles.</b><br>Ajakan: <b>Let us / Let's</b> + kata kerja dasar. Urutan poin: <b>First, Second, Finally, In conclusion</b>.<br>Pertanyaan retoris: <i>What does this mean for us?</i>",
+    q: [["Let us ___ our Bibles.",["opens","open","opening"],1],["Please ___ with me to Psalm 23.",["turn","turns","turned"],0],
+        ["___, God loves us. Second, He saves us.",["One","Once","First"],2],["What ___ this verse mean?",["does","do","is"],0],
+        ["___ conclusion, God is faithful.",["On","In","At"],1],["Let's ___ our heads and pray.",["bows","bowing","bow"],2]] },
+  verse: { ref: "Mark 16:15", en: "Go into all the world, and preach the Good News to the whole creation.",
+    id: "Pergilah ke seluruh dunia dan beritakanlah Kabar Baik kepada segala makhluk." },
+  talk: { t: "Meeting the guest preacher", scene: "You will interpret for a visiting speaker on Sunday.", lines: [
+    ["A","Hello! I'm the guest speaker today. Are you my interpreter?","Halo! Saya pembicara tamu hari ini. Apakah Anda penerjemah saya?"],
+    ["Y","Yes, I am. It's an honor to serve with you.","Ya, benar. Suatu kehormatan melayani bersama Anda."],
+    ["A","Thank you! I will speak one sentence at a time.","Terima kasih! Saya akan berbicara satu kalimat demi satu kalimat."],
+    ["Y","Great. Please pause after each sentence.","Baik. Tolong berhenti sejenak setelah setiap kalimat."],
+    ["A","Of course. Is there anything else I should know?","Tentu. Ada hal lain yang perlu saya ketahui?"],
+    ["Y","Please give me your Bible verses before the service.","Tolong berikan ayat-ayat Alkitab Anda sebelum ibadah."],
+    ["A","Sure. Shall we pray before we start?","Tentu. Bagaimana kalau kita berdoa sebelum mulai?"],
+    ["Y","Yes, let's pray together.","Ya, mari kita berdoa bersama."]] },
+  interp: [
+    ["Please turn with me to Romans chapter eight.","Silakan buka bersama saya Roma pasal delapan.",["buka","roma","pasal","delapan|8"]],
+    ["Nothing can separate us from the love of God.","Tidak ada yang dapat memisahkan kita dari kasih Allah.",["tidak ada|tak ada","isah","kasih"]],
+    ["God is working in every situation.","Allah bekerja dalam setiap situasi.",["allah|tuhan","kerja|karya","setiap|segala","situasi|keadaan|hal"]],
+    ["Maybe you are going through a hard time.","Mungkin Anda sedang mengalami masa yang sulit.",["mungkin","sulit|berat|susah"]],
+    ["But remember, you are not alone.","Tetapi ingatlah, Anda tidak sendirian.",["tetapi|namun|tapi","ingat","sendiri"]],
+    ["Let us stand and worship Him.","Mari kita berdiri dan menyembah Dia.",["mari|ayo","berdiri","embah|puji"]]] }
+];
+
+/* Read & Write: one short passage per week + 4 comprehension questions. Writing items reuse each week's sentences. */
+var READS = [
+{ t: "A New Face at the Office", text: "Maria is new at the office. She works on the second floor.\nOn Monday morning, Daniel says, “Good morning! Welcome!” Maria smiles. “Thank you. I am Maria.”\nDaniel is a Christian. He goes to church every Sunday with his wife. Maria is a Christian too. She goes to a small church near her house.\nAt lunch, they eat together, and they pray before they eat. Daniel says, “See you on Sunday at the English service?” Maria says, “Yes! God bless you.”",
+  q: [["Where does Maria work?",["On the first floor","On the second floor","On the third floor"],1],
+      ["Who goes to church with his wife?",["Maria","Daniel","The pastor"],1],
+      ["What do they do before they eat?",["They sing","They pray","They read"],1],
+      ["Where is Maria’s church?",["Near her house","Near the office","In another city"],0]] },
+{ t: "Ruth’s Morning", text: "Ruth wakes up at five o’clock every day. First, she makes coffee. Then she reads one chapter of the Bible and prays for her family.\nHer husband doesn’t wake up early. He prays at night.\nAt six thirty, Ruth rides her motorbike to the office. The traffic is bad, but she is calm. Ruth says, “My devotion time gives me peace for the whole day.”",
+  q: [["What time does Ruth wake up?",["At four","At five","At six thirty"],1],
+      ["What does she read every morning?",["A newspaper","One Bible chapter","Her emails"],1],
+      ["When does her husband pray?",["In the morning","At lunch","At night"],2],
+      ["What gives Ruth peace for the day?",["Her coffee","Her devotion time","Her motorbike"],1]] },
+{ t: "A Prayer at Lunch", text: "On Wednesday, Samuel looked tired at lunch. Grace asked, “Are you okay? What happened?”\nSamuel said, “My father is sick. He is in the hospital in Malang.” Grace listened carefully. Then she asked, “When is his surgery?” “On Friday,” Samuel answered.\n“Can I pray for him?” Grace asked. Samuel nodded, and Grace prayed a short prayer. After that, Samuel said, “Thank you. I feel stronger now.”\nEvery day that week, Grace asked him, “How is your father today?”",
+  q: [["Why was Samuel tired?",["He worked late","His father was sick","He was hungry"],1],
+      ["Where is the hospital?",["In Malang","In Surabaya","In Jakarta"],0],
+      ["When is the surgery?",["On Wednesday","On Friday","On Sunday"],1],
+      ["What did Grace do every day that week?",["She brought food","She asked about his father","She called the doctor"],1]] },
+{ t: "The Morning of the Third Day", text: "Jesus died on the cross on Friday. His friends were very sad. They put His body in a tomb, and a big stone closed the entrance.\nEarly on Sunday morning, some women went to the tomb with spices. When they arrived, the stone was already moved. The tomb was empty!\nAn angel said, “He is not here. He has risen!” The women ran to tell the disciples. At first, the disciples didn’t believe them. Later, Jesus appeared to them, and they were full of joy.",
+  q: [["What closed the entrance of the tomb?",["A big stone","A wooden door","A small fence"],0],
+      ["When did the women go to the tomb?",["On Friday night","Early on Sunday morning","On Saturday afternoon"],1],
+      ["What did the angel say?",["Go home","He has risen","Wait here"],1],
+      ["How did the disciples react at first?",["They didn’t believe","They were angry","They went to sleep"],0]] },
+{ t: "Budi’s Story", text: "Budi has worked in the finance team for six years. Before he knew Jesus, he worried about everything: money, his health, and his future. He often felt empty, even when he was busy.\nIn 2018, a coworker invited him to a small Bible study. There, Budi heard that God loved him and could forgive him. He repented and believed.\n“God has not taken away all my problems,” Budi says, “but He has given me peace in them.” Since then, Budi has led a prayer group at the office every Thursday.",
+  q: [["How long has Budi worked in finance?",["Two years","Six years","Ten years"],1],
+      ["Who invited Budi to a Bible study?",["His wife","A coworker","His pastor"],1],
+      ["What does Budi say God has given him?",["A life with no problems","Peace in his problems","More money"],1],
+      ["What does Budi do every Thursday?",["He leads a prayer group","He plays football","He visits the hospital"],0]] },
+{ t: "Christmas Plans", text: "Next month, our church is going to have a Christmas service for families from the neighborhood. The youth group will sing, and the children are going to perform a short drama about the birth of Jesus.\nWe need twenty volunteers: ushers to welcome guests, people to prepare snacks, and a team to clean up afterward. Would you like to help?\nThe planning meeting will be on Saturday at four in the afternoon. If you can’t come, please send a message to Pastor Yohanes. Don’t forget to invite a friend!",
+  q: [["Who is the Christmas service for?",["Only church leaders","Families from the neighborhood","Children only"],1],
+      ["What will the children perform?",["A song","A short drama","A dance"],1],
+      ["How many volunteers do they need?",["Ten","Twelve","Twenty"],2],
+      ["When is the planning meeting?",["Saturday at four","Sunday at four","Friday at seven"],0]] },
+{ t: "The Gospel in Four Words", text: "Some people explain the gospel with four simple words: God, sin, Jesus, and response.\nFirst, God created us and loves us. Second, all of us have sinned, so we are separated from God, and we cannot fix this by our own good works.\nThird, Jesus, God’s Son, died on the cross for our sins and rose again; therefore, the way back to God is open.\nFinally, God asks for a response: we turn from our sin and trust Jesus. Salvation is not a reward; it is a gift.",
+  q: [["What is the first of the four words?",["Sin","God","Response"],1],
+      ["Why are we separated from God?",["Because of sin","Because God is far away","Because we are poor"],0],
+      ["Can our good works fix the problem of sin?",["Yes, always","No","Only on Sunday"],1],
+      ["According to the text, salvation is…",["a reward","a gift","a payment"],1]] },
+{ t: "Behind the Microphone", text: "Last Sunday, Lidya interpreted for a guest preacher from Singapore for the first time. Before the service, she asked him for his Bible passages and his main points, so she could prepare the key words.\nDuring the sermon, he spoke in short sentences and paused after each one. Lidya didn’t translate every single word; she focused on the meaning. When he told a joke, she adapted it so the congregation would understand.\nAfter the service, an old man thanked her: “I felt like the preacher was speaking Indonesian to me.”",
+  q: [["Where was the guest preacher from?",["Malaysia","Singapore","Australia"],1],
+      ["What did Lidya ask for before the service?",["A new microphone","His passages and main points","A script of every word"],1],
+      ["How did Lidya translate?",["Word for word","She focused on the meaning","She summarized at the end"],1],
+      ["What did she do with the joke?",["She skipped it","She adapted it","She explained it in English"],1]] }
+];
+
+var TEST_BANDS = [[85,'C1','Advanced'],[70,'B2','Upper-intermediate'],[55,'B1','Intermediate'],[40,'A2','Elementary'],[20,'A1','Basic'],[0,'Pre-A1','Starter']];
+var CRITERIA = ['Fluency','Pronunciation','Vocabulary','Grammar','Understanding'];
+
+var CARDS = {
+  basic: [
+    ["How was your weekend?",["My weekend was…","On Saturday, I…","On Sunday, I went to…"]],
+    ["What is your favorite worship song?",["My favorite song is…","I like it because…"]],
+    ["What do you do at the office?",["I work on the … floor.","I am a/an …","Every day, I…"]],
+    ["What do you usually eat for breakfast?",["I usually eat…","I drink…"]],
+    ["Who is your favorite person in the Bible? Why?",["My favorite is…","because…"]],
+    ["How do you come to the office?",["I ride…","It takes … minutes."]],
+    ["What do you pray for every day?",["I pray for…","I thank God for…"]],
+    ["What did you do last night?",["Last night, I…","Then I…"]]],
+  inter: [
+    ["Tell about a time God answered your prayer.",["One time, I prayed for…","God answered by…","I learned that…"]],
+    ["Retell your favorite Bible story.",["A long time ago,…","Then…","In the end,…"]],
+    ["Who taught you about Jesus?",["My … taught me…","I remember when…"]],
+    ["How can we show God's love at the office?",["We can…","For example,…"]],
+    ["What has God taught you this year?",["This year, God has taught me…","I have learned…"]],
+    ["Describe your church to a new friend.",["My church is in…","The service starts at…","We have…"]],
+    ["What is hard about learning English for you?",["The hardest part is…","I want to improve my…"]],
+    ["Invite your partner to a church activity.",["Would you like to…?","It will be on…","I can pick you up…"]]],
+  adv: [
+    ["Explain the gospel in one minute.",["First, God loves…","But sin…","So Jesus…","Therefore…"]],
+    ["Preach a one-minute message on Philippians 4:13.",["Today we will read…","This verse teaches us…","How can we apply this?"]],
+    ["Your partner preaches three sentences. Interpret them into Indonesian.",["Pause after each sentence.","Keep the meaning, not every word."]],
+    ["What does it mean to be the light of the world at work?",["It means…","For example, when…"]],
+    ["How would you answer: Why do you believe in God?",["I believe because…","In my life, I have seen…"]],
+    ["Share your testimony in 90 seconds: before, how, after.",["Before I knew Jesus,…","Then…","Now…"]],
+    ["Pick a verse and explain how to apply it this week.",["My verse is…","It means…","This week, I will…"]],
+    ["What makes a good interpreter? Discuss.",["A good interpreter…","It is important to…"]]]
+};
+
+var CHALLENGES = [
+  "Greet five coworkers in English today.",
+  "Ask someone “How was your weekend?” and listen to the whole answer.",
+  "Offer to pray for a coworker, in English.",
+  "Tell someone a Bible story in English in under two minutes.",
+  "Share one sentence of your testimony in English at lunch.",
+  "Invite a coworker to an activity, in English.",
+  "Explain one Bible verse in English to a friend.",
+  "Interpret a short devotion for someone on your floor."
+];
+
+var LEVELS = [[0,'Seeker'],[100,'Listener'],[250,'Learner'],[500,'Disciple'],[800,'Servant'],[1200,'Witness'],
+  [1700,'Messenger'],[2300,'Teacher'],[3000,'Interpreter'],[4000,'Preacher'],[5500,'Evangelist'],[7500,'Shepherd']];
+var DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var FLOOR_COLORS = { 1: 'cobalt', 2: 'ruby', 3: 'emerald', 4: 'violet', 5: 'sky', 6: 'gold' };
+var DEMO = [['Ruth',2,1840,215,6],['Daniel',1,1625,180,4],['Grace',3,1490,245,9],['Yohanes',2,1210,95,2],
+  ['Maria',1,980,150,3],['Samuel',3,860,60,1],['Esther',2,720,120,5],['Paulus',1,540,40,0],['Lidya',3,410,85,2]];
+
+/* =====================================================================
+   3. HELPERS
+   ===================================================================== */
+var IC = {
+  mic:'<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>',
+  vol:'<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>',
+  x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+  lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  check:'<polyline points="20 6 9 17 4 12"/>',
+  flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+  book:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+  zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>',
+  scroll:'<path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/>',
+  chat:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+  swap:'<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  award:'<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>',
+  user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  refresh:'<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>',
+  eye:'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
+  cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+  shuffle:'<polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/>',
+  gift:'<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
+  clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  play:'<polygon points="6 3 20 12 6 21 6 3"/>',
+  chev:'<polyline points="9 18 15 12 9 6"/>',
+  bulb:'<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/>',
+  out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+  slow:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/>',
+  pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  clip:'<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/>'
+};
+function icon(n, s, cls) {
+  s = s || 20;
+  return '<svg class="ic' + (cls ? ' ' + cls : '') + '" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[n] + '</svg>';
+}
+function starIcon(on, s) {
+  return '<svg class="ic' + (on ? ' on' : '') + '" width="' + (s || 14) + '" height="' + (s || 14) + '" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" stroke="var(--lead)" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+}
+function $(s, el) { return (el || document).querySelector(s); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+function fmt(n) { return Number(n || 0).toLocaleString('en-US'); }
+function pad(n) { return (n < 10 ? '0' : '') + n; }
+function dkey(d) { d = d || new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function weekStartKey(d) { var x = new Date(d || new Date()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return dkey(x); }
+function colorVar(n) { return 'var(--' + n + ')'; }
+function glass(c1, c2) { return '--c1:' + colorVar(c1) + ';--c2:' + colorVar(c2); }
+
+/* =====================================================================
+   4. STATE + STORAGE
+   ===================================================================== */
+var S = {
+  profile: null,
+  prog: null,
+  settings: { rate: 0.9, voiceURI: '', sfx: true, openAll: false },
+  config: { englishDay: CONFIG.ENGLISH_DAY, dailyGoal: CONFIG.DAILY_GOAL, floors: CONFIG.FLOORS },
+  view: 'learn', week: 1, rankTab: 'week', cardLevel: 'basic', card: null,
+  tests: [], mic: 'unknown', board: null, boardLoading: false, lastSync: 0, syncErr: '', pendingLevel: 0
+};
+function defaultProg() { return { daily: {}, stars: {}, best: {}, words: {}, verses: {}, cards: {}, challenges: {}, badges: [], talks: 0, skill: {}, sp: {} }; }
+function maxMap(a, b) { var o = {}, k; a = a || {}; b = b || {}; for (k in a) o[k] = Number(a[k]) || 0; for (k in b) o[k] = Math.max(o[k] || 0, Number(b[k]) || 0); return o; }
+function merge(a, b) {
+  a = a || {}; b = b || {};
+  var badges = {}, ch = {}, k;
+  (a.badges || []).concat(b.badges || []).forEach(function (x) { badges[x] = 1; });
+  [a.challenges || {}, b.challenges || {}].forEach(function (m) { for (k in m) if (m[k]) ch[k] = true; });
+  return { daily: maxMap(a.daily, b.daily), stars: maxMap(a.stars, b.stars), best: maxMap(a.best, b.best),
+    words: maxMap(a.words, b.words), verses: maxMap(a.verses, b.verses), cards: maxMap(a.cards, b.cards),
+    challenges: ch, badges: Object.keys(badges), talks: Math.max(Number(a.talks) || 0, Number(b.talks) || 0),
+    skill: maxMap(a.skill, b.skill), sp: maxMap(a.sp, b.sp) };
+}
+var LS_KEY = 'speaktheword.v1';
+function load() {
+  S.prog = defaultProg();
+  try {
+    var d = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
+    if (d) { S.profile = d.profile || null; S.prog = merge(defaultProg(), d.prog); S.tests = d.tests || []; for (var k in (d.settings || {})) S.settings[k] = d.settings[k]; }
+  } catch (e) { /* storage unavailable: start fresh */ }
+}
+function persist() { try { localStorage.setItem(LS_KEY, JSON.stringify({ profile: S.profile, prog: S.prog, settings: S.settings, tests: S.tests || [] })); } catch (e) { } }
+
+/* ---------- derived numbers ---------- */
+function totalXP() { var t = 0; for (var k in S.prog.daily) t += S.prog.daily[k] || 0; return t; }
+function todayXP() { return S.prog.daily[dkey()] || 0; }
+function weekXP() { var ws = weekStartKey(), td = dkey(), t = 0; for (var k in S.prog.daily) if (k >= ws && k <= td) t += S.prog.daily[k] || 0; return t; }
+function streak() { var d = S.prog.daily, n = 0, x = new Date(); if (!(d[dkey(x)] > 0)) x.setDate(x.getDate() - 1); while (d[dkey(x)] > 0) { n++; x.setDate(x.getDate() - 1); } return n; }
+function levelOf(xp) {
+  var i = 0; while (i + 1 < LEVELS.length && xp >= LEVELS[i + 1][0]) i++;
+  var n = i + 1, min = LEVELS[i][0], next = LEVELS[i + 1] ? LEVELS[i + 1][0] : null, title = LEVELS[i][1];
+  if (next === null) { var extra = Math.floor((xp - min) / 2500); n += extra; min += extra * 2500; next = min + 2500; }
+  return { n: n, title: title, min: min, next: next };
+}
+function starsOf(w, k) { return S.prog.stars[w + '-' + k] || 0; }
+function doneCount(w) { return STATIONS.filter(function (s) { return starsOf(w, s.k) > 0; }).length; }
+function starSum(w) { return STATIONS.reduce(function (t, s) { return t + starsOf(w, s.k); }, 0); }
+function weekUnlocked(w) { return !!S.settings.openAll || w === 1 || doneCount(w - 1) >= 5; }
+function weeksComplete(n) { for (var w = 1; w <= n; w++) if (doneCount(w) < STATIONS.length) return false; return true; }
+function learnedWords() { var c = 0; for (var k in S.prog.words) if (S.prog.words[k] >= 3) c++; return c; }
+function versesKnown() { var c = 0; for (var k in S.prog.verses) if (S.prog.verses[k] >= 80) c++; return c; }
+function stationsCleared() { var c = 0; for (var k in S.prog.stars) if (S.prog.stars[k] > 0) c++; return c; }
+function isEDay() { return new Date().getDay() === Number(S.config.englishDay); }
+function defaultWeek() { for (var w = 1; w <= 8; w++) { if (!weekUnlocked(w)) return Math.max(1, w - 1); if (doneCount(w) < STATIONS.length) return w; } return 8; }
+
+var BADGES = [
+  { k: 'first', t: 'First Steps', d: 'Finish a station', c: ['cobalt', 'cobalt-2'], test: function () { return stationsCleared() > 0; } },
+  { k: 'goal', t: 'Daily Bread', d: 'Reach the daily goal', c: ['emerald', 'emerald-2'], test: function () { for (var k in S.prog.daily) if (S.prog.daily[k] >= S.config.dailyGoal) return true; return false; } },
+  { k: 's3', t: 'On Fire', d: '3-day streak', c: ['ruby', 'gold'], test: function () { return streak() >= 3; } },
+  { k: 's7', t: 'Faithful Week', d: '7-day streak', c: ['ruby', 'ruby-2'], test: function () { return streak() >= 7; } },
+  { k: 'perfect', t: 'Flawless', d: '100% in a station', c: ['gold', 'gold-2'] },
+  { k: 'blitz', t: 'Lightning', d: '20 right in Quick Match', c: ['gold', 'sky'], test: function () { for (var k in S.prog.best) if (S.prog.best[k] >= 20) return true; return false; } },
+  { k: 'w50', t: 'Word Collector', d: 'Learn 50 words', c: ['cobalt', 'sky-2'], test: function () { return learnedWords() >= 50; } },
+  { k: 'v3', t: 'Verse Keeper', d: 'Recite 3 verses', c: ['violet', 'violet-2'], test: function () { return versesKnown() >= 3; } },
+  { k: 'talk5', t: 'Conversation Starter', d: 'Finish 5 Talk Times', c: ['sky', 'sky-2'], test: function () { return S.prog.talks >= 5; } },
+  { k: 'eday', t: 'English Day Hero', d: '100 XP on English Day', c: ['gold', 'ruby'] },
+  { k: 'basic', t: 'Basic Speaker', d: 'Complete Weeks 1–2', c: ['emerald', 'gold'], test: function () { return weeksComplete(2); } },
+  { k: 'inter', t: 'Conversationalist', d: 'Complete Weeks 1–4', c: ['cobalt', 'gold'], test: function () { return weeksComplete(4); } },
+  { k: 'preach', t: 'Ready to Preach', d: 'Complete all 8 weeks', c: ['violet', 'gold'], test: function () { return weeksComplete(8); } }
+];
+function award(k) {
+  if (S.prog.badges.indexOf(k) >= 0) return;
+  S.prog.badges.push(k);
+  var b = BADGES.filter(function (x) { return x.k === k; })[0];
+  if (b) setTimeout(function () { toast('Badge earned: ' + b.t); SFX.gift(); }, 400);
+}
+function checkBadges() { BADGES.forEach(function (b) { if (b.test && b.test()) award(b.k); }); }
+
+/* =====================================================================
+   5. BACKEND (Apps Script, external API, or this device only)
+   ===================================================================== */
+var API = {
+  mode: 'local',
+  init: function () {
+    if (typeof google !== 'undefined' && google.script && google.script.run) this.mode = 'gas';
+    else if (CONFIG.API_URL) this.mode = 'http';
+  },
+  call: function (fn) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (this.mode === 'gas') {
+      return new Promise(function (res, rej) {
+        var r = google.script.run.withSuccessHandler(res).withFailureHandler(function (e) { rej(new Error((e && e.message) || String(e))); });
+        r[fn].apply(r, args);
+      });
+    }
+    if (this.mode === 'http') {
+      return fetch(CONFIG.API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: fn, args: args }) })
+        .then(function (r) { return r.json(); })
+        .then(function (j) { if (!j.ok) throw new Error(j.error || 'Server error'); return j.data; });
+    }
+    return Promise.reject(new Error('offline'));
+  }
+};
+var saveTimer = null;
+function pushSave() {
+  persist();
+  if (API.mode === 'local' || !S.profile) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function () {
+    API.call('saveProgress', S.profile.id, S.profile.pin, { progress: S.prog, level: levelOf(totalXP()).n, streak: streak() })
+      .then(function (r) {
+        if (r && r.progress) { S.prog = merge(S.prog, r.progress); persist(); }
+        S.lastSync = Date.now(); S.syncErr = '';
+        refreshBoard();
+      })
+      .catch(function (e) { S.syncErr = e.message; });
+  }, 700);
+}
+function refreshBoard() {
+  if (API.mode === 'local') { S.board = demoBoard(); if (S.view === 'ranks' || S.view === 'learn') renderView(); return; }
+  if (S.boardLoading) return;
+  S.boardLoading = true;
+  API.call('getLeaderboard').then(function (b) {
+    S.boardLoading = false; S.board = b; S.board.demo = false;
+    if (S.view === 'ranks' || S.view === 'learn') renderView();
+  }).catch(function () { S.boardLoading = false; });
+}
+function demoBoard() {
+  var players = DEMO.map(function (d, i) { return { id: 'demo' + i, name: d[0], floor: d[1], xp: d[2], week: d[3], level: levelOf(d[2]).n, streak: d[4], demo: true }; });
+  if (S.profile) players.push({ id: S.profile.id, name: S.profile.name, floor: Number(S.profile.floor), xp: totalXP(), week: weekXP(), level: levelOf(totalXP()).n, streak: streak() });
+  var floors = (S.config.floors || [1, 2, 3]).map(function (f) {
+    var ps = players.filter(function (p) { return p.floor === f; });
+    return { floor: f, week: ps.reduce(function (s, p) { return s + p.week; }, 0), players: ps.length };
+  });
+  return { players: players, floors: floors, demo: true };
+}
+
+/* =====================================================================
+   6. VOICE: text-to-speech, speech recognition, sound effects
+   ===================================================================== */
+var TTS = {
+  ok: typeof window.speechSynthesis !== 'undefined',
+  voices: [],
+  init: function () {
+    if (!this.ok) return;
+    var self = this;
+    var loadV = function () { self.voices = window.speechSynthesis.getVoices() || []; if (S.view === 'me' && $('#game').hidden && S.prog) renderView(); };
+    loadV();
+    try { window.speechSynthesis.addEventListener('voiceschanged', loadV); } catch (e) { window.speechSynthesis.onvoiceschanged = loadV; }
+  },
+  list: function (lang) { var p = lang.slice(0, 2).toLowerCase(); return this.voices.filter(function (v) { return (v.lang || '').toLowerCase().indexOf(p) === 0; }); },
+  pick: function (lang, alt) {
+    var L = this.list(lang); if (!L.length) return null;
+    if (!alt && lang.indexOf('en') === 0 && S.settings.voiceURI) { var mine = L.filter(function (v) { return v.voiceURI === S.settings.voiceURI; })[0]; if (mine) return mine; }
+    var want = lang.toLowerCase();
+    var rank = function (v) { var s = 0; if ((v.lang || '').toLowerCase().replace('_', '-') === want) s += 4; if (/google|natural|neural|samantha|aria|jenny|guy|daniel|karen/i.test(v.name)) s += 2; return s; };
+    var sorted = L.slice().sort(function (a, b) { return rank(b) - rank(a); });
+    if (alt) { var main = this.pick(lang); return sorted.filter(function (v) { return v !== main; })[0] || main; }
+    return sorted[0];
+  },
+  speak: function (text, o) {
+    o = o || {};
+    var self = this;
+    return new Promise(function (res) {
+      if (!self.ok || !text) return res();
+      self.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = o.lang || 'en-US'; u.rate = o.rate || S.settings.rate; u.pitch = o.pitch || 1;
+      var v = self.pick(u.lang, o.alt); if (v) u.voice = v;
+      var done = false, t;
+      var fin = function () { if (done) return; done = true; clearTimeout(t); res(); };
+      u.onend = fin; u.onerror = fin;
+      t = setTimeout(fin, 2200 + text.length * 115 / u.rate);
+      setTimeout(function () { try { window.speechSynthesis.speak(u); } catch (e) { fin(); } }, 60);
+    });
+  },
+  cancel: function () { try { if (this.ok) window.speechSynthesis.cancel(); } catch (e) { } }
+};
+
+var STT = {
+  Ctor: window.SpeechRecognition || window.webkitSpeechRecognition || null,
+  cur: null,
+  listen: function (lang, onText) {
+    var self = this;
+    return new Promise(function (resolve) {
+      if (!self.Ctor) { S.mic = 'unsupported'; return resolve({ alts: [], error: 'unsupported' }); }
+      var rec;
+      try { rec = new self.Ctor(); } catch (e) { S.mic = 'unsupported'; return resolve({ alts: [], error: 'unsupported' }); }
+      rec.lang = lang; rec.interimResults = true; rec.maxAlternatives = 3; rec.continuous = false;
+      var alts = [], last = '', err = null, finished = false, t;
+      rec.onresult = function (e) {
+        var fin = [], inter = '';
+        for (var i = 0; i < e.results.length; i++) { var r = e.results[i]; if (r.isFinal) fin.push(r); else inter += r[0].transcript; }
+        var main = fin.map(function (r) { return r[0].transcript; }).join(' ').trim();
+        if (fin.length === 1) { alts = []; for (var j = 0; j < fin[0].length; j++) alts.push(fin[0][j].transcript); }
+        else if (main) alts = [main];
+        last = (main + ' ' + inter).trim();
+        if (onText) onText(last);
+      };
+      rec.onerror = function (e) { err = e.error || 'error'; };
+      var done = function () {
+        if (finished) return; finished = true; clearTimeout(t); self.cur = null;
+        if (!alts.length && last) alts = [last];
+        if (err === 'not-allowed' || err === 'service-not-allowed' || err === 'audio-capture') S.mic = 'blocked';
+        else if (!err || err === 'no-speech' || err === 'aborted') S.mic = 'ok';
+        resolve({ alts: alts, error: err === 'no-speech' || err === 'aborted' ? null : err });
+      };
+      rec.onend = done;
+      t = setTimeout(function () { try { rec.stop(); } catch (e) { done(); } }, 12000);
+      self.cur = rec;
+      try { rec.start(); } catch (e) { err = 'start-failed'; done(); }
+    });
+  },
+  stop: function () { if (this.cur) try { this.cur.stop(); } catch (e) { } },
+  abort: function () { if (this.cur) try { this.cur.abort(); } catch (e) { } this.cur = null; }
+};
+function voiceMode() { return (S.mic === 'blocked' || S.mic === 'unsupported' || !STT.Ctor) ? 'self' : 'voice'; }
+
+var SFX = {
+  ctx: null,
+  ac: function () {
+    if (!S.settings.sfx) return null;
+    try { this.ctx = this.ctx || new (window.AudioContext || window.webkitAudioContext)(); if (this.ctx.state === 'suspended') this.ctx.resume(); return this.ctx; } catch (e) { return null; }
+  },
+  bell: function (f, delay, vol, dur) {
+    var c = this.ac(); if (!c) return;
+    delay = delay || 0; vol = vol || 0.14; dur = dur || 1.1;
+    var t = c.currentTime + delay;
+    [[1, vol], [2.76, vol * 0.3], [5.4, vol * 0.1]].forEach(function (p) {
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = 'sine'; o.frequency.value = f * p[0];
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(p[1], t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur / Math.pow(p[0], 0.4));
+      o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur);
+    });
+  },
+  blip: function (f, dur, vol, delay) {
+    var c = this.ac(); if (!c) return;
+    var t = c.currentTime + (delay || 0), o = c.createOscillator(), g = c.createGain();
+    o.type = 'square'; o.frequency.value = f;
+    g.gain.setValueAtTime(vol || 0.04, t); g.gain.linearRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + 0.02);
+  },
+  ok: function (combo) { var b = 659 * Math.pow(2, Math.min(combo || 0, 9) / 12); this.bell(b); this.bell(b * 1.5, 0.08, 0.09); },
+  bad: function () { this.blip(220, 0.14, 0.045); this.blip(165, 0.2, 0.045, 0.1); },
+  level: function () { var s = this; [523, 659, 784, 1047].forEach(function (f, i) { s.bell(f, i * 0.13, 0.13, 1.5); }); },
+  gift: function () { var s = this; [784, 988, 1175, 1568].forEach(function (f, i) { s.bell(f, i * 0.07, 0.09, 0.9); }); },
+  tick: function () { this.blip(1500, 0.035, 0.025); }
+};
+
+/* =====================================================================
+   7. SCORING — what did they say?
+   ===================================================================== */
+var CONTR = { "i'm": 'i am', "you're": 'you are', "we're": 'we are', "they're": 'they are', "he's": 'he is', "she's": 'she is', "it's": 'it is',
+  "that's": 'that is', "what's": 'what is', "let's": 'let us', "don't": 'do not', "doesn't": 'does not', "didn't": 'did not', "can't": 'can not',
+  "won't": 'will not', "isn't": 'is not', "aren't": 'are not', "haven't": 'have not', "hasn't": 'has not', "i'll": 'i will', "you'll": 'you will',
+  "we'll": 'we will', "he'll": 'he will', "she'll": 'she will', "i've": 'i have', "we've": 'we have', "i'd": 'i would', "there's": 'there is',
+  "wasn't": 'was not', "shouldn't": 'should not', "couldn't": 'could not', "who's": 'who is', "o'clock": 'oclock' };
+var HOMO = { prey: 'pray', preys: 'prays', sun: 'son', hymn: 'him', wholly: 'holy', holey: 'holy', their: 'there', four: 'for', too: 'to', two: 'to',
+  won: 'one', know: 'no', hour: 'our', write: 'right', weak: 'week', ate: 'eight', piece: 'peace', red: 'read', knew: 'new', ok: 'okay',
+  rows: 'rose', rode: 'rose', got: 'god', guard: 'god', profit: 'prophet', seam: 'seem', scene: 'seen', bye: 'by', buy: 'by', alter: 'altar', sole: 'soul', reign: 'rain',
+  grays: 'grace', graves: 'grace', heel: 'heal', mourning: 'morning', saviour: 'savior', meat: 'meet' };
+var ONES = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+var TENS = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+function numWord(n) {
+  if (n < 20) return ONES[n];
+  if (n < 100) return TENS[Math.floor(n / 10)] + (n % 10 ? ' ' + ONES[n % 10] : '');
+  return String(n).split('').map(function (d) { return ONES[+d]; }).join(' ');
+}
+function normEn(s, strict) {
+  s = String(s || '').toLowerCase().replace(/[’‘`´]/g, "'").replace(/(\d+):00\b/g, '$1 oclock').replace(/(\d+):(\d+)/g, '$1 $2');
+  s = s.replace(/\bcannot\b/g, 'can not');
+  s = s.replace(/[a-z]+'[a-z]+/g, function (m) { return CONTR[m] || m.replace(/'s$/, 's').replace(/'/g, ''); });
+  s = s.replace(/\d+/g, function (n) { return ' ' + numWord(parseInt(n, 10)) + ' '; });
+  s = s.replace(/[^a-z\s]/g, ' ').replace(/\s+/g, ' ').trim();
+  return s ? s.split(' ').map(function (w) { return strict ? w : (HOMO[w] || w); }) : [];
+}
+function lev(a, b) {
+  if (a === b) return 0;
+  var m = a.length, n = b.length, prev = [], cur = [], i, j;
+  for (j = 0; j <= n; j++) prev[j] = j;
+  for (i = 1; i <= m; i++) { cur = [i]; for (j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
+  return prev[n];
+}
+function eqw(a, b) { if (a === b) return true; var L = Math.max(a.length, b.length); if (Math.min(a.length, b.length) < 4) return false; return lev(a, b) <= (L >= 8 ? 2 : 1); }
+function align(t, h, strict) {
+  var eq = strict ? function (a, b) { return a === b; } : eqw;
+  var n = t.length, m = h.length, dp = [], i, j;
+  for (i = 0; i <= n; i++) { dp[i] = []; for (j = 0; j <= m; j++) dp[i][j] = 0; }
+  for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--) dp[i][j] = eq(t[i], h[j]) ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+  var ok = t.map(function () { return false; }); i = 0; j = 0;
+  while (i < n && j < m) { if (eq(t[i], h[j])) { ok[i] = true; i++; j++; } else if (dp[i + 1][j] >= dp[i][j + 1]) i++; else j++; }
+  return ok;
+}
+function scoreEn(target, alts, strict) {
+  var toks = target.split(/\s+/).filter(Boolean), flat = [], owner = [];
+  toks.forEach(function (tk, ti) { normEn(tk, strict).forEach(function (w) { flat.push(w); owner.push(ti); }); });
+  var best = { score: -1, tokOk: [], heard: '' };
+  (alts.length ? alts : ['']).forEach(function (alt) {
+    var ok = align(flat, normEn(alt, strict), strict);
+    var hits = ok.filter(Boolean).length, score = flat.length ? hits / flat.length : 0;
+    if (score > best.score) {
+      best = { score: score, heard: alt, tokOk: toks.map(function (_, ti) { for (var k = 0; k < owner.length; k++) if (owner[k] === ti && !ok[k]) return false; return true; }) };
+    }
+  });
+  best.toks = toks;
+  return best;
+}
+function normId(s) { return ' ' + String(s || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim() + ' '; }
+function scoreId(keys, alts) {
+  var best = { score: -1, hits: [], heard: '' };
+  (alts.length ? alts : ['']).forEach(function (alt) {
+    var n = normId(alt);
+    var hits = keys.map(function (g) { return g.split('|').some(function (k) { return n.indexOf(k) >= 0; }); });
+    var score = hits.filter(Boolean).length / keys.length;
+    if (score > best.score) best = { score: score, hits: hits, heard: alt };
+  });
+  return best;
+}
+
+/* =====================================================================
+   8. ROUNDS (the games)
+   ===================================================================== */
+var R = null;
+var PASS = { write: 0.8, word: 0.75, sentence: 0.7, 'verse-read': 0.7, 'verse-recite': 0.6, talk: 0.6, en2id: 0.6, id2en: 0.6 };
+
+function startRound(week, sk) {
+  var W = WEEKS[week - 1], steps = [];
+  if (sk === 'match') return startBlitz(week);
+  if (sk === 'words') {
+    steps = shuffle(W.words).map(function (w) { return { type: 'say', mode: 'word', en: w[0], id: w[1], ex: w[2] }; });
+  } else if (sk === 'grammar') {
+    steps.push({ type: 'tip' });
+    W.gram.q.forEach(function (q) {
+      var full = q[0].replace('___', q[1][q[2]]);
+      steps.push({ type: 'choice', q: q[0], opts: q[1], a: q[2], full: full });
+      steps.push({ type: 'say', mode: 'sentence', en: full, id: '', after: true });
+    });
+  } else if (sk === 'read') {
+    var RD = READS[week - 1];
+    steps.push({ type: 'passage' });
+    RD.q.forEach(function (q) { steps.push({ type: 'choice', reading: true, skill: 'reading', q: q[0], opts: q[1], a: q[2], full: q[1][q[2]] }); });
+    shuffle(W.says).slice(0, 4).forEach(function (x, i) { steps.push({ type: 'write', mode: 'write', en: x[0], id: x[1], dict: i % 2 === 0 }); });
+  } else if (sk === 'speak') {
+    steps = W.says.map(function (s) { return { type: 'say', mode: 'sentence', en: s[0], id: s[1] }; });
+  } else if (sk === 'verse') {
+    steps = [{ type: 'say', mode: 'verse-read', en: W.verse.en, id: W.verse.id, ref: W.verse.ref },
+             { type: 'order', en: W.verse.en, ref: W.verse.ref },
+             { type: 'say', mode: 'verse-recite', en: W.verse.en, id: W.verse.id, ref: W.verse.ref }];
+  } else if (sk === 'talk') {
+    var hide = starsOf(week, 'talk') >= 2;
+    steps = W.talk.lines.map(function (l) { return l[0] === 'A' ? { type: 'partner', en: l[1], id: l[2] } : { type: 'say', mode: 'talk', en: l[1], id: l[2], hideEn: hide }; });
+  } else if (sk === 'interp') {
+    steps = W.interp.map(function (it, i) { return i % 2 === 0 ? { type: 'say', mode: 'en2id', en: it[0], id: it[1], keys: it[2] } : { type: 'say', mode: 'id2en', en: it[0], id: it[1] }; });
+  }
+  R = { week: week, sk: sk, steps: steps, i: 0, scores: [], combo: 0, maxCombo: 0, xp: 0, recite: 0 };
+  openGame();
+  renderStep();
+}
+function startMix() {
+  var pool = [];
+  for (var w = 1; w <= 8; w++) if (weekUnlocked(w)) WEEKS[w - 1].words.forEach(function (x) { pool.push(x); });
+  var ranked = shuffle(pool).sort(function (a, b) { return (S.prog.words[a[0].toLowerCase()] || 0) - (S.prog.words[b[0].toLowerCase()] || 0); }).slice(0, 8);
+  var steps = ranked.map(function (x, i) {
+    if (i % 2 === 0) {
+      var others = shuffle(pool.filter(function (p) { return p[0] !== x[0]; })).slice(0, 3).map(function (p) { return p[0]; });
+      var opts = shuffle(others.concat([x[0]]));
+      return { type: 'choice', prompt: 'Which English word means…', q: x[1], opts: opts, a: opts.indexOf(x[0]), full: x[2], word: x[0] };
+    }
+    return { type: 'say', mode: 'word', en: x[0], id: x[1], ex: x[2] };
+  });
+  R = { week: 0, sk: 'mix', mix: true, steps: steps, i: 0, scores: [], combo: 0, maxCombo: 0, xp: 0 };
+  openGame();
+  renderStep();
+}
+
+function openGame() {
+  $('#game').hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('#g-prog').classList.remove('timer');
+  $('#g-close').innerHTML = icon('x', 22);
+}
+function closeGame() {
+  if (!R) { $('#game').hidden = true; return; }
+  STT.abort(); TTS.cancel();
+  if (R.raf) cancelAnimationFrame(R.raf);
+  clearTimeout(R.autoT);
+  R = null;
+  closeSheet();
+  $('#game').hidden = true;
+  document.body.style.overflow = '';
+  renderAll();
+  if (S.pendingLevel) showLevelUp();
+}
+
+function setProgress() {
+  $('#g-bar').style.width = (R.i / R.steps.length * 100) + '%';
+  $('#g-combo').innerHTML = R.combo >= 2 ? icon('flame', 18) + '×' + R.combo : '';
+}
+
+function renderStep() {
+  closeSheet();
+  STT.abort();
+  S.seq = (S.seq || 0) + 1; TTS.cancel();
+  clearTimeout(R.autoT);
+  if (R.i >= R.steps.length) return finishRound();
+  setProgress();
+  var st = R.steps[R.i];
+  R.tries = 0; R.best = null; R.peek = false; R.answered = false; R.listening = false; R.selfOnly = false;
+  if (st.type === 'tip') return rTip();
+  if (st.type === 'passage') return rPassage();
+  if (st.type === 'write') return rWrite(st);
+  if (st.type === 'say') return rSay(st, false);
+  if (st.type === 'choice') return rChoice(st);
+  if (st.type === 'order') return rOrder(st);
+  if (st.type === 'partner') return rPartner(st);
+}
+
+function rTip() {
+  var W = WEEKS[R.week - 1];
+  var ex = W.gram.q.slice(0, 2).map(function (q) { return '<li>' + esc(q[0].replace('___', q[1][q[2]])) + '</li>'; }).join('');
+  $('#g-body').innerHTML = '<div class="card tipcard center"><span class="eyebrow">Grammar Snap · Week ' + R.week + '</span><h2>' + esc(W.gram.t) +
+    '</h2><div class="tip">' + W.gram.tip + '</div><ul class="muted">' + ex + '</ul></div>';
+  $('#g-actions').innerHTML = '<button class="btn primary wide" data-g="next-tip">Let’s go ' + icon('chev') + '</button>';
+}
+
+function chatLog() {
+  var html = '', W = WEEKS[R.week - 1];
+  for (var k = 0; k < R.i; k++) {
+    var s = R.steps[k];
+    html += '<div class="bubble ' + (s.type === 'partner' ? 'a' : 'y') + '">' + esc(s.en) + '</div>';
+  }
+  return '<p class="scene"><b>' + esc(W.talk.t) + '.</b> ' + esc(W.talk.scene) + '</p><div class="chat">' + html;
+}
+
+function rSay(st, quiet) {
+  var body = '', eyebrow = '', auto = true;
+  var tools = '<div class="tools"><button class="tool" data-g="hear">' + icon('vol', 16) + 'Listen</button><button class="tool" data-g="slow">' + icon('slow', 16) + 'Slowly</button></div>';
+  if (st.mode === 'word') {
+    eyebrow = 'Say this word · Ucapkan kata ini';
+    body = '<div class="card prompt center"><span class="eyebrow">' + eyebrow + '</span><div class="big-word">' + esc(st.en) + '</div><div class="trans">' + esc(st.id) +
+      '</div><button class="ex" data-g="hear-ex">' + icon('vol', 16) + '<span>' + esc(st.ex) + '</span></button>' + tools + '</div>';
+  } else if (st.mode === 'sentence') {
+    eyebrow = st.after ? 'Now say the whole sentence' : 'Say this sentence · Ucapkan kalimat ini';
+    body = '<div class="card prompt center"><span class="eyebrow">' + eyebrow + '</span><div class="big-sent">' + esc(st.en) + '</div>' +
+      (st.id ? '<div class="trans">' + esc(st.id) + '</div>' : '') + tools + '</div>';
+  } else if (st.mode === 'verse-read') {
+    body = '<div class="card prompt center"><span class="eyebrow">Step 1 of 3 · Read the verse aloud</span><div class="verse-ref">' + esc(st.ref) + ' (WEB)</div><div class="big-sent">' + esc(st.en) +
+      '</div><div class="trans">' + esc(st.id) + '</div>' + tools + '</div>';
+  } else if (st.mode === 'verse-recite') {
+    auto = false;
+    var words = st.en.split(' ');
+    var shown = R.peek ? esc(st.en) : '<b>' + esc(words.slice(0, 3).join(' ')) + '</b> … <span class="muted">(' + words.length + ' words)</span>';
+    body = '<div class="card prompt center"><span class="eyebrow">Step 3 of 3 · Recite from memory</span><div class="verse-ref">' + esc(st.ref) + '</div><div class="recite">' + shown +
+      '</div><div class="trans">' + esc(st.id) + '</div><div class="tools">' + (R.peek ? '' : '<button class="tool" data-g="peek">' + icon('eye', 16) + 'Peek (−20%)</button>') + '</div></div>';
+  } else if (st.mode === 'talk') {
+    var showEn = !st.hideEn || R.peek;
+    body = chatLog() + '</div><div class="card yourline"><span class="eyebrow">Your turn · Giliranmu</span>' +
+      (showEn ? '<div class="big-sent">' + esc(st.en) + '</div>' : '') + '<div class="trans">' + esc(st.id) + '</div><div class="tools">' +
+      (showEn ? '<button class="tool" data-g="hear">' + icon('vol', 16) + 'Listen</button>' : '<button class="tool" data-g="peek">' + icon('eye', 16) + 'Show English (−15%)</button>') + '</div></div>';
+    auto = false;
+  } else if (st.mode === 'en2id') {
+    body = '<div class="card prompt center"><span class="eyebrow">Interpret into Indonesian · Terjemahkan</span><div class="listen-big"><button class="play" data-g="hear" aria-label="Play the English sentence">' + icon('vol', 28) +
+      '</button><div><b>Listen to the preacher.</b><div class="muted">Then say it in Indonesian.</div></div></div>' +
+      (R.peek ? '<div class="big-sent">' + esc(st.en) + '</div>' : '<div class="tools"><button class="tool" data-g="peek">' + icon('eye', 16) + 'Show English text</button><button class="tool" data-g="slow">' + icon('slow', 16) + 'Slowly</button></div>') + '</div>';
+  } else if (st.mode === 'id2en') {
+    auto = false;
+    body = '<div class="card prompt center"><span class="eyebrow">Say it in English · Ucapkan dalam bahasa Inggris</span><div class="big-sent id">' + esc(st.id) + '</div>' +
+      (R.peek ? '<div class="trans">Hint: <b>' + esc(st.en.split(' ').slice(0, 3).join(' ')) + '…</b></div>' : '<div class="tools"><button class="tool" data-g="peek">' + icon('bulb', 16) + 'Hint</button></div>') + '</div>';
+  }
+  $('#g-body').innerHTML = body;
+  if (st.mode === 'talk') { var b = $('#g-body'); b.scrollTop = b.scrollHeight; }
+  if (!quiet) $('#g-actions').innerHTML = sayActions();
+  if (auto && !quiet) speakTarget(st, false);
+}
+function sayActions() {
+  if (voiceMode() === 'voice' && !(R && R.selfOnly)) {
+    return '<div class="live" id="live">' + (R && R.tries ? 'Tap the mic and try again' : 'Tap the mic, then speak') + '</div>' +
+      '<button class="mic" id="mic" data-g="mic" aria-label="Start speaking">' + icon('mic', 36) + '</button><button class="link" data-g="skip">Skip</button>';
+  }
+  var note = (R && R.selfOnly) ? 'Say it out loud in Indonesian, then compare with the model.' : S.mic === 'blocked'
+    ? 'Voice scoring is blocked in this browser window. Say it out loud anyway, then rate yourself.' + (CONFIG.VOICE_URL ? ' <a href="' + esc(CONFIG.VOICE_URL) + '" target="_blank" rel="noopener">Open the voice version</a>' : '')
+    : 'Your browser can’t score your voice. Say it out loud, then rate yourself. (Chrome, Edge or Safari can score you.)';
+  return '<p class="selfnote">' + note + '</p><button class="btn primary wide" data-g="self">' + icon('check') + 'I said it out loud</button><button class="link" data-g="skip">Skip</button>';
+}
+function speakTarget(st, slow) {
+  var rate = slow ? Math.max(0.5, S.settings.rate - 0.3) : S.settings.rate;
+  if (st.mode === 'id2en') return TTS.speak(st.id, { lang: 'id-ID', rate: rate });
+  return TTS.speak(st.en, { rate: rate });
+}
+
+function onMic() {
+  if (!R) return;
+  if (R.listening) { STT.stop(); return; }
+  var st = R.steps[R.i];
+  TTS.cancel();
+  R.listening = true;
+  var mic = $('#mic'), live = $('#live');
+  if (mic) { mic.classList.add('on'); mic.setAttribute('aria-label', 'Stop'); }
+  if (live) { live.textContent = 'Listening…'; live.classList.add('hearing'); }
+  STT.listen(st.mode === 'en2id' ? 'id-ID' : 'en-US', function (t) { var l = $('#live'); if (l) l.textContent = t || 'Listening…'; }).then(function (res) {
+    if (!R) return;
+    R.listening = false;
+    var m = $('#mic'); if (m) { m.classList.remove('on'); m.setAttribute('aria-label', 'Start speaking'); }
+    if (R.steps[R.i] !== st) return;
+    if (res.error === 'language-not-supported') { R.selfOnly = true; $('#g-actions').innerHTML = sayActions(); toast('This browser can’t listen to Indonesian. Rate yourself for this one.'); return; }
+    if (res.error && res.error !== 'network') {
+      if (voiceMode() === 'self') { toast('Microphone not available here. Switched to self-check.'); $('#g-actions').innerHTML = sayActions(); }
+      else { var l2 = $('#live'); if (l2) { l2.classList.remove('hearing'); l2.textContent = 'Something went wrong with the mic. Tap to try again.'; } }
+      return;
+    }
+    if (res.error === 'network') {
+      S.netFails = (S.netFails || 0) + 1;
+      if (S.netFails >= 2) { S.mic = 'blocked'; $('#g-actions').innerHTML = sayActions(); }
+      toast('The speech service can’t be reached. Check the internet connection.');
+      return;
+    }
+    if (!res.alts.length) { var l3 = $('#live'); if (l3) { l3.classList.remove('hearing'); l3.textContent = 'I didn’t hear anything. Tap the mic and speak a little louder.'; } return; }
+    evaluateSay(st, res.alts);
+  });
+}
+function evaluateSay(st, alts) {
+  var r, sc;
+  if (st.mode === 'en2id') { r = scoreId(st.keys, alts); sc = r.score; }
+  else { r = scoreEn(st.en, alts); sc = r.score; }
+  if (R.peek && (st.mode === 'verse-recite')) sc *= 0.8;
+  if (R.peek && st.mode === 'talk' && st.hideEn) sc *= 0.85;
+  if (R.peek && st.mode === 'id2en') sc *= 0.85;
+  R.tries++;
+  if (!R.best || sc > R.best.score) R.best = { score: sc };
+  showSaySheet(st, sc, r);
+}
+function passOf(st) { return PASS[st.mode] || 0.7; }
+function xpPreview(score, passed) {
+  var gain = Math.round(10 * score), c = passed ? R.combo + 1 : 0;
+  if (c >= 3) gain += Math.min(10, (c - 2) * 2);
+  if (score >= 0.95) gain += 2;
+  return isEDay() ? gain * 2 : gain;
+}
+function verdictText(sc, pass) { return sc >= 0.9 ? 'Excellent!' : sc >= pass ? 'Good job!' : sc >= 0.4 ? 'Almost there' : 'Let’s try again'; }
+function showSaySheet(st, sc, r) {
+  var pass = passOf(st), good = sc >= pass, html = '';
+  html += '<div class="verdict">' + icon(good ? 'check' : 'refresh', 26) + verdictText(sc, pass) + '<span class="pct">' + Math.round(sc * 100) + '%</span></div>';
+  if (st.mode === 'en2id') {
+    html += '<div class="keys">' + st.keys.map(function (k, i) { return '<span class="key ' + (r.hits[i] ? 'ok' : 'miss') + '">' + icon(r.hits[i] ? 'check' : 'x', 14) + esc(k.split('|')[0]) + '</span>'; }).join('') + '</div>';
+    html += '<p class="heard">You said: “' + esc(r.heard) + '”</p><p class="model">Model: <b>' + esc(st.id) + '</b> <button class="tool" data-g="hear-id">' + icon('vol', 14) + 'Hear</button></p><p class="model muted">English: ' + esc(st.en) + '</p>';
+  } else {
+    html += '<div class="marks">' + r.toks.map(function (t, i) { return '<span class="' + (r.tokOk[i] ? 'ok' : 'miss') + '">' + esc(t) + '</span>'; }).join(' ') + '</div>';
+    html += '<p class="heard">I heard: “' + esc(r.heard) + '”</p>';
+  }
+  html += '<div class="sheet-xp">+' + xpPreview(R.best.score, R.best.score >= pass) + ' XP' + (R.best.score >= pass && R.combo + 1 >= 2 ? ' · combo ×' + (R.combo + 1) : '') + '</div>';
+  var retry = !good && R.tries < 3;
+  html += '<div class="sheet-actions">' + (retry ? '<button class="btn" data-g="retry">' + icon('refresh') + 'Try again</button>' : '') +
+    '<button class="btn ' + (good ? 'good' : 'primary') + '" data-g="next">Continue ' + icon('chev') + '</button></div>';
+  openSheet(html, good ? 'good' : 'bad');
+  if (good) SFX.ok(R.combo); else SFX.bad();
+}
+function onSelf() {
+  var st = R.steps[R.i];
+  var model = st.mode === 'en2id' ? st.id : st.en;
+  var html = '<div class="verdict">' + icon('vol', 24) + 'Compare with the model</div><p class="model"><b>' + esc(model) + '</b></p>' +
+    (st.mode === 'en2id' ? '<p class="model muted">English: ' + esc(st.en) + '</p>' : '') +
+    '<p class="muted">How close were you? Be honest. It is between you and God.</p>' +
+    '<div class="rate"><button class="btn" data-g="rate" data-v="0.3">Missed it<small>try again later</small></button>' +
+    '<button class="btn" data-g="rate" data-v="0.8">Almost<small>small mistakes</small></button>' +
+    '<button class="btn good" data-g="rate" data-v="1">Nailed it<small>clear &amp; correct</small></button></div>';
+  openSheet(html, '');
+  TTS.speak(model, { lang: st.mode === 'en2id' ? 'id-ID' : 'en-US' });
+}
+function onRate(v) {
+  var st = R.steps[R.i];
+  R.best = { score: v, self: true };
+  if (v >= passOf(st)) SFX.ok(R.combo); else SFX.bad();
+  commit();
+}
+
+function rChoice(st) {
+  var head = st.reading ? '<span class="eyebrow">Reading · ' + esc(READS[R.week - 1].t) + '</span><div class="big-sent">' + esc(st.q) + '</div>' +
+      '<details class="again"><summary>Read the text again</summary><div class="passage">' + paras(READS[R.week - 1].text) + '</div></details>'
+    : st.prompt ? '<span class="eyebrow">' + esc(st.prompt) + '</span><div class="big-sent id">' + esc(st.q) + '</div>'
+    : '<span class="eyebrow">Choose the right word · Pilih kata yang tepat</span><div class="big-sent">' + esc(st.q).replace('___', '<span class="blank">?</span>') + '</div>';
+  $('#g-body').innerHTML = '<div class="card prompt center">' + head + '</div>';
+  $('#g-actions').innerHTML = '<div class="opts">' + st.opts.map(function (o, i) { return '<button class="opt" data-g="opt" data-i="' + i + '"><kbd>' + (i + 1) + '</kbd>' + esc(o) + '</button>'; }).join('') + '</div>';
+}
+function onOpt(i) {
+  var st = R.steps[R.i];
+  if (R.answered) return;
+  R.answered = true;
+  var right = i === st.a, btns = document.querySelectorAll('#g-actions .opt');
+  btns[st.a].classList.add('right');
+  if (!right) btns[i].classList.add('wrong');
+  R.best = { score: right ? 1 : 0 };
+  if (st.word) bumpWord(st.word, right);
+  var html = '<div class="verdict">' + icon(right ? 'check' : 'x', 26) + (right ? 'Correct!' : 'Not quite') + '</div>' +
+    (st.word ? '<p class="model"><b>' + esc(st.word) + '</b> = ' + esc(st.q) + '</p><p class="model muted">' + esc(st.full) + '</p>'
+     : st.reading ? '<p class="model">Answer: <b>' + esc(st.full) + '</b></p>'
+             : '<p class="model"><b>' + esc(st.full) + '</b></p>') +
+    '<div class="sheet-xp">+' + xpPreview(right ? 1 : 0, right) + ' XP</div>' +
+    '<div class="sheet-actions">' + (st.reading ? '' : '<button class="tool" data-g="hear-full">' + icon('vol', 16) + 'Listen</button>') + '<button class="btn ' + (right ? 'good' : 'primary') + '" data-g="next">Continue ' + icon('chev') + '</button></div>';
+  openSheet(html, right ? 'good' : 'bad');
+  if (right) SFX.ok(R.combo); else SFX.bad();
+}
+
+function paras(t) { return t.split('\n').map(function (x) { return '<p>' + esc(x) + '</p>'; }).join(''); }
+function rPassage() {
+  var RD = READS[R.week - 1];
+  $('#g-body').innerHTML = '<div class="card prompt"><span class="eyebrow">Read & Write · Part 1 of 3 · Read carefully</span><h2 class="ptitle">' + esc(RD.t) + '</h2>' +
+    '<div class="passage">' + paras(RD.text) + '</div><div class="tools"><button class="tool" data-g="hear-passage">' + icon('vol', 16) + 'Listen while you read</button></div></div>';
+  $('#g-actions').innerHTML = '<p class="selfnote">Next: 4 questions about the text, then 4 sentences to write.</p><button class="btn primary wide" data-g="next-tip">I’ve read it ' + icon('chev') + '</button>';
+}
+function speakPassage(text) {
+  var parts = text.replace(/\n+/g, ' ').match(/[^.!?]+[.!?”"]*\s*/g) || [text];
+  var token = S.seq = (S.seq || 0) + 1, i = 0;
+  var next = function () { if (S.seq !== token || !R || i >= parts.length) return; TTS.speak(parts[i++].trim()).then(next); };
+  next();
+}
+function hintOf(en) { return en.split(' ').map(function (w) { return w.replace(/([A-Za-z])([A-Za-z’']*)/, function (m, a, b) { return a + b.replace(/[A-Za-z]/g, '_'); }); }).join('  '); }
+function rWrite(st) {
+  var body = st.dict
+    ? '<span class="eyebrow">Part 3 · Listen and write · Dengar dan tulis</span><div class="listen-big"><button class="play" data-g="hear" aria-label="Play the sentence">' + icon('vol', 28) +
+      '</button><div><b>Type exactly what you hear.</b><div class="muted">Meaning: ' + esc(st.id) + '</div></div></div><div class="tools"><button class="tool" data-g="slow">' + icon('slow', 16) + 'Slowly</button></div>'
+    : '<span class="eyebrow">Part 3 · Write it in English · Tulis dalam bahasa Inggris</span><div class="big-sent id">' + esc(st.id) + '</div><div class="hintline" aria-label="Hint: first letters">' + esc(hintOf(st.en)) + '</div>';
+  $('#g-body').innerHTML = '<div class="card prompt center">' + body + '</div>';
+  $('#g-actions').innerHTML = '<form class="wform" id="w-form" autocomplete="off"><label class="sr" for="w-in">Your answer</label><input id="w-in" type="text" autocomplete="off" autocapitalize="sentences" autocorrect="off" spellcheck="false" placeholder="Type in English…">' +
+    '<button class="btn primary" type="submit">Check</button></form><button class="link" data-g="skip">Skip</button>';
+  if (st.dict) speakTarget(st, false);
+  setTimeout(function () { var i = $('#w-in'); if (i && window.matchMedia && window.matchMedia('(hover: hover)').matches) i.focus(); }, 80);
+}
+function onWrite() {
+  var st = R && R.steps[R.i], inp = $('#w-in');
+  if (!st || st.type !== 'write' || !inp) return;
+  var val = inp.value.trim();
+  if (!val) { inp.focus(); return; }
+  var r = scoreEn(st.en, [val], true), sc = r.score, pass = passOf(st), good = sc >= pass;
+  R.tries++;
+  if (!R.best || sc > R.best.score) R.best = { score: sc };
+  var html = '<div class="verdict">' + icon(good ? 'check' : 'refresh', 26) + (sc >= 0.999 ? 'Perfect spelling!' : verdictText(sc, pass)) + '<span class="pct">' + Math.round(sc * 100) + '%</span></div>' +
+    '<div class="marks">' + r.toks.map(function (t, i) { return '<span class="' + (r.tokOk[i] ? 'ok' : 'miss') + '">' + esc(t) + '</span>'; }).join(' ') + '</div>' +
+    '<p class="heard">You wrote: “' + esc(val) + '”</p>' +
+    '<div class="sheet-xp">+' + xpPreview(R.best.score, R.best.score >= pass) + ' XP</div>' +
+    '<div class="sheet-actions">' + (!good && R.tries < 3 ? '<button class="btn" data-g="retry">' + icon('refresh') + 'Try again</button>' : '') +
+    '<button class="tool" data-g="hear">' + icon('vol', 16) + 'Listen</button><button class="btn ' + (good ? 'good' : 'primary') + '" data-g="next">Continue ' + icon('chev') + '</button></div>';
+  openSheet(html, good ? 'good' : 'bad');
+  if (good) SFX.ok(R.combo); else SFX.bad();
+}
+function skillOf(st) {
+  if (st.skill) return st.skill;
+  if (st.type === 'choice') return st.word ? 'vocab' : 'grammar';
+  if (st.type === 'order') return 'reading';
+  if (st.type === 'write') return 'writing';
+  if (st.mode === 'word') return 'vocab';
+  if (st.mode === 'en2id' || st.mode === 'id2en') return 'interp';
+  return 'speaking';
+}
+function rOrder(st) {
+  var words = st.en.split(' '), size = words.length <= 12 ? 2 : 3, chunks = [];
+  for (var i = 0; i < words.length; i += size) chunks.push(words.slice(i, i + size).join(' '));
+  R.order = { chunks: chunks, built: 0, mistakes: 0 };
+  var bank = shuffle(chunks.map(function (c, i) { return i; }));
+  $('#g-body').innerHTML = '<div class="card prompt center"><span class="eyebrow">Step 2 of 3 · Build the verse in order</span><div class="verse-ref">' + esc(st.ref) + '</div><div class="built" id="built" aria-live="polite"></div></div>';
+  $('#g-actions').innerHTML = '<div class="bank">' + bank.map(function (i) { return '<button class="chunk" data-g="chunk" data-i="' + i + '">' + esc(chunks[i]) + '</button>'; }).join('') + '</div>';
+}
+function onChunk(btn) {
+  var o = R.order, txt = o.chunks[+btn.dataset.i];
+  if (txt === o.chunks[o.built]) {
+    btn.classList.add('used');
+    var sp = document.createElement('span'); sp.textContent = txt; $('#built').appendChild(sp);
+    o.built++;
+    SFX.bell(880 + o.built * 30, 0, 0.05, 0.4);
+    if (o.built === o.chunks.length) {
+      var sc = Math.max(0.3, 1 - o.mistakes * 0.12);
+      R.best = { score: sc };
+      var good = sc >= 0.7;
+      openSheet('<div class="verdict">' + icon(good ? 'check' : 'refresh', 26) + (o.mistakes ? o.mistakes + ' slip' + (o.mistakes > 1 ? 's' : '') + ', verse built' : 'Perfect order!') + '<span class="pct">' + Math.round(sc * 100) + '%</span></div>' +
+        '<div class="sheet-xp">+' + xpPreview(sc, good) + ' XP</div><div class="sheet-actions"><button class="btn good" data-g="next">Continue ' + icon('chev') + '</button></div>', good ? 'good' : 'bad');
+      SFX.ok(R.combo);
+    }
+  } else {
+    o.mistakes++;
+    btn.classList.remove('no'); void btn.offsetWidth; btn.classList.add('no');
+    SFX.bad();
+  }
+}
+
+function rPartner(st) {
+  $('#g-body').innerHTML = chatLog() + '<div class="bubble a now">' + esc(st.en) + '<small>' + esc(st.id) + '</small></div></div>';
+  var b = $('#g-body'); b.scrollTop = b.scrollHeight;
+  $('#g-actions').innerHTML = '<div class="row"><button class="tool" data-g="hear">' + icon('vol', 16) + 'Replay</button><button class="btn primary" data-g="skip-partner">Continue ' + icon('chev') + '</button></div>';
+  var here = R.i;
+  TTS.speak(st.en, { alt: true, pitch: 1.08 }).then(function () {
+    if (!R) return;
+    R.autoT = setTimeout(function () { if (R && R.i === here && $('#sheet').className.indexOf('open') < 0) { R.i++; renderStep(); } }, 700);
+  });
+}
+
+function bumpWord(en, ok) {
+  var k = en.toLowerCase(), v = S.prog.words[k] || 0;
+  S.prog.words[k] = Math.max(0, Math.min(5, v + (ok ? 1 : -1)));
+}
+function commit() {
+  var st = R.steps[R.i];
+  var score = R.best ? R.best.score : 0;
+  var passed = st.type === 'choice' ? score === 1 : score >= passOf(st);
+  if (st.type !== 'tip' && st.type !== 'partner' && st.type !== 'passage') {
+    R.scores.push(score);
+    var skl = skillOf(st);
+    R.sks = R.sks || {};
+    R.sks[skl] = R.sks[skl] || [0, 0]; R.sks[skl][0] += score; R.sks[skl][1]++;
+    if (st.type === 'say' && st.mode !== 'en2id' && !(R.best && R.best.skipped)) { var spk = R.best && R.best.self ? 's' : 'v'; S.prog.sp[spk] = (S.prog.sp[spk] || 0) + 1; }
+    var gain = Math.round(10 * score);
+    if (passed) R.combo++; else R.combo = 0;
+    R.maxCombo = Math.max(R.maxCombo, R.combo);
+    if (R.combo >= 3) gain += Math.min(10, (R.combo - 2) * 2);
+    if (score >= 0.95) gain += 2;
+    R.xp += addXP(gain, true);
+    if (st.mode === 'word') bumpWord(st.en, passed);
+    if (st.mode === 'verse-recite') R.recite = score;
+  }
+  R.i++;
+  renderStep();
+}
+function skipStep() {
+  var st = R.steps[R.i];
+  STT.abort();
+  R.best = { score: 0, skipped: true };
+  if (st.mode === 'word') bumpWord(st.en, false);
+  commit();
+}
+
+/* ---------- Quick Match blitz ---------- */
+function startBlitz(week) {
+  R = { week: week, sk: 'match', blitz: true, correct: 0, wrong: 0, combo: 0, maxCombo: 0, xp: 0, scores: [], steps: [], i: 0, last: '', end: 0, lastTick: 0 };
+  openGame();
+  $('#g-prog').classList.add('timer');
+  $('#g-body').innerHTML = '<div class="card tipcard center"><span class="eyebrow">Quick Match · Week ' + week + '</span><h2>45 seconds. How many can you match?</h2>' +
+    '<p class="tip">Tap the right meaning as fast as you can. Correct answers build a combo. A wrong answer costs <b>3 seconds</b>.</p>' +
+    (S.prog.best[String(week)] ? '<p class="muted">Your best: <b>' + S.prog.best[String(week)] + '</b></p>' : '') + '</div>';
+  $('#g-actions').innerHTML = '<button class="btn gold wide" data-g="blitz-go">' + icon('zap') + 'Start</button>';
+  $('#g-bar').style.width = '100%';
+  $('#g-combo').innerHTML = '';
+}
+function blitzGo() {
+  R.end = Date.now() + 45000;
+  nextBlitzQ();
+  var loop = function () {
+    if (!R || !R.blitz) return;
+    var left = R.end - Date.now();
+    $('#g-bar').style.width = Math.max(0, left / 450) + '%';
+    var sec = Math.ceil(left / 1000);
+    if (sec <= 5 && sec !== R.lastTick && left > 0) { R.lastTick = sec; SFX.tick(); }
+    if (left <= 0) return finishBlitz();
+    R.raf = requestAnimationFrame(loop);
+  };
+  R.raf = requestAnimationFrame(loop);
+}
+function nextBlitzQ() {
+  var pool = WEEKS[R.week - 1].words;
+  var cand = pool.filter(function (w) { return w[0] !== R.last; });
+  cand.sort(function (a, b) { return (S.prog.words[a[0].toLowerCase()] || 0) - (S.prog.words[b[0].toLowerCase()] || 0) + (Math.random() - 0.5) * 3; });
+  var w = cand[0];
+  R.last = w[0];
+  var dir = Math.random() < 0.5 ? 'id2en' : 'en2id';
+  var col = dir === 'id2en' ? 0 : 1;
+  var others = shuffle(pool.filter(function (p) { return p[0] !== w[0]; })).slice(0, 3).map(function (p) { return p[col]; });
+  var opts = shuffle(others.concat([w[col]]));
+  R.q = { w: w, opts: opts, a: opts.indexOf(w[col]), locked: false };
+  $('#g-body').innerHTML = '<div class="blitz-score"><span class="muted">Correct</span><b class="tab-num">' + R.correct + '</b></div>' +
+    '<div class="card blitz-q center"><span class="eyebrow dir">' + (dir === 'id2en' ? 'In English?' : 'In Indonesian?') + '</span><div class="' + (dir === 'id2en' ? 'big-sent id' : 'big-word') + '">' + esc(dir === 'id2en' ? w[1] : w[0]) + '</div></div>';
+  $('#g-actions').innerHTML = '<div class="opts grid2">' + opts.map(function (o, i) { return '<button class="opt" data-g="bopt" data-i="' + i + '"><kbd>' + (i + 1) + '</kbd>' + esc(o) + '</button>'; }).join('') + '</div>';
+  $('#g-combo').innerHTML = R.combo >= 2 ? icon('flame', 18) + '×' + R.combo : '';
+}
+function onBlitz(i) {
+  var q = R.q; if (!q || q.locked || !R.end) return;
+  q.locked = true;
+  var btns = document.querySelectorAll('#g-actions .opt'), right = i === q.a;
+  btns[q.a].classList.add('right');
+  bumpWord(q.w[0], right);
+  if (right) {
+    R.correct++; R.combo++; R.maxCombo = Math.max(R.maxCombo, R.combo);
+    R.xp += addXP(5 + Math.min(5, Math.max(0, R.combo - 1)), true);
+    SFX.ok(R.combo);
+    setTimeout(function () { if (R && R.blitz && Date.now() < R.end) nextBlitzQ(); }, 220);
+  } else {
+    btns[i].classList.add('wrong');
+    R.wrong++; R.combo = 0; R.end -= 3000;
+    SFX.bad();
+    setTimeout(function () { if (R && R.blitz && Date.now() < R.end) nextBlitzQ(); }, 750);
+  }
+}
+function finishBlitz() {
+  cancelAnimationFrame(R.raf);
+  var total = R.correct + R.wrong;
+  R.scores = [total ? R.correct / total : 0];
+  var stars = R.correct >= 18 ? 3 : R.correct >= 12 ? 2 : 1;
+  var key = String(R.week), prevBest = S.prog.best[key] || 0;
+  S.prog.best[key] = Math.max(prevBest, R.correct);
+  finishRound(stars, R.correct > prevBest ? 'New best: ' + R.correct + '!' : 'Best: ' + S.prog.best[key]);
+}
+
+/* ---------- end of a round ---------- */
+function finishRound(forcedStars, note) {
+  STT.abort(); TTS.cancel();
+  $('#g-bar').style.width = '100%';
+  var sc = R.scores, acc = sc.length ? sc.reduce(function (a, b) { return a + b; }, 0) / sc.length : 1;
+  var stars = forcedStars || (acc >= 0.9 ? 3 : acc >= 0.7 ? 2 : 1);
+  var bonus = 0, first = false;
+  if (!R.mix) {
+    var key = R.week + '-' + R.sk;
+    first = !(S.prog.stars[key] > 0);
+    S.prog.stars[key] = Math.max(S.prog.stars[key] || 0, stars);
+    bonus = 10 + stars * 5 + (first ? 20 : 0);
+    if (R.sk === 'talk') S.prog.talks = (S.prog.talks || 0) + 1;
+    if (R.sk === 'verse') S.prog.verses[String(R.week)] = Math.max(S.prog.verses[String(R.week)] || 0, Math.round(R.recite * 100));
+    if (acc >= 0.999 && sc.length >= 3 && !R.blitz) award('perfect');
+    var sks = R.sks || {};
+    if (R.blitz && R.correct + R.wrong > 0) sks = { vocab: [R.correct, R.correct + R.wrong] };
+    for (var sk2 in sks) { var kk = R.week + '-' + sk2, v2 = Math.round(sks[sk2][0] / sks[sk2][1] * 100); S.prog.skill[kk] = kk in S.prog.skill ? Math.max(S.prog.skill[kk], v2) : v2; }
+  } else bonus = 15;
+  R.xp += addXP(bonus, true);
+  R.gift = Math.random() < 0.35 ? 10 + 5 * Math.floor(Math.random() * 5) : 0;
+  checkBadges();
+  pushSave();
+
+  var titles = R.mix ? ['Review done!', 'Review done!', 'Review done!', 'Review done!'] : ['', 'Good start!', 'Well done!', 'Wonderful!'];
+  var starsHtml = R.mix ? '' : '<div class="bigstars">' + [1, 2, 3].map(function (n) {
+    return '<svg viewBox="0 0 24 24" class="' + (n <= stars ? 's-on' : 's-off') + '"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+  }).join('') + '</div>';
+  var label = R.mix ? 'Daily Mix' : 'Week ' + R.week + ' · ' + STATIONS.filter(function (s) { return s.k === R.sk; })[0].name;
+  $('#g-body').innerHTML = '<div class="result center">' + starsHtml + '<span class="eyebrow">' + esc(label) + '</span><h2>' + titles[stars] + '</h2>' +
+    (note ? '<p><b>' + esc(note) + '</b></p>' : '') + (first ? '<p class="muted">First clear bonus +' + (isEDay() ? 40 : 20) + ' XP</p>' : '') +
+    '<div class="rstats"><div class="card rstat"><b>' + (R.blitz ? R.correct : Math.round(acc * 100) + '%') + '</b><span>' + (R.blitz ? 'Correct' : 'Accuracy') + '</span></div>' +
+    '<div class="card rstat"><b>+' + R.xp + '</b><span>XP earned</span></div><div class="card rstat"><b>×' + R.maxCombo + '</b><span>Best combo</span></div></div>' +
+    (R.gift ? '<button class="card gift" data-g="gift">' + icon('gift', 26) + '<span>A blessing bonus! Tap to open</span></button>' : '') + '</div>';
+  var nxt = nextStation();
+  $('#g-actions').innerHTML = (nxt ? '<button class="btn primary wide" data-g="go-next">' + esc(nxt.label) + ' ' + icon('chev') + '</button>' : '') +
+    '<div class="row"><button class="btn" data-g="again">' + icon('refresh') + 'Play again</button><button class="btn" data-g="close">Back to the path</button></div>';
+  if (stars === 3 || R.mix) { confetti(); SFX.level(); } else SFX.gift();
+  if (S.pendingLevel) setTimeout(showLevelUp, 1400);
+}
+function nextStation() {
+  if (!R || R.mix) return null;
+  var idx = STATIONS.map(function (s) { return s.k; }).indexOf(R.sk);
+  for (var j = idx + 1; j < STATIONS.length; j++) if (!(starsOf(R.week, STATIONS[j].k) > 0)) return { w: R.week, k: STATIONS[j].k, label: 'Next: ' + STATIONS[j].name };
+  if (idx + 1 < STATIONS.length) return { w: R.week, k: STATIONS[idx + 1].k, label: 'Next: ' + STATIONS[idx + 1].name };
+  if (R.week < 8 && weekUnlocked(R.week + 1)) return { w: R.week + 1, k: 'words', label: 'Start Week ' + (R.week + 1) };
+  return null;
+}
+
+/* ---------- XP, sheet, toast, modal, confetti ---------- */
+function addXP(n, quiet) {
+  if (!(n > 0)) return 0;
+  var before = levelOf(totalXP()).n, amt = isEDay() ? n * 2 : n, k = dkey(), prev = S.prog.daily[k] || 0;
+  S.prog.daily[k] = prev + amt;
+  if (prev < S.config.dailyGoal && prev + amt >= S.config.dailyGoal) setTimeout(function () { toast('Daily goal reached! Keep the fire burning.'); }, 600);
+  if (isEDay() && prev + amt >= 100) award('eday');
+  var after = levelOf(totalXP()).n;
+  if (after > before) S.pendingLevel = after;
+  renderHeader();
+  popXP(amt);
+  if (!quiet) { checkBadges(); pushSave(); if (S.pendingLevel) showLevelUp(); }
+  return amt;
+}
+function popXP(n) {
+  var el = document.createElement('div');
+  el.className = 'xp-pop'; el.textContent = '+' + n + ' XP';
+  document.body.appendChild(el);
+  setTimeout(function () { el.remove(); }, 1200);
+}
+function openSheet(html, kind) { var s = $('#sheet'); $('#sheet-in').innerHTML = html; s.className = 'sheet open ' + (kind || ''); var f = s.querySelector('[data-g="next"],[data-g="rate"]'); if (f) setTimeout(function () { try { f.focus({ preventScroll: true }); } catch (e) { } }, 50); }
+function closeSheet() { $('#sheet').className = 'sheet'; }
+var toastT;
+function toast(msg) { var t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('show'); }, 2800); }
+function showLevelUp() {
+  var n = S.pendingLevel; S.pendingLevel = 0; if (!n) return;
+  var L = levelOf(totalXP());
+  $('#modal-card').innerHTML = '<span class="eyebrow">Level up</span><div class="lvl-num">' + n + '</div><h2>' + esc(L.title) + '</h2><p class="muted">You are growing. Keep speaking the Word!</p><button class="btn primary wide" data-m="close">Amen!</button>';
+  $('#modal').hidden = false;
+  SFX.level(); confetti();
+}
+function confetti() {
+  try { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; } catch (e) { }
+  var cv = $('#confetti'), ctx = cv.getContext('2d'); if (!ctx) return;
+  var W = window.innerWidth, H = window.innerHeight, dpr = window.devicePixelRatio || 1;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); cv.hidden = false;
+  var cs = getComputedStyle(document.documentElement);
+  var cols = ['--cobalt', '--ruby', '--gold', '--emerald', '--sky', '--violet'].map(function (v) { return cs.getPropertyValue(v).trim() || '#f2b400'; });
+  var lead = cs.getPropertyValue('--lead').trim() || '#141a3a';
+  var parts = []; for (var i = 0; i < 90; i++) parts.push({ x: W / 2 + (Math.random() - 0.5) * W * 0.5, y: H * 0.4, vx: (Math.random() - 0.5) * 11, vy: -Math.random() * 12 - 4, r: Math.random() * 6, vr: (Math.random() - 0.5) * 0.3, s: 7 + Math.random() * 9, c: cols[i % cols.length], n: 3 + (i % 2) });
+  var t0 = performance.now();
+  var frame = function (t) {
+    ctx.clearRect(0, 0, W, H);
+    parts.forEach(function (p) {
+      p.vy += 0.32; p.vx *= 0.99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.beginPath();
+      for (var k = 0; k < p.n; k++) { var a = k / p.n * Math.PI * 2; ctx.lineTo(Math.cos(a) * p.s, Math.sin(a) * p.s * 0.7); }
+      ctx.closePath(); ctx.fillStyle = p.c; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = lead; ctx.stroke(); ctx.restore();
+    });
+    if (t - t0 < 2600) requestAnimationFrame(frame); else { ctx.clearRect(0, 0, W, H); cv.hidden = true; }
+  };
+  requestAnimationFrame(frame);
+}
+
+/* =====================================================================
+   9. VIEWS
+   ===================================================================== */
+function renderAll() { renderHeader(); renderTabs(); renderView(); }
+function renderTabs() { document.querySelectorAll('.tab').forEach(function (t) { if (t.dataset.tab === S.view) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current'); }); }
+function renderView() {
+  if (S.view === 'learn') renderLearn();
+  else if (S.view === 'eday') renderEday();
+  else if (S.view === 'ranks') renderRanks();
+  else renderMe();
+}
+function renderHeader() {
+  var st = streak(), td = todayXP(), goal = S.config.dailyGoal, pct = Math.min(1, td / goal), C = 2 * Math.PI * 10;
+  $('#hstats').innerHTML = (isEDay() ? '<span class="hchip eday" title="English Day: double XP">2× XP</span>' : '') +
+    '<span class="hchip ' + (td > 0 ? 'fire' : 'cold') + '" title="Day streak">' + icon('flame', 18) + '<b>' + st + '</b></span>' +
+    '<span class="hchip" title="Total XP"><b>' + fmt(totalXP()) + '</b><small>XP</small></span>' +
+    '<span class="ring" title="Today: ' + td + ' of ' + goal + ' XP" role="img" aria-label="Daily goal ' + td + ' of ' + goal + ' XP"><svg viewBox="0 0 26 26" width="32" height="32"><circle cx="13" cy="13" r="10" class="ring-bg"/><circle cx="13" cy="13" r="10" class="ring-fg" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + (C * (1 - pct)).toFixed(1) + '" transform="rotate(-90 13 13)"/></svg></span>';
+}
+
+function renderLearn() {
+  var w = S.week, W = WEEKS[w - 1], unlocked = weekUnlocked(w);
+  var chips = WEEKS.map(function (x, i) {
+    var n = i + 1, lk = !weekUnlocked(n), dn = doneCount(n) === STATIONS.length;
+    return '<button class="wchip' + (lk ? ' locked' : '') + (dn ? ' done' : '') + '" role="tab" aria-selected="' + (n === w) + '" data-act="week" data-w="' + n + '">' +
+      (lk ? icon('lock', 14) : dn ? icon('check', 14) : '') + 'Week ' + n + '</button>';
+  }).join('');
+  var panes = WEEKS.map(function (x, i) { var n = i + 1; return '<span class="pane ' + (doneCount(n) === STATIONS.length ? 'done' : n === w ? 'now' : '') + '" title="Week ' + n + ': ' + esc(x.t) + '"></span>'; }).join('');
+  var labels = '<span style="grid-column:2">Basic</span><span style="grid-column:4">Fluent</span><span style="grid-column:8">Preach</span>';
+  var nextIdx = -1;
+  if (unlocked) for (var j = 0; j < STATIONS.length; j++) if (!(starsOf(w, STATIONS[j].k) > 0)) { nextIdx = j; break; }
+  var offs = [0, 56, 84, 56, 0, -56, -84, -56];
+  var nodes = STATIONS.map(function (s, i) {
+    var st = starsOf(w, s.k);
+    return '<button class="node' + (unlocked ? '' : ' locked') + (i === nextIdx ? ' next' : '') + '" style="--x:' + offs[i] + 'px" data-act="station" data-k="' + s.k + '" aria-label="' + esc(s.name) + ', ' + st + ' of 3 stars">' +
+      (i === nextIdx ? '<span class="start-tag">' + (i === 0 && doneCount(w) === 0 ? 'START' : 'NEXT') + '</span>' : '') +
+      '<span class="roundel" style="' + glass(s.c1, s.c2) + '"><span class="boss">' + icon(unlocked ? s.icon : 'lock', 22) + '</span></span>' +
+      '<span class="nstars">' + starIcon(st >= 1) + starIcon(st >= 2) + starIcon(st >= 3) + '</span><span class="nlabel">' + esc(s.name) + '</span><span class="nsub">' + esc(s.sub) + '</span></button>';
+  }).join('');
+  var lockNote = '<div class="card locknote">' + icon('lock', 22) + '<span>Finish 5 stations in Week ' + (w - 1) + ' to open this week. You have ' + doneCount(w - 1) + ' of 5.</span></div>';
+  var mix = '<button class="card mix" data-act="mix"><span class="mix-ic">' + icon('shuffle', 24) + '</span><span><b>Daily Mix</b><small>Two minutes. Your weakest words come back.</small></span><span class="chev">' + icon('chev', 22) + '</span></button>';
+
+  $('#main').innerHTML = '<div class="learn"><div class="learn-main">' +
+    '<div class="weekbar" role="tablist" aria-label="Weeks">' + chips + '</div>' +
+    '<section class="card hero"><span class="eyebrow">Week ' + w + ' of 8 · ' + esc(W.stage) + '</span><h1>' + esc(W.t) + '</h1><p class="id-title">' + esc(W.idt) + '</p>' +
+    '<p class="goal"><b>By the end of this week:</b> ' + esc(W.goal) + '</p>' +
+    '<div class="hero-meta"><span>' + icon('check', 16) + doneCount(w) + ' / ' + STATIONS.length + ' stations</span><span>' + icon('star', 16) + starSum(w) + ' / ' + STATIONS.length * 3 + ' stars</span></div>' +
+    '<div class="journey" aria-label="Your 8-week journey"><div class="panes">' + panes + '</div><div class="pane-labels">' + labels + '</div></div></section>' +
+    (unlocked ? mix : lockNote) + '<div class="path">' + nodes + '</div></div>' +
+    '<aside class="learn-side">' + goalCard() + verseCard(W) + floorCard(true) + '</aside></div>';
+  var bar = $('.weekbar'), sel = $('.wchip[aria-selected="true"]');
+  if (bar && sel) bar.scrollLeft = Math.max(0, sel.offsetLeft - bar.clientWidth / 2 + sel.clientWidth / 2);
+}
+function goalCard() {
+  var td = todayXP(), g = S.config.dailyGoal, st = streak();
+  return '<section class="card side-card"><h2>Today</h2><div class="goalrow"><span class="big tab-num">' + td + '</span><span class="muted">of ' + g + ' XP daily goal</span></div>' +
+    '<div class="lvlbar" aria-hidden="true"><i style="width:' + Math.min(100, td / g * 100) + '%;background:var(--emerald)"></i></div>' +
+    '<p class="muted">' + (st ? icon('flame', 16, '') + ' ' : '') + (st ? st + '-day streak. ' : '') + (td >= g ? 'Goal reached. Every extra round still counts for your floor.' : 'One Daily Mix gets you most of the way.') + '</p>' +
+    (isEDay() ? '<p><b>It’s English Day: all XP is doubled.</b></p>' : '') + '</section>';
+}
+function verseCard(W) {
+  return '<section class="card side-card"><h2>Verse of the week</h2><p class="verse-ref">' + esc(W.verse.ref) + '</p><p class="verse-text">' + esc(W.verse.en) + '</p>' +
+    '<div class="row"><button class="tool" data-act="hear-verse">' + icon('vol', 16) + 'Listen</button><button class="tool" data-act="station" data-k="verse">' + icon('scroll', 16) + 'Memorize</button></div></section>';
+}
+function floorCard(mini) {
+  var b = API.mode === 'local' ? demoBoard() : S.board; if (!b) return mini ? '' : '<p class="muted">Loading…</p>';
+  var max = Math.max.apply(null, b.floors.map(function (f) { return f.week; }).concat([1]));
+  var lead = b.floors.slice().sort(function (a, c) { return c.week - a.week; })[0];
+  var rows = b.floors.map(function (f) {
+    var c = FLOOR_COLORS[f.floor] || 'cobalt';
+    return '<div class="bar-row"><span>Floor ' + f.floor + '</span><div class="bar-track"><div class="bar-fill" style="width:' + (f.week / max * 100) + '%;background:' + colorVar(c) + '"></div></div><span class="val">' + fmt(f.week) +
+      (f === lead && f.week > 0 && !mini ? '<span class="lead-pill">Leading</span>' : '') + '</span></div>';
+  }).join('');
+  return '<section class="card side-card"><h2>Floor Battle · this week</h2><div class="bars">' + rows + '</div>' + (b.demo ? '<p class="hint">Example floors until the office is connected.</p>' : '') +
+    (mini ? '<button class="link" data-act="tab" data-tab="ranks" style="align-self:flex-start;padding-left:0">See full ranks</button>' : '') + '</section>';
+}
+
+function renderRanks() {
+  if (!S.board && API.mode !== 'local') refreshBoard();
+  var b = API.mode === 'local' ? demoBoard() : S.board, list = '';
+  if (b) {
+    var key = S.rankTab === 'week' ? 'week' : 'xp';
+    var ps = b.players.slice().sort(function (a, c) { return c[key] - a[key]; });
+    list = ps.map(function (p, i) {
+      var me = S.profile && p.id === S.profile.id, c = FLOOR_COLORS[p.floor] || 'cobalt';
+      return '<div class="rank-row' + (me ? ' me' : '') + '"><span class="rank-no' + (i < 3 ? ' m' + (i + 1) : '') + '">' + (i + 1) + '</span><div style="min-width:0"><div class="rank-name">' + esc(p.name) + (me ? ' (you)' : '') +
+        '<span class="floor-pill" style="background:' + colorVar(c) + '">F' + p.floor + '</span></div><div class="rank-sub">Level ' + p.level + ' · ' + esc(levelOf(p.xp).title) + (p.streak ? ' · ' + p.streak + '-day streak' : '') + '</div></div>' +
+        '<div class="rank-xp">' + fmt(p[key]) + '<small>' + (key === 'week' ? 'XP this week' : 'XP total') + '</small></div></div>';
+    }).join('');
+  }
+  $('#main').innerHTML = '<div class="page"><h1 class="page-title">Ranks</h1>' + floorCard(false) +
+    '<div class="row" style="justify-content:space-between"><div class="seg" role="group" aria-label="Period"><button data-act="rank" data-r="week" aria-pressed="' + (S.rankTab === 'week') + '">This week</button><button data-act="rank" data-r="all" aria-pressed="' + (S.rankTab === 'all') + '">All time</button></div>' +
+    '<button class="tool" data-act="refresh">' + icon('refresh', 16) + 'Refresh</button></div>' +
+    '<section class="card rank-list">' + (list || '<p class="muted" style="padding:16px">Loading the office scores…</p>') + '</section>' +
+    (b && b.demo ? '<p class="demo-note">These names are examples. When the app runs from Google Apps Script, everyone in the office appears here and every floor’s weekly XP adds up in the Floor Battle.</p>' : '') + '</div>';
+}
+
+function renderEday() {
+  var ed = Number(S.config.englishDay), today = new Date().getDay(), diff = (ed - today + 7) % 7, isToday = diff === 0;
+  var ws = weekStartKey(), chIdx = Math.floor(new Date(ws + 'T00:00:00').getTime() / 604800000) % CHALLENGES.length;
+  var chDone = !!S.prog.challenges[ws];
+  var cardsToday = S.prog.cards[dkey()] || 0, left = Math.max(0, 6 - cardsToday);
+  if (!S.card || S.card.level !== S.cardLevel) S.card = { level: S.cardLevel, i: Math.floor(Math.random() * CARDS[S.cardLevel].length), done: false };
+  var c = CARDS[S.cardLevel][S.card.i];
+  var lv = [['basic', 'Basic'], ['inter', 'Intermediate'], ['adv', 'Preaching']];
+  $('#main').innerHTML = '<div class="page">' +
+    '<section class="card eday-hero' + (isToday ? ' today' : '') + '"><span class="eyebrow' + (isToday ? '' : '') + '">' + (isToday ? 'Today' : (diff === 1 ? 'Tomorrow' : 'In ' + diff + ' days')) + '</span>' +
+    '<h1>' + (isToday ? 'It’s English Day!' : 'English Day is every ' + DAYS[ed]) + '</h1><p class="' + (isToday ? '' : 'muted') + '">' +
+    (isToday ? 'Speak only English at the office today. Every XP you earn counts double for you and your floor.' : 'One day a week the whole office speaks English. All XP counts double that day.') + '</p></section>' +
+    '<section class="card challenge"><span class="eyebrow">Challenge of the week</span><p class="ch-text">' + esc(CHALLENGES[chIdx]) + '</p>' +
+    (chDone ? '<p class="muted">' + icon('check', 16) + ' Done this week. Well done!</p>' : '<button class="btn gold" data-act="challenge" style="align-self:flex-start">' + icon('check') + 'I did it (+30 XP)</button>') + '</section>' +
+    '<h2 style="font-size:1.15rem">Talk cards for pairs</h2><p class="muted" style="margin-top:-10px">Find a partner. One person asks, the other answers for two minutes. Then swap.</p>' +
+    '<div class="seg" role="group" aria-label="Level">' + lv.map(function (l) { return '<button data-act="clevel" data-l="' + l[0] + '" aria-pressed="' + (S.cardLevel === l[0]) + '">' + l[1] + '</button>'; }).join('') + '</div>' +
+    '<section class="card talkcard"><span class="eyebrow">Ask your partner</span><p class="q">' + esc(c[0]) + '</p>' +
+    '<div class="starters">' + c[1].map(function (s) { return '<button class="starter" data-act="say-starter" data-t="' + esc(s) + '">' + icon('vol', 14) + esc(s) + '</button>'; }).join('') + '</div>' +
+    '<div class="row" style="justify-content:space-between"><span class="timer tab-num" id="c-timer">2:00</span><div class="row"><button class="tool" data-act="card-hear">' + icon('vol', 16) + 'Hear question</button>' +
+    '<button class="tool" data-act="card-timer" id="c-tbtn">' + icon('clock', 16) + 'Start 2 min</button></div></div>' +
+    '<div class="row"><button class="btn good" data-act="card-done"' + (S.card.done || !left ? ' disabled' : '') + '>' + icon('check') + (S.card.done ? 'Counted' : 'We talked! (+15 XP)') + '</button><button class="btn" data-act="card-next">' + icon('shuffle') + 'New card</button></div>' +
+    '<p class="hint">' + left + ' talk rewards left today.</p></section></div>';
+  if (S.timer) updateTimer();
+}
+function updateTimer() {
+  var el = $('#c-timer'), b = $('#c-tbtn'); if (!el) return;
+  var left = S.timer ? Math.max(0, S.timer.end - Date.now()) : 120000;
+  var s = Math.ceil(left / 1000);
+  el.textContent = Math.floor(s / 60) + ':' + pad(s % 60);
+  el.classList.toggle('run', !!S.timer);
+  if (b) b.innerHTML = icon('clock', 16) + (S.timer ? 'Stop' : 'Start 2 min');
+}
+function toggleTimer() {
+  if (S.timer) { clearInterval(S.timer.int); S.timer = null; updateTimer(); return; }
+  S.timer = { end: Date.now() + 120000 };
+  S.timer.int = setInterval(function () {
+    if (!S.timer) return;
+    if (Date.now() >= S.timer.end) { clearInterval(S.timer.int); S.timer = null; SFX.level(); toast('Time! Swap roles with your partner.'); }
+    updateTimer();
+  }, 250);
+  updateTimer();
+}
+
+function renderMe() {
+  var xp = totalXP(), L = levelOf(xp), pct = Math.min(100, (xp - L.min) / (L.next - L.min) * 100);
+  var initials = S.profile ? S.profile.name.split(' ').map(function (x) { return x[0]; }).join('').slice(0, 2).toUpperCase() : '?';
+  var badges = BADGES.map(function (b) {
+    var on = S.prog.badges.indexOf(b.k) >= 0;
+    return '<div class="badge' + (on ? '' : ' off') + '"><span class="roundel" style="' + glass(b.c[0], b.c[1]) + '"><span class="boss">' + (on ? starIcon(true, 14) : icon('lock', 13)) + '</span></span><b>' + esc(b.t) + '</b><small>' + esc(b.d) + '</small></div>';
+  }).join('');
+  var voices = TTS.list('en-US');
+  var vopts = '<option value="">Automatic</option>' + voices.map(function (v) { return '<option value="' + esc(v.voiceURI) + '"' + (v.voiceURI === S.settings.voiceURI ? ' selected' : '') + '>' + esc(v.name + ' (' + v.lang + ')') + '</option>'; }).join('');
+  var sync = API.mode === 'local'
+    ? 'This copy is running on its own, so progress stays in this browser. Run it from Google Apps Script to join the office leaderboard.'
+    : (S.syncErr ? 'Could not sync: ' + esc(S.syncErr) : S.lastSync ? 'Synced with the office leaderboard at ' + new Date(S.lastSync).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '.' : 'Connected to the office leaderboard.');
+  var micTxt = { unknown: 'Not tested yet', ok: 'Working', blocked: 'Blocked in this window (self-check mode)', unsupported: 'Not supported in this browser (self-check mode)' }[S.mic];
+  $('#main').innerHTML = '<div class="page">' +
+    '<section class="card profile"><span class="avatar"><span>' + esc(initials) + '</span></span><div style="flex:1;min-width:0"><h1>' + esc(S.profile ? S.profile.name : 'Guest') + '</h1>' +
+    '<p class="muted">Floor ' + esc(S.profile ? S.profile.floor : '–') + ' · Level ' + L.n + ' · ' + esc(L.title) + '</p><div class="lvlbar"><i style="width:' + pct + '%"></i></div><p class="hint">' + fmt(L.next - xp) + ' XP to level ' + (L.n + 1) + '</p></div></section>' +
+    '<div class="tiles"><div class="card tile"><b>' + streak() + '</b><span>Day streak</span></div><div class="card tile"><b>' + learnedWords() + '</b><span>Words learned</span></div>' +
+    '<div class="card tile"><b>' + versesKnown() + ' / 8</b><span>Verses memorized</span></div><div class="card tile"><b>' + stationsCleared() + ' / ' + STATIONS.length * 8 + '</b><span>Stations cleared</span></div></div>' +
+    speakingCard() +
+    '<h2 style="font-size:1.15rem">Badges</h2><section class="card badges">' + badges + '</section>' +
+    '<h2 style="font-size:1.15rem">Settings</h2><section class="card settings">' +
+    '<div class="set"><label for="s-rate">Voice speed<small>How fast the app speaks English</small></label><input type="range" id="s-rate" min="0.6" max="1.15" step="0.05" value="' + S.settings.rate + '"></div>' +
+    '<div class="set"><label for="s-voice">English voice<small>Depends on your device</small></label><select id="s-voice">' + vopts + '</select></div>' +
+    '<div class="set"><label for="s-sfx">Sound effects<small>Bells for right answers</small></label><input type="checkbox" class="switch" id="s-sfx"' + (S.settings.sfx ? ' checked' : '') + '></div>' +
+    '<div class="set"><span class="lbl">Microphone<small id="mic-status">' + micTxt + '</small></span><button class="tool" data-act="mic-test">' + icon('mic', 16) + 'Test: say “Hallelujah”</button></div>' +
+    '<div class="set"><label for="s-open">Open all weeks<small>For leaders and interpreters who want to jump ahead</small></label><input type="checkbox" class="switch" id="s-open"' + (S.settings.openAll ? ' checked' : '') + '></div>' +
+    '<div class="set"><span class="lbl">Teachers<small>Progress of every learner, plus the speaking test</small></span>' + teacherLink() + '</div>' +
+    '<div class="set"><span class="lbl">Account<small class="sync">' + sync + '</small></span><button class="tool" data-act="signout">' + icon('out', 16) + (S.signoutArm ? 'Tap again to sign out' : 'Sign out') + '</button></div>' +
+    '</section></div>';
+}
+
+function bandOf(score) { for (var i = 0; i < TEST_BANDS.length; i++) if (score >= TEST_BANDS[i][0]) return TEST_BANDS[i]; return TEST_BANDS[TEST_BANDS.length - 1]; }
+function speakingCard() {
+  var t = (S.tests || [])[0];
+  if (!t) return '<section class="card side-card"><h2>Speaking test with your teacher</h2><p class="muted">No test yet. Your teacher will invite you for a 10-minute conversation. Your level and feedback will appear here.</p></section>';
+  var b = bandOf(t.score), crit = (t.criteria || []).map(function (v, i) {
+    return '<span>' + CRITERIA[i] + '</span><div class="bar-track"><div class="bar-fill" style="width:' + (v / 5 * 100) + '%;background:var(--cobalt)"></div></div><span>' + v + '/5</span>';
+  }).join('');
+  var prev = (S.tests || [])[1];
+  return '<section class="card side-card"><h2>Speaking test with your teacher</h2><div class="row"><span class="lvl-badge">' + esc(b[1] + ' · ' + b[2]) + '</span><span class="muted tab-num">' + t.score + ' / 100 · ' + esc(t.date) + '</span></div>' +
+    (prev ? '<p class="hint">Previous test: ' + prev.score + ' / 100 (' + esc(prev.date) + ')' + (t.score > prev.score ? ', up ' + (t.score - prev.score) + ' points. Praise God!' : '') + '</p>' : '') +
+    '<div class="crit">' + crit + '</div>' + (t.feedback ? '<p class="feedback">' + esc(t.feedback) + '</p>' : '') + '</section>';
+}
+function teacherLink() {
+  var base = S.config.url || CONFIG.API_URL || '';
+  if (API.mode === 'local' || !base) return '<span class="hint">Available after you deploy</span>';
+  return '<a class="tool" href="' + esc(base + '?page=teacher') + '" target="_top" rel="noopener">' + icon('clip', 16) + 'Teacher dashboard</a>';
+}
+
+/* ---------- login ---------- */
+function showLogin() {
+  var floors = S.config.floors || [1, 2, 3];
+  $('#floors').innerHTML = floors.map(function (f) { return '<input type="radio" name="floor" id="fl-' + f + '" value="' + f + '"><label for="fl-' + f + '">Floor ' + f + '</label>'; }).join('');
+  $('#login-mode').textContent = API.mode === 'local' ? 'Preview mode: progress stays on this device.' : '';
+  $('#login').hidden = false;
+}
+function onLogin(e) {
+  e.preventDefault();
+  var name = $('#in-name').value.replace(/\s+/g, ' ').trim(), pin = $('#in-pin').value.trim();
+  var fl = document.querySelector('input[name="floor"]:checked'), err = $('#login-err');
+  if (!name) { err.textContent = 'Please type your name.'; return; }
+  if (!fl) { err.textContent = 'Please choose your floor.'; return; }
+  if (!/^\d{4}$/.test(pin)) { err.textContent = 'Your PIN must be exactly 4 digits.'; return; }
+  err.textContent = '';
+  var floor = Number(fl.value);
+  if (API.mode === 'local') {
+    S.profile = { id: (S.profile && S.profile.id) || 'local-' + Date.now().toString(36), name: name, floor: floor, pin: pin };
+    persist(); $('#login').hidden = true; S.board = demoBoard(); renderAll(); return;
+  }
+  var btn = $('#login-btn'); btn.disabled = true; btn.textContent = 'Signing in…';
+  API.call('login', name, floor, pin).then(function (r) {
+    var same = S.profile && S.profile.id === r.id;
+    S.profile = { id: r.id, name: r.name, floor: r.floor, pin: pin };
+    S.prog = merge(same ? S.prog : defaultProg(), r.progress || {});
+    S.tests = r.tests || [];
+    persist(); $('#login').hidden = true; S.week = defaultWeek(); renderAll(); refreshBoard(); pushSave();
+    toast('Welcome, ' + r.name + '!');
+  }).catch(function (x) { err.textContent = x.message; }).then(function () { btn.disabled = false; btn.textContent = 'Start learning'; });
+}
+function syncDown() {
+  if (API.mode === 'local' || !S.profile) return;
+  API.call('login', S.profile.name, S.profile.floor, S.profile.pin).then(function (r) {
+    if (r.id !== S.profile.id) return;
+    S.prog = merge(S.prog, r.progress || {}); S.tests = r.tests || S.tests; persist(); renderAll();
+  }).catch(function () { /* stay offline; local progress keeps working */ });
+}
+
+/* =====================================================================
+   10. EVENTS
+   ===================================================================== */
+function go(tab) { S.view = tab; S.signoutArm = false; renderTabs(); renderView(); try { window.scrollTo(0, 0); } catch (e) { } }
+
+document.addEventListener('click', function (e) {
+  var t = e.target.closest('[data-tab]');
+  if (t && t.classList.contains('tab')) { go(t.dataset.tab); return; }
+  var m = e.target.closest('[data-m]');
+  if (m) { $('#modal').hidden = true; return; }
+  var a = e.target.closest('[data-act]');
+  if (a) return onAct(a);
+  var g = e.target.closest('[data-g]');
+  if (g) return onGame(g);
+});
+function onAct(a) {
+  var act = a.dataset.act;
+  if (act === 'week') { var w = +a.dataset.w; if (!weekUnlocked(w)) { toast('Finish 5 stations in Week ' + (w - 1) + ' to unlock Week ' + w + '.'); } S.week = w; renderLearn(); }
+  else if (act === 'station') { if (!weekUnlocked(S.week)) { toast('This week is still locked.'); return; } startRound(S.week, a.dataset.k); }
+  else if (act === 'mix') startMix();
+  else if (act === 'tab') go(a.dataset.tab);
+  else if (act === 'hear-verse') TTS.speak(WEEKS[S.week - 1].verse.en);
+  else if (act === 'rank') { S.rankTab = a.dataset.r; renderRanks(); }
+  else if (act === 'refresh') { S.board = API.mode === 'local' ? demoBoard() : S.board; refreshBoard(); toast('Refreshing scores…'); }
+  else if (act === 'challenge') { var ws = weekStartKey(); if (!S.prog.challenges[ws]) { S.prog.challenges[ws] = true; addXP(30); confetti(); SFX.gift(); renderEday(); } }
+  else if (act === 'clevel') { S.cardLevel = a.dataset.l; S.card = null; renderEday(); }
+  else if (act === 'card-next') { var n = CARDS[S.cardLevel].length, i = S.card ? S.card.i : 0; S.card = { level: S.cardLevel, i: (i + 1 + Math.floor(Math.random() * (n - 1))) % n, done: false }; renderEday(); }
+  else if (act === 'card-hear') TTS.speak(CARDS[S.cardLevel][S.card.i][0]);
+  else if (act === 'say-starter') TTS.speak(a.dataset.t.replace(/…/g, ''));
+  else if (act === 'card-timer') toggleTimer();
+  else if (act === 'card-done') { var k = dkey(); if ((S.prog.cards[k] || 0) < 6 && !S.card.done) { S.prog.cards[k] = (S.prog.cards[k] || 0) + 1; S.card.done = true; addXP(15); SFX.ok(0); renderEday(); } }
+  else if (act === 'mic-test') micTest();
+  else if (act === 'signout') {
+    if (!S.signoutArm) { S.signoutArm = true; renderMe(); return; }
+    S.profile = null; S.prog = defaultProg(); S.tests = []; S.signoutArm = false; persist(); S.board = null; S.week = 1; go('learn'); renderHeader(); showLogin();
+  }
+}
+function micTest() {
+  var st = $('#mic-status'); if (st) st.textContent = 'Listening… say “Hallelujah”';
+  STT.listen('en-US', function (t) { var s = $('#mic-status'); if (s) s.textContent = 'Hearing: ' + t; }).then(function (r) {
+    var s = $('#mic-status'); if (!s) return;
+    if (r.error) s.textContent = S.mic === 'blocked' ? 'Blocked in this window. Self-check mode is on.' + (CONFIG.VOICE_URL ? ' Use the voice version link in lessons.' : '') : 'Not available: ' + r.error;
+    else if (!r.alts.length) s.textContent = 'Heard nothing. Check that the right microphone is selected.';
+    else { var ok = scoreEn('Hallelujah', r.alts).score >= 0.75; s.textContent = (ok ? 'Working! ' : 'Working, but I heard ') + '“' + r.alts[0] + '”'; }
+  });
+}
+function onGame(g) {
+  if (!R && g.dataset.g !== 'close') return;
+  var k = g.dataset.g, st = R ? R.steps[R.i] : null;
+  switch (k) {
+    case 'close': closeGame(); break;
+    case 'next-tip': R.i++; renderStep(); break;
+    case 'mic': onMic(); break;
+    case 'self': onSelf(); break;
+    case 'rate': onRate(parseFloat(g.dataset.v)); break;
+    case 'retry': if (st && st.type === 'write') { closeSheet(); var wi = $('#w-in'); if (wi) { wi.focus(); wi.select(); } break; }
+      closeSheet(); var l = $('#live'); if (l) { l.classList.remove('hearing'); l.textContent = 'Tap the mic and try again'; } speakTarget(st, true); break;
+    case 'next': commit(); break;
+    case 'skip': skipStep(); break;
+    case 'skip-partner': TTS.cancel(); clearTimeout(R.autoT); R.i++; renderStep(); break;
+    case 'hear': if (st && st.type === 'partner') TTS.speak(st.en, { alt: true, pitch: 1.08 }); else if (st) speakTarget(st, false); break;
+    case 'slow': if (st) speakTarget(st, true); break;
+    case 'hear-ex': TTS.speak(st.ex); break;
+    case 'hear-passage': speakPassage(READS[R.week - 1].text); break;
+    case 'hear-id': TTS.speak(st.id, { lang: 'id-ID' }); break;
+    case 'hear-full': TTS.speak(st.word ? st.word + '. ' + st.full : st.full); break;
+    case 'peek': R.peek = true; rSay(st, true); if (st.mode === 'talk' || st.mode === 'en2id') speakTarget(st, false); break;
+    case 'opt': onOpt(+g.dataset.i); break;
+    case 'chunk': onChunk(g); break;
+    case 'blitz-go': blitzGo(); break;
+    case 'bopt': onBlitz(+g.dataset.i); break;
+    case 'gift':
+      if (g.classList.contains('opened')) break;
+      var amt = addXP(R.gift, true); R.xp += amt; pushSave();
+      g.classList.add('opened'); g.innerHTML = icon('gift', 26) + '<span>Blessing bonus: +' + amt + ' XP</span>';
+      SFX.gift(); confetti();
+      var xs = document.querySelectorAll('.rstat b')[1]; if (xs) xs.textContent = '+' + R.xp;
+      break;
+    case 'again': var wk = R.week, sk = R.sk, mx = R.mix; R = null; closeSheet(); if (mx) startMix(); else startRound(wk, sk); break;
+    case 'go-next': var nx = nextStation(); R = null; if (nx) { S.week = nx.w; startRound(nx.w, nx.k); } break;
+  }
+}
+document.addEventListener('keydown', function (e) {
+  if ($('#game').hidden) return;
+  var tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'select' || tag === 'textarea') return;
+  var onButton = tag === 'button';
+  var sheetOpen = $('#sheet').className.indexOf('open') >= 0;
+  if (e.key === 'Escape') { closeGame(); return; }
+  if (e.key === 'Enter' && !onButton) { var b = sheetOpen ? $('#sheet [data-g="next"]') : $('#g-actions .btn.primary, #g-actions .btn.gold'); if (b) { e.preventDefault(); b.click(); } }
+  else if (e.key === ' ' && !onButton && !sheetOpen) { var mc = $('#mic'); if (mc) { e.preventDefault(); mc.click(); } }
+  else if (/^[1-4]$/.test(e.key) && !sheetOpen) { var o = $('#g-actions [data-i="' + (+e.key - 1) + '"]'); if (o) o.click(); }
+});
+document.addEventListener('input', function (e) {
+  if (e.target.id === 's-rate') { S.settings.rate = parseFloat(e.target.value); persist(); }
+});
+document.addEventListener('change', function (e) {
+  var id = e.target.id;
+  if (id === 's-rate') TTS.speak('God is good all the time.');
+  else if (id === 's-voice') { S.settings.voiceURI = e.target.value; persist(); TTS.speak('Welcome to English Day.'); }
+  else if (id === 's-sfx') { S.settings.sfx = e.target.checked; persist(); if (S.settings.sfx) SFX.ok(0); }
+  else if (id === 's-open') { S.settings.openAll = e.target.checked; persist(); toast(S.settings.openAll ? 'All weeks are open.' : 'Weeks unlock step by step again.'); }
+});
+$('#login-form').addEventListener('submit', onLogin);
+document.addEventListener('submit', function (e) { if (e.target && e.target.id === 'w-form') { e.preventDefault(); onWrite(); } });
+document.addEventListener('visibilitychange', function () { if (!document.hidden) { renderHeader(); if (S.view === 'ranks') refreshBoard(); } });
+
+/* =====================================================================
+   11. START
+   ===================================================================== */
+function init() {
+  load();
+  API.init();
+  TTS.init();
+  if (!STT.Ctor) S.mic = 'unsupported';
+  document.querySelectorAll('.tab').forEach(function (t) { t.insertAdjacentHTML('afterbegin', icon(t.dataset.icon, 22)); });
+  S.week = defaultWeek();
+  S.board = API.mode === 'local' ? demoBoard() : null;
+  renderAll();
+  if (!S.profile) showLogin();
+  if (API.mode !== 'local') {
+    API.call('getConfig').then(function (c) {
+      S.config.englishDay = c.englishDay; S.config.dailyGoal = c.dailyGoal; S.config.floors = c.floors || S.config.floors; S.config.url = c.url || '';
+      if (!S.profile && !document.querySelector('input[name="floor"]:checked')) showLogin();
+      renderAll();
+    }).catch(function () { });
+    refreshBoard();
+    syncDown();
+  }
+}
+init();
+})();
+</script>
+<!-- PREVIEW:BODY-END -->
+</body>
+</html>
